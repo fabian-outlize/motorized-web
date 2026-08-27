@@ -106,38 +106,76 @@
     });
   }
 
+  function knownRepo() {
+    var ls = (localStorage.getItem(LS_REPO) || '').trim();
+    if (ls) return ls;
+    if (CONFIG.owner && CONFIG.repo) return CONFIG.owner + '/' + CONFIG.repo;
+    return '';
+  }
+
+  function showRepoField() {
+    var f = $('#repoField');
+    if (f) { f.hidden = false; $('#repo').value = knownRepo(); }
+  }
+
+  function fail(msg) {
+    var err = $('#loginErr');
+    err.textContent = msg;
+    err.hidden = false;
+    console.warn('[CMS]', msg);
+  }
+
   $('#loginForm').addEventListener('submit', function (e) {
     e.preventDefault();
     var btn = $('#loginBtn'), err = $('#loginErr');
-    var token = $('#token').value.trim();
-    var repoStr = (localStorage.getItem(LS_REPO) || '').trim();
-    if (!repoStr && CONFIG.owner && CONFIG.repo) repoStr = CONFIG.owner + '/' + CONFIG.repo;
-
     err.hidden = true;
+
+    var token = $('#token').value.trim();
+    if (!token) { fail('Bitte zuerst den GitHub-Token einfügen.'); $('#token').focus(); return; }
+
+    var repoStr = ($('#repo') && $('#repo').value.trim()) || knownRepo();
+    if (!repoStr) {
+      showRepoField();
+      fail('Ich konnte das Repository nicht automatisch erkennen — bitte unten eintragen '
+           + '(Form: benutzername/repository) und erneut auf Anmelden klicken.');
+      return;
+    }
+
+    repoStr = repoStr.replace(/^https?:\/\/github\.com\//, '').replace(/\.git$/, '').replace(/\/+$/, '');
+    var parts = repoStr.split('/');
+    if (parts.length !== 2 || !parts[0] || !parts[1]) {
+      showRepoField();
+      fail('„' + repoStr + '" sieht nicht wie ein Repository aus. Erwartet: benutzername/repository');
+      return;
+    }
+
     btn.disabled = true; btn.textContent = 'Verbinde…';
+    console.log('[CMS] verbinde mit', parts.join('/'));
 
-    var ask = repoStr ? Promise.resolve(repoStr)
-      : Promise.resolve(prompt('Repository (Form: benutzername/repository)', '') || '');
-
-    ask.then(function (rs) {
-      rs = String(rs).trim().replace(/^https?:\/\/github\.com\//, '').replace(/\.git$/, '');
-      var parts = rs.split('/');
-      if (parts.length !== 2 || !parts[0] || !parts[1]) {
-        throw new Error('Bitte das Repository als benutzername/repository angeben.');
+    login(token, parts[0], parts[1]).then(function () {
+      if ($('#remember').checked) {
+        localStorage.setItem(LS_TOKEN, token);
+        localStorage.setItem(LS_REPO, parts.join('/'));
       }
-      return login(token, parts[0], parts[1]).then(function () {
-        if ($('#remember').checked) {
-          localStorage.setItem(LS_TOKEN, token);
-          localStorage.setItem(LS_REPO, parts.join('/'));
-        }
-        start();
-      });
+      start();
     }).catch(function (ex) {
-      var m = ex.message || String(ex);
-      if (/Bad credentials|401/.test(m)) m = 'Token ungültig oder abgelaufen.';
-      else if (/Not Found|404/.test(m)) m = 'Repository nicht gefunden — oder der Token hat keinen Zugriff darauf.';
-      err.textContent = m;
-      err.hidden = false;
+      var m = String(ex && ex.message || ex);
+      console.warn('[CMS] Anmeldung fehlgeschlagen:', m);
+      if (/Failed to fetch|NetworkError|Load failed/i.test(m)) {
+        fail('Keine Verbindung zu api.github.com. Blockt ein Adblocker oder eine '
+             + 'Erweiterung die Anfrage? Bitte kurz deaktivieren und erneut versuchen.');
+      } else if (/Bad credentials|401/.test(m)) {
+        fail('Der Token wird von GitHub abgelehnt. Ist er vollständig kopiert und noch gültig?');
+      } else if (/Not Found|404/.test(m)) {
+        showRepoField();
+        fail('Repository „' + parts.join('/') + '" nicht gefunden — oder der Token hat keinen '
+             + 'Zugriff darauf. Bei „Repository access" muss dieses Repository ausgewählt sein.');
+      } else if (/403/.test(m) || /rate limit/i.test(m)) {
+        fail('GitHub verweigert den Zugriff (403). Fehlt dem Token die Berechtigung '
+             + '„Contents: Read and write"?');
+      } else {
+        fail('Anmeldung fehlgeschlagen: ' + m);
+      }
     }).then(function () {
       btn.disabled = false; btn.textContent = 'Anmelden';
     });
