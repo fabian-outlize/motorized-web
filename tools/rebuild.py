@@ -20,6 +20,7 @@ Aus content/ (und damit im CMS änderbar):
 Der Fließtext der Startseite liegt in tools/home-main.html, die Rechtstexte
 in tools/legal-*.json.
 """
+import hashlib
 import html
 import json
 import os
@@ -27,6 +28,18 @@ import os
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PARTS = os.path.join(ROOT, "tools")
 CONTENT = os.path.join(ROOT, "content")
+
+def stamp(relpath):
+    """Kurzer Fingerabdruck einer Datei. Haengt als ?v=… an CSS und JS, damit
+    Browser nach einer Aenderung garantiert die neue Fassung laden und nicht
+    tagelang die alte aus dem Zwischenspeicher zeigen."""
+    f = os.path.join(ROOT, relpath)
+    try:
+        with open(f, "rb") as fh:
+            return hashlib.sha1(fh.read()).hexdigest()[:8]
+    except OSError:
+        return "0"
+
 
 CHEV = '<svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>'
 
@@ -121,8 +134,8 @@ window.SM_BASE = "{base}";
 
 <link rel="preload" href="{r('fonts/antonio-latin.woff2')}" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{r('fonts/inter-latin.woff2')}" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="{r('css/fonts.css')}">
-<link rel="stylesheet" href="{r('css/style.css')}">
+<link rel="stylesheet" href="{r('css/fonts.css')}?v={stamp("css/fonts.css")}">
+<link rel="stylesheet" href="{r('css/style.css')}?v={stamp("css/style.css")}">
 </head>
 <body>
 
@@ -223,8 +236,8 @@ def footer(depth):
   </div>
 </footer>
 
-<script src="{rel(depth, 'js/main.js')}" defer></script>
-<script src="{rel(depth, 'js/consent.js')}" defer></script>
+<script src="{rel(depth, 'js/main.js')}?v={stamp('js/main.js')}" defer></script>
+<script src="{rel(depth, 'js/consent.js')}?v={stamp('js/consent.js')}" defer></script>
 </body>
 </html>
 """
@@ -1107,6 +1120,20 @@ def build_robots():
           f"Sitemap: {SITE}/sitemap.xml\n")
 
 
+def build_admin():
+    """Setzt den Fingerabdruck in admin/index.html, damit auch das CMS
+    nach einer Aenderung sofort neu geladen wird."""
+    import re as _re
+    p = os.path.join(ROOT, "admin", "index.html")
+    s = open(p, encoding="utf-8").read()
+    s = _re.sub(r'href="admin\.css(\?v=[a-f0-9]+)?"',
+                f'href="admin.css?v={stamp("admin/admin.css")}"', s)
+    s = _re.sub(r'src="admin\.js(\?v=[a-f0-9]+)?"',
+                f'src="admin.js?v={stamp("admin/admin.js")}"', s)
+    open(p, "w", encoding="utf-8").write(s)
+    print(f"  {'admin/index.html':36} gestempelt")
+
+
 def build_sitemap():
     urls = [("/", "1.0"), ("/racing/", "0.9"), ("/bikes/", "0.8")]
     for b in load("bikes.json"):
@@ -1137,6 +1164,7 @@ if __name__ == "__main__":
     build_404()
     build_robots()
     build_sitemap()
+    build_admin()
     if NOINDEX:
         print("\n  ACHTUNG: Vorschau-Modus aktiv — alle Seiten stehen auf noindex.")
     print("fertig.")
