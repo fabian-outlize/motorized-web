@@ -27,7 +27,6 @@ import os
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PARTS = os.path.join(ROOT, "tools")
 CONTENT = os.path.join(ROOT, "content")
-SITE = "https://motorized.at"
 
 CHEV = '<svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>'
 
@@ -39,6 +38,9 @@ def load(name):
 
 S = load("settings.json")
 TRACK = load("tracking.json")
+# Basisadresse der Seite. Für eine Vorschau unter github.io hier die
+# Vorschau-Adresse eintragen, damit Link-Vorschauen und canonical stimmen.
+SITE = S.get("site_url", "https://motorized.at").rstrip("/")
 BOOKING = S["buchung_url"]
 TEL = S["telefon_link"]
 MAIL = S["email"]

@@ -594,6 +594,9 @@
   function viewSettings() {
     var s = state.files['settings.json'];
     var body = [
+      field('Adresse der Website', s.site_url, function (v) { s.site_url = v.replace(/\/+$/, ''); },
+            { hint: 'Ohne Schrägstrich am Ende. Steuert Link-Vorschauen, canonical und die Sitemap. ' +
+                    'Während einer Vorschau auf die github.io-Adresse setzen.' }),
       field('Firmenname', s.firma, function (v) { s.firma = v; }),
       (function () {
         var g = el('div', 'grid2');

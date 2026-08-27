@@ -1,4 +1,5 @@
 {
+  "site_url": "https://motorized.at",
   "firma": "Autohaus Schwarz e.U.",
   "marke": "Schwarz Motorized",
   "strasse": "Betriebsgebiet Nord 4",
@@ -10,8 +11,14 @@
   "maps_url": "https://maps.app.goo.gl/D2jVzh5HcYnCtnNU9",
   "buchung_url": "https://osb.motiondata-vector.com/?d=aK4R5zkrGzP73AP9STMjSadQmMsnCELL6D8Gy8GXPQxZPafxBL",
   "oeffnungszeiten": [
-    { "tage": "Mo – Fr", "zeit": "07:30 – 12:00" },
-    { "tage": "", "zeit": "13:00 – 17:30" }
+    {
+      "tage": "Mo – Fr",
+      "zeit": "07:30 – 12:00"
+    },
+    {
+      "tage": "",
+      "zeit": "13:00 – 17:30"
+    }
   ],
   "oeffnungszeiten_hinweis": "Samstag und Sonntag geschlossen"
 }
