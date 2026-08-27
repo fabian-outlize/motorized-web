@@ -1,5 +1,6 @@
 {
   "site_url": "https://fabian-outlize.github.io/motorized-web",
+  "noindex": true,
   "firma": "Autohaus Schwarz e.U.",
   "marke": "Schwarz Motorized",
   "strasse": "Betriebsgebiet Nord 4",

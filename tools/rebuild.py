@@ -41,6 +41,8 @@ TRACK = load("tracking.json")
 # Basisadresse der Seite. Für eine Vorschau unter github.io hier die
 # Vorschau-Adresse eintragen, damit Link-Vorschauen und canonical stimmen.
 SITE = S.get("site_url", "https://motorized.at").rstrip("/")
+# Vorschau-Modus: haelt die Seite komplett aus Google raus.
+NOINDEX = bool(S.get("noindex"))
 BOOKING = S["buchung_url"]
 TEL = S["telefon_link"]
 MAIL = S["email"]
@@ -77,7 +79,8 @@ def head(depth, title, desc, canonical, noindex=False):
         "facebook_pixel_id": TRACK.get("facebook_pixel_id", ""),
         "aktiv": bool(TRACK.get("aktiv")),
     }, ensure_ascii=False)
-    robots = '<meta name="robots" content="noindex, nofollow">\n' if noindex else ""
+    robots = ('<meta name="robots" content="noindex, nofollow">\n'
+              if (noindex or NOINDEX) else "")
     return f"""<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -1068,6 +1071,30 @@ def build_404():
 
 
 # ================================================================== Sitemap
+def build_robots():
+    if NOINDEX:
+        # Crawlen bleibt erlaubt — sonst koennte Google das noindex gar nicht lesen
+        # und die Adresse trotzdem in den Index nehmen.
+        write("robots.txt",
+              "# Vorschau — diese Seite soll nicht in Suchmaschinen erscheinen.\n"
+              "# Das Auslesen bleibt absichtlich erlaubt, damit das noindex\n"
+              "# in jeder Seite auch gelesen werden kann.\n"
+              "User-agent: *\n"
+              "Allow: /\n"
+              "Disallow: /admin/\n"
+              "Disallow: /tools/\n"
+              "Disallow: /content/\n")
+        return
+    write("robots.txt",
+          "User-agent: *\n"
+          "Allow: /\n"
+          "Disallow: /admin/\n"
+          "Disallow: /tools/\n"
+          "Disallow: /content/\n"
+          "\n"
+          f"Sitemap: {SITE}/sitemap.xml\n")
+
+
 def build_sitemap():
     urls = [("/", "1.0"), ("/racing/", "0.9"), ("/bikes/", "0.8")]
     for b in load("bikes.json"):
@@ -1096,5 +1123,8 @@ if __name__ == "__main__":
                 "Allgemeine Geschäftsbedingungen von Autohaus Schwarz e.U.")
     build_cookies()
     build_404()
+    build_robots()
     build_sitemap()
+    if NOINDEX:
+        print("\n  ACHTUNG: Vorschau-Modus aktiv — alle Seiten stehen auf noindex.")
     print("fertig.")

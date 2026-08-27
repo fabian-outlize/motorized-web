@@ -1,7 +1,8 @@
+# Vorschau — diese Seite soll nicht in Suchmaschinen erscheinen.
+# Das Auslesen bleibt absichtlich erlaubt, damit das noindex
+# in jeder Seite auch gelesen werden kann.
 User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /tools/
 Disallow: /content/
-
-Sitemap: https://motorized.at/sitemap.xml

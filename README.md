@@ -96,6 +96,22 @@ python3 tools/rebuild.py
 Direkt in `index.html` zu schreiben funktioniert auch — aber der nächste Rebuild
 überschreibt es wieder. Deshalb besser in den Vorlagen ändern.
 
+## Vorschau-Modus
+
+In `content/settings.json` steht `"noindex": true` — im CMS unter *Kontaktdaten*
+als Schalter „Vorschau-Modus". Solange er an ist:
+
+- jede Seite trägt `<meta name="robots" content="noindex, nofollow">`
+- `robots.txt` erlaubt das Auslesen weiterhin (wichtig!) und nennt keine Sitemap
+
+Das Auslesen bleibt bewusst erlaubt: Sperrt man Suchmaschinen per `robots.txt` aus,
+können sie das `noindex` gar nicht lesen — und nehmen die Adresse trotzdem in den
+Index, nur ohne Beschreibung. Der umgekehrte Weg ist der sichere.
+
+**Vor dem echten Livegang ausschalten**, sonst findet Google die Seite nie.
+Zusammen mit `site_url` sind das die zwei Werte, die beim Umzug auf die echte
+Domain angepasst werden müssen.
+
 ## Cookies und Tracking
 
 Solange in `content/tracking.json` keine ID eingetragen und aktiviert ist, lädt die
@@ -150,7 +166,9 @@ Zwei Fallstricke, die schon aufgetreten sind:
 5. **Racing-Anfrageformular** öffnet aktuell das E-Mail-Programm des Besuchers
    (kein Server nötig). Wenn Anfragen direkt ankommen sollen, braucht es einen
    Formulardienst — dann fallen Datenschutzhinweise dafür an.
-6. **Preise auf der Racing-Seite:** Die drei Ausbaustufen nennen bewusst keine Beträge,
+6. **Vorschau-Modus ist aktiv** — die Seite steht auf `noindex` und wird von Google
+   nicht aufgenommen. Vor dem Livegang zusammen mit `site_url` umstellen.
+7. **Preise auf der Racing-Seite:** Die drei Ausbaustufen nennen bewusst keine Beträge,
    weil mir keine vorliegen. Sobald es Richtwerte gibt, gehören sie dort hin — das ist
    der größte verbleibende Conversion-Hebel.
 

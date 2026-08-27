@@ -597,6 +597,7 @@
       field('Adresse der Website', s.site_url, function (v) { s.site_url = v.replace(/\/+$/, ''); },
             { hint: 'Ohne Schrägstrich am Ende. Steuert Link-Vorschauen, canonical und die Sitemap. ' +
                     'Während einer Vorschau auf die github.io-Adresse setzen.' }),
+      checkbox('Vorschau-Modus — Seite aus Google heraushalten', s.noindex, function (v) { s.noindex = v; }),
       field('Firmenname', s.firma, function (v) { s.firma = v; }),
       (function () {
         var g = el('div', 'grid2');
