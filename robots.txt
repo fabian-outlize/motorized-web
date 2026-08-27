@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /tools/
+Disallow: /content/
 
 Sitemap: https://motorized.at/sitemap.xml

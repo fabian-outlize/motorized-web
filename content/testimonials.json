@@ -1,0 +1,56 @@
+[
+  {
+    "zitat": "Professioneller Service und sehr nahbar. Absolut zuverlässiges Personal!",
+    "text": "Empfehlenswert.",
+    "quelle": "Google",
+    "name": "Alejandro",
+    "faehrt": "Yamaha MT-09",
+    "avatar": "av-alejandro.jpg",
+    "hervorheben": true
+  },
+  {
+    "zitat": "Top Erfahrung bei Schwarz Motorized!",
+    "text": "Sehr nettes und freundliches Personal, das einem wirklich das Gefühl gibt, willkommen zu sein. Die Beratung war kompetent und ausführlich. Man merkt, dass die Mitarbeiter wissen, wovon sie sprechen. Dazu noch faire Preise.",
+    "quelle": "Google",
+    "name": "Predrag B.",
+    "faehrt": "Aprilia Tuono V4",
+    "avatar": "av-predrag.jpg",
+    "hervorheben": false
+  },
+  {
+    "zitat": "100 % Empfehlung",
+    "text": "Perfekte Arbeit!",
+    "quelle": "Google",
+    "name": "Martin U.",
+    "faehrt": "Aprilia RSV4",
+    "avatar": "av-m.jpg",
+    "hervorheben": false
+  },
+  {
+    "zitat": "Sehr kompetentes und sympathisches Team!",
+    "text": "Werde ich auf jeden Fall weiterempfehlen!",
+    "quelle": "Facebook",
+    "name": "Georg S.",
+    "faehrt": "Aprilia RSV4",
+    "avatar": "av-georg.jpg",
+    "hervorheben": false
+  },
+  {
+    "zitat": "Fachlich kompetent und lösungsorientiert!",
+    "text": "Sehr empfehlenswert. Das Team bringt frischen Wind in den Seewinkel.",
+    "quelle": "Facebook",
+    "name": "Ursula S.",
+    "faehrt": "Aprilia Caponord",
+    "avatar": "av-ursula.jpg",
+    "hervorheben": true
+  },
+  {
+    "zitat": "Tolle Beratung, sympathische Mitarbeiter und kompetenter Service.",
+    "text": "Ich habe mich hier sehr wohl gefühlt. Komme gerne wieder.",
+    "quelle": "Google",
+    "name": "Vera S.",
+    "faehrt": "SYM 125",
+    "avatar": "av-v.jpg",
+    "hervorheben": false
+  }
+]

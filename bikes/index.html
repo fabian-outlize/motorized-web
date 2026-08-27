@@ -28,6 +28,8 @@
    und die Seite ist ganz normal sichtbar. */
 document.documentElement.classList.add("js");
 setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.remove("js"); }, 3000);
+window.SM_TRACKING = {"gtm_id": "", "facebook_pixel_id": "", "aktiv": false};
+window.SM_BASE = "../";
 </script>
 
 <link rel="preload" href="../fonts/antonio-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -113,83 +115,83 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
 <section class="sec sec--flush-t">
   <div class="wrap">
     <div class="bikes__grid">
-      <article class="bike" data-rv style="--rv-d:0ms">
+      <a class="bike" href="../bikes/moto-guzzi-v9-bobber/" data-rv style="--rv-d:0ms">
         <div class="bike__media">
           <img src="../assets/web/bike-guzzi-v9.jpg" alt="Moto Guzzi V9 Bobber in Mattschwarz" loading="lazy">
-          <span class="bike__flag">Gebraucht</span>
+          <span class="bike__flag">Top Gebrauchtbike</span>
         </div>
         <div>
           <h2 class="bike__t">Moto Guzzi V9 Bobber</h2>
-          <p class="bike__meta num"><span>Baujahr 05/2025</span><span>1.300 km</span></p>
+          <p class="bike__meta num"><span>Baujahr 05/2025</span> <span>1.300 km</span></p>
         </div>
         <p class="bike__price num">€ 7.790,–</p>
-      </article>
-      <article class="bike" data-rv style="--rv-d:70ms">
+      </a>
+      <a class="bike" href="../bikes/bmw-m-1000-r/" data-rv style="--rv-d:70ms">
         <div class="bike__media">
           <img src="../assets/web/bike-bmw-m1000r.jpg" alt="BMW M 1000 R in M-Lackierung" loading="lazy">
           <span class="bike__flag">Gebraucht</span>
         </div>
         <div>
           <h2 class="bike__t">BMW M 1000 R</h2>
-          <p class="bike__meta num"><span>Baujahr 2024</span><span>8.718 km</span></p>
+          <p class="bike__meta num"><span>Baujahr 2024</span> <span>8.718 km</span></p>
         </div>
         <p class="bike__price num">€ 22.990,–</p>
-      </article>
-      <article class="bike" data-rv style="--rv-d:140ms">
+      </a>
+      <a class="bike" href="../bikes/aprilia-tuono-v4-1100-e5/" data-rv style="--rv-d:140ms">
         <div class="bike__media">
           <img src="../assets/web/bike-tuono-e5.jpg" alt="Aprilia Tuono V4 1100 E5+" loading="lazy">
-          <span class="bike__flag">Gebraucht</span>
+          <span class="bike__flag">Vorführer</span>
         </div>
         <div>
           <h2 class="bike__t">Aprilia Tuono V4 1100 E5+</h2>
-          <p class="bike__meta num"><span>Baujahr 03/2026</span><span>1.440 km</span></p>
+          <p class="bike__meta num"><span>Baujahr 03/2026</span> <span>1.440 km</span></p>
         </div>
         <p class="bike__price num">€ 23.590,–</p>
-      </article>
-      <article class="bike" data-rv style="--rv-d:210ms">
+      </a>
+      <a class="bike" href="../bikes/aprilia-rsv4-1100-factory-e5/" data-rv style="--rv-d:210ms">
         <div class="bike__media">
           <img src="../assets/web/bike-rsv4-e5.jpg" alt="Aprilia RSV4 1100 Factory E5" loading="lazy">
           <span class="bike__flag">Gebraucht</span>
         </div>
         <div>
           <h2 class="bike__t">Aprilia RSV4 1100 Factory E5</h2>
-          <p class="bike__meta num"><span>Baujahr 04/2022</span><span>5.783 km</span></p>
+          <p class="bike__meta num"><span>Baujahr 04/2022</span> <span>5.783 km</span></p>
         </div>
         <p class="bike__price num">€ 22.590,–</p>
-      </article>
-      <article class="bike" data-rv style="--rv-d:280ms">
+      </a>
+      <a class="bike" href="../bikes/aprilia-tuono-v4-1100-2023/" data-rv style="--rv-d:280ms">
         <div class="bike__media">
           <img src="../assets/web/bike-tuono-2023.jpg" alt="Aprilia Tuono V4 1100" loading="lazy">
           <span class="bike__flag">Gebraucht</span>
         </div>
         <div>
           <h2 class="bike__t">Aprilia Tuono V4 1100</h2>
-          <p class="bike__meta num"><span>Baujahr 2023</span><span>24.423 km</span></p>
+          <p class="bike__meta num"><span>Baujahr 2023</span> <span>24.423 km</span></p>
         </div>
         <p class="bike__price num">€ 18.900,–</p>
-      </article>
-      <article class="bike" data-rv style="--rv-d:350ms">
+      </a>
+      <a class="bike" href="../bikes/aprilia-tuono-v4-factory-1100-e4/" data-rv style="--rv-d:350ms">
         <div class="bike__media">
           <img src="../assets/web/bike-tuono-e4.jpg" alt="Aprilia Tuono V4 Factory 1100 E4" loading="lazy">
           <span class="bike__flag">Gebraucht</span>
         </div>
         <div>
           <h2 class="bike__t">Aprilia Tuono V4 Factory 1100 E4</h2>
-          <p class="bike__meta num"><span>Baujahr 05/2021</span><span>16.928 km</span></p>
+          <p class="bike__meta num"><span>Baujahr 05/2021</span> <span>16.928 km</span></p>
         </div>
         <p class="bike__price num">€ 14.590,–</p>
-      </article>
-      <article class="bike" data-rv style="--rv-d:350ms">
+      </a>
+      <a class="bike" href="../bikes/aprilia-rs-125/" data-rv style="--rv-d:350ms">
         <div class="bike__media">
           <img src="../assets/web/bike-rs125.jpg" alt="Aprilia RS 125" loading="lazy">
           <span class="bike__flag">Gebraucht</span>
         </div>
         <div>
           <h2 class="bike__t">Aprilia RS 125</h2>
-          <p class="bike__meta num"><span>Baujahr 2024</span><span>1.731 km</span></p>
+          <p class="bike__meta num"><span>Baujahr 2024</span> <span>1.731 km</span></p>
         </div>
         <p class="bike__price num">€ 7.200,–</p>
-      </article>
+      </a>
     </div>
     <p class="bikes__note">
       Alle Preise inkl. USt., Stand der Veröffentlichung. Verfügbarkeit auf Anfrage —
@@ -248,6 +250,8 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
         <a href="../impressum/">Impressum</a>
         <a href="../agb/">AGB</a>
         <a href="../datenschutz/">Datenschutz</a>
+        <a href="../cookies/">Cookies</a>
+        <a href="#" data-cookie-settings>Cookie-Einstellungen</a>
       </nav>
       <span class="ft__cr">© <span class="num">2026</span> Autohaus Schwarz e.U.</span>
       <span class="ft__by">designed with love by <b>outlize®</b></span>
@@ -256,5 +260,6 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
 </footer>
 
 <script src="../js/main.js" defer></script>
+<script src="../js/consent.js" defer></script>
 </body>
 </html>

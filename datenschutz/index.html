@@ -28,6 +28,8 @@
    und die Seite ist ganz normal sichtbar. */
 document.documentElement.classList.add("js");
 setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.remove("js"); }, 3000);
+window.SM_TRACKING = {"gtm_id": "", "facebook_pixel_id": "", "aktiv": false};
+window.SM_BASE = "../";
 </script>
 
 <link rel="preload" href="../fonts/antonio-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -104,7 +106,7 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
 
 <section class="sec sec--flush-t">
   <div class="wrap">
-    <p class="legal-note"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg><span>Diese Datenschutzerklärung stammt noch von der bisherigen WordPress-Seite und beschreibt Dienste, die es hier nicht mehr gibt. Die neue Seite setzt keine Cookies, bindet keine externen Schriften ein und verwendet kein Tracking. Der Text muss vor dem Livegang überarbeitet werden.</span></p>
+    <p class="legal-note"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg><span>Diese Datenschutzerklärung stammt noch von der bisherigen WordPress-Seite und beschreibt Dienste, die es hier so nicht mehr gibt. Sie muss vor dem Livegang überarbeitet werden.</span></p>
     <div class="prose">
       <p>Als Autohaus Schwarz Kunde bin ich immer im Vorteil!<br />Bei Einwilligung zur Verarbeitung von Telefonnummer, Geburtsdatum und E-Mail-Adresse erhalte ich viele Vorteile!</p>
       <h3>Welche personenbezogenen Daten werden verarbeitet?</h3>
@@ -130,7 +132,7 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
       <h3>Cookies</h3>
       <p>Unsere Website verwendet so genannte Cookies. Dabei handelt es sich um kleine Textdateien, die mit Hilfe des Browsers auf Ihrem Endgerät abgelegt werden. Sie richten keinen Schaden an. Wir nutzen Cookies dazu, unser Angebot nutzerfreundlich zu gestalten. Einige Cookies bleiben auf Ihrem Endgerät gespeichert, bis Sie diese löschen. Sie ermöglichen es uns, Ihren Browser beim nächsten Besuch wiederzuerkennen. Wenn Sie dies nicht wünschen, so können Sie Ihren Browser so einrichten, dass er Sie über das Setzen von Cookies informiert und Sie dies nur im Einzelfall erlauben. Bei der Deaktivierung von Cookies kann die Funktionalität unserer Website eingeschränkt sein.</p>
       <h3>Datenschutzerklärung für die Nutzung von Google Analytics</h3>
-      <p>Diese Website nutzt Funktionen des Webanalysedienstes Google Analytics. Anbieter ist die Google Inc. 1600 Amphitheatre Parkway Mountain View, CA 94043, USA. Google Analytics verwendet sog. „Cookies“. Das sind Textdateien, die auf Ihrem Computer gespeichert werden und die eine Analyse der Benutzung der Website durch Sie ermöglichen. Die durch den Cookie erzeugten Informationen über Ihre Benutzung dieser Website werden in der Regel an einen Server von Google in den USA übertragen und dort gespeichert.Im Falle der Aktivierung der IP-Anonymisierung auf dieser Webseite wird Ihre IP-Adresse von Google jedoch innerhalb von Mitgliedstaaten der Europäischen Union oder in anderen Vertragsstaaten des Abkommens über den Europäischen Wirtschaftsraum zuvor gekürzt. Nur in Ausnahmefällen wird die volle IP-Adresse an einen Server von Google in den USA übertragen und dort gekürzt. Im Auftrag des Betreibers dieser Website wird Google diese Informationen benutzen, um Ihre Nutzung der Website auszuwerten, um Reports über die Websiteaktivitäten zusammenzustellen und um weitere mit der Websitenutzung und der Internetnutzung verbundene Dienstleistungen gegenüber dem Websitebetreiber zu erbringen. Die im Rahmen von Google Analytics von Ihrem Browser übermittelte IP-Adresse wird nicht mit anderen Daten von Google zusammengeführt.Sie können die Speicherung der Cookies durch eine entsprechende Einstellung Ihrer Browser-Software verhindern; wir weisen Sie jedoch darauf hin, dass Sie in diesem Fall gegebenenfalls nicht sämtliche Funktionen dieser Website vollumfänglich werden nutzen können. Sie können darüber hinaus die Erfassung der durch das Cookie erzeugten und auf Ihre Nutzung der Website bezogenen Daten (inkl. Ihrer IP-Adresse) an Google sowie die Verarbeitung dieser Daten durch Google verhindern, indem sie das unter dem folgenden Link verfügbare Browser-Plugin herunterladen und installieren: <a href="" target="_blank" rel="noopener noreferrer">http://tools.google.com/dlpage/gaoptout?hl=de</a></p>
+      <p>Diese Website nutzt Funktionen des Webanalysedienstes Google Analytics. Anbieter ist die Google Inc. 1600 Amphitheatre Parkway Mountain View, CA 94043, USA. Google Analytics verwendet sog. „Cookies“. Das sind Textdateien, die auf Ihrem Computer gespeichert werden und die eine Analyse der Benutzung der Website durch Sie ermöglichen. Die durch den Cookie erzeugten Informationen über Ihre Benutzung dieser Website werden in der Regel an einen Server von Google in den USA übertragen und dort gespeichert.Im Falle der Aktivierung der IP-Anonymisierung auf dieser Webseite wird Ihre IP-Adresse von Google jedoch innerhalb von Mitgliedstaaten der Europäischen Union oder in anderen Vertragsstaaten des Abkommens über den Europäischen Wirtschaftsraum zuvor gekürzt. Nur in Ausnahmefällen wird die volle IP-Adresse an einen Server von Google in den USA übertragen und dort gekürzt. Im Auftrag des Betreibers dieser Website wird Google diese Informationen benutzen, um Ihre Nutzung der Website auszuwerten, um Reports über die Websiteaktivitäten zusammenzustellen und um weitere mit der Websitenutzung und der Internetnutzung verbundene Dienstleistungen gegenüber dem Websitebetreiber zu erbringen. Die im Rahmen von Google Analytics von Ihrem Browser übermittelte IP-Adresse wird nicht mit anderen Daten von Google zusammengeführt.Sie können die Speicherung der Cookies durch eine entsprechende Einstellung Ihrer Browser-Software verhindern; wir weisen Sie jedoch darauf hin, dass Sie in diesem Fall gegebenenfalls nicht sämtliche Funktionen dieser Website vollumfänglich werden nutzen können. Sie können darüber hinaus die Erfassung der durch das Cookie erzeugten und auf Ihre Nutzung der Website bezogenen Daten (inkl. Ihrer IP-Adresse) an Google sowie die Verarbeitung dieser Daten durch Google verhindern, indem sie das unter dem folgenden Link verfügbare Browser-Plugin herunterladen und installieren: <a href="http://tools.google.com/dlpage/gaoptout?hl=de" target="_blank" rel="noopener noreferrer">http://tools.google.com/dlpage/gaoptout?hl=de</a></p>
       <h3>Widerspruch Werbe-Mails</h3>
       <p>Der Nutzung von im Rahmen der Impressumspflicht veröffentlichten Kontaktdaten zur Übersendung von nicht ausdrücklich angeforderter Werbung und Informationsmaterialien wird hiermit widersprochen. Die Betreiber der Seiten behalten sich ausdrücklich rechtliche Schritte im Falle der unverlangten Zusendung von Werbeinformationen, etwa durch Spam-E-Mails, vor.</p>
       <h3>Ihre Rechte</h3>
@@ -168,6 +170,8 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
         <a href="../impressum/">Impressum</a>
         <a href="../agb/">AGB</a>
         <a href="../datenschutz/">Datenschutz</a>
+        <a href="../cookies/">Cookies</a>
+        <a href="#" data-cookie-settings>Cookie-Einstellungen</a>
       </nav>
       <span class="ft__cr">© <span class="num">2026</span> Autohaus Schwarz e.U.</span>
       <span class="ft__by">designed with love by <b>outlize®</b></span>
@@ -176,5 +180,6 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
 </footer>
 
 <script src="../js/main.js" defer></script>
+<script src="../js/consent.js" defer></script>
 </body>
 </html>

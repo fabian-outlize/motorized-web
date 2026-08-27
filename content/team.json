@@ -1,0 +1,6 @@
+[
+  { "name": "Ing. Thomas Schwarz", "rolle": "Geschäftsführer, Verkauf", "bild": "team-thomas.jpg" },
+  { "name": "Christoph Halbauer",  "rolle": "Reparaturannahme",        "bild": "team-christoph.jpg" },
+  { "name": "Roland Strobl",       "rolle": "Mechaniker",              "bild": "team-roland.jpg" },
+  { "name": "Max Barwik",          "rolle": "Mechaniker",              "bild": "team-max.jpg" }
+]

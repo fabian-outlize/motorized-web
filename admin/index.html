@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inhalte pflegen — Schwarz Motorized</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../assets/icons/favicon.png">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ============================================================ Anmeldung -->
+<div class="login" id="login">
+  <form class="login__box" id="loginForm">
+    <h1 class="login__h">Inhalte pflegen</h1>
+    <p class="login__t">
+      Zum Anmelden brauchst du einen GitHub-Token mit Schreibrechten auf dieses
+      Repository. Der Token bleibt in diesem Browser und wird nirgends sonst gespeichert.
+    </p>
+
+    <label class="f">
+      <span class="f__l">GitHub-Token</span>
+      <input class="f__i" type="password" id="token" autocomplete="current-password"
+             placeholder="github_pat_… oder ghp_…" required>
+    </label>
+
+    <label class="f f--check">
+      <input type="checkbox" id="remember" checked>
+      <span>Angemeldet bleiben (auf diesem Gerät)</span>
+    </label>
+
+    <button class="btn btn--primary" type="submit" id="loginBtn">Anmelden</button>
+    <p class="login__err" id="loginErr" hidden></p>
+
+    <details class="login__help">
+      <summary>Wie komme ich zu einem Token?</summary>
+      <ol>
+        <li>Auf <a href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener">github.com/settings/personal-access-tokens</a> gehen.</li>
+        <li><em>Generate new token</em> → <em>Fine-grained</em>.</li>
+        <li>Bei <em>Repository access</em> nur dieses eine Repository auswählen.</li>
+        <li>Bei <em>Permissions → Repository permissions</em> den Punkt
+            <strong>Contents</strong> auf <strong>Read and write</strong> stellen.</li>
+        <li>Token erzeugen, kopieren und hier einfügen.</li>
+      </ol>
+      <p>Setz beim Token ein Ablaufdatum. Läuft er ab, erzeugst du einfach einen neuen.</p>
+    </details>
+  </form>
+</div>
+
+<!-- ================================================================== App -->
+<div class="app" id="app" hidden>
+  <header class="top">
+    <div class="top__in">
+      <span class="top__brand">Inhalte pflegen</span>
+      <span class="top__repo" id="repoLabel"></span>
+      <span class="top__spacer"></span>
+      <span class="top__state" id="state"></span>
+      <button class="btn" id="publishBtn" type="button" disabled>Änderungen veröffentlichen</button>
+      <button class="btn btn--quiet" id="logoutBtn" type="button">Abmelden</button>
+    </div>
+  </header>
+
+  <div class="shell">
+    <nav class="side" id="side" aria-label="Bereiche"></nav>
+    <main class="main" id="main"></main>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="admin.js"></script>
+</body>
+</html>

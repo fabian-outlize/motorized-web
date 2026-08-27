@@ -1,0 +1,7 @@
+{
+  "gtm_id": "",
+  "facebook_pixel_id": "",
+  "aktiv": false,
+  "cookie_banner": true,
+  "hinweis": "gtm_id z. B. GTM-XXXXXXX · facebook_pixel_id ist eine reine Zahlenfolge. Leer lassen = wird nicht geladen. Nichts wird geladen, bevor der Besucher zustimmt."
+}

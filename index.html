@@ -28,6 +28,8 @@
    und die Seite ist ganz normal sichtbar. */
 document.documentElement.classList.add("js");
 setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.remove("js"); }, 3000);
+window.SM_TRACKING = {"gtm_id": "", "facebook_pixel_id": "", "aktiv": false};
+window.SM_BASE = "";
 </script>
 
 <link rel="preload" href="fonts/antonio-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -218,8 +220,7 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
 
     <div class="svc__list" id="svcList">
       <div class="svc__peek" id="svcPeek" aria-hidden="true"><img alt="" id="svcPeekImg"></div>
-
-      <a class="svc__row" href="#kontakt" data-img="assets/web/svc-aprilia.jpg" data-rv>
+      <a class="svc__row" href="#kontakt" data-img="assets/web/svc-aprilia.jpg" data-rv style="--rv-d:0ms">
         <div class="svc__in">
           <h3 class="svc__t">Offizieller Aprilia Händler</h3>
           <p class="svc__d">Alle aktuellen Modelle, ehrliche Beratung, Finanzierung, Versicherung und Anmeldung — aus einer Hand.</p>
@@ -227,8 +228,7 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
         </div>
         <div class="svc__img"><img src="assets/web/svc-aprilia.jpg" alt="Aprilia RSV4 im Showroom von Schwarz Motorized" loading="lazy"></div>
       </a>
-
-      <a class="svc__row" href="#kontakt" data-img="assets/web/svc-ecu.jpg" data-rv style="--rv-d:80ms">
+      <a class="svc__row" href="racing/" data-img="assets/web/svc-ecu.jpg" data-rv style="--rv-d:80ms">
         <div class="svc__in">
           <h3 class="svc__t">ECU Flash by ROM Racing</h3>
           <p class="svc__d">Individuelle Abstimmung der Motorsteuerung für alle V4- und 660er-Modelle. Exklusiv in Österreich bei uns.</p>
@@ -236,16 +236,14 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
         </div>
         <div class="svc__img"><img src="assets/web/svc-ecu.jpg" alt="Laptop mit Kennfeld-Tabellen, per Diagnosekabel mit einem Motorrad verbunden" loading="lazy"></div>
       </a>
-
-      <a class="svc__row" href="#racing" data-img="assets/web/svc-race.jpg" data-rv style="--rv-d:160ms">
+      <a class="svc__row" href="racing/" data-img="assets/web/svc-race.jpg" data-rv style="--rv-d:160ms">
         <div class="svc__in">
-          <h3 class="svc__t">Rennstrecken&shy;umbau</h3>
+          <h3 class="svc__t">Rennstreckenumbau</h3>
           <p class="svc__d">Fahrwerk, Bremsen, Ergonomie, Elektronik, Rennverkleidung. Wir bauen dein Traumbike rennbereit auf.</p>
           <span class="svc__go"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></span>
         </div>
         <div class="svc__img"><img src="assets/web/svc-race.jpg" alt="Aprilia RSV4 Factory mit Carbon-Rennverkleidung" loading="lazy"></div>
       </a>
-
       <a class="svc__row" href="https://osb.motiondata-vector.com/?d=aK4R5zkrGzP73AP9STMjSadQmMsnCELL6D8Gy8GXPQxZPafxBL" target="_blank" rel="noopener" data-img="assets/web/svc-service.jpg" data-rv style="--rv-d:240ms">
         <div class="svc__in">
           <h3 class="svc__t">Service für alle Marken</h3>
@@ -254,7 +252,6 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
         </div>
         <div class="svc__img"><img src="assets/web/svc-service.jpg" alt="Hände mit Drehmomentschlüssel an der Hinterradaufhängung eines Sportmotorrads" loading="lazy"></div>
       </a>
-    </div>
   </div>
 </section>
 
@@ -309,42 +306,39 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
     </div>
 
     <div class="offers__grid">
-      <article class="offer" data-rv>
+      <a class="offer" href="bikes/moto-guzzi-v9-bobber/" data-rv>
+        <div class="offer__media">
+          <img src="assets/web/bike-guzzi-v9.jpg" alt="Moto Guzzi V9 Bobber in Mattschwarz" loading="lazy">
+          <span class="offer__flag">Top Gebrauchtbike</span>
+        </div>
+        <div class="offer__body">
+          <h3 class="offer__t">Moto Guzzi V9 Bobber</h3>
+          <p class="offer__meta num">Baujahr 05/2025 · 1.300 km</p>
+          <p class="offer__price"><b class="num">€ 7.790,–</b></p>
+        </div>
+      </a>
+      <a class="offer" href="#kontakt" data-rv>
         <div class="offer__media">
           <img src="assets/web/offer-tuono.jpg" alt="Aprilia Tuono V4 1100 Factory" loading="lazy">
           <span class="offer__flag">Cool Deal Aktion</span>
         </div>
         <div class="offer__body">
           <h3 class="offer__t">Aprilia Tuono V4 1100 Factory</h3>
-          <p class="offer__meta">Naked Superbike · <span class="num">175</span> PS V4</p>
+          <p class="offer__meta num">Naked Superbike · 175 PS V4</p>
           <p class="offer__price"><span>ab</span> <b class="num">€ 21.490,–</b></p>
         </div>
-      </article>
-
-      <article class="offer" data-rv style="--rv-d:100ms">
+      </a>
+      <a class="offer" href="#kontakt" data-rv>
         <div class="offer__media">
           <img src="assets/web/offer-tuareg.jpg" alt="Aprilia Tuareg 660" loading="lazy">
           <span class="offer__flag">Anmeldeaktion</span>
         </div>
         <div class="offer__body">
           <h3 class="offer__t">Aprilia Tuareg 660</h3>
-          <p class="offer__meta">Adventure · <span class="num">80</span> PS Twin</p>
+          <p class="offer__meta num">Adventure · 80 PS Twin</p>
           <p class="offer__price"><span>ab</span> <b class="num">€ 12.490,–</b></p>
         </div>
-      </article>
-
-      <article class="offer" data-rv style="--rv-d:200ms">
-        <div class="offer__media">
-          <img src="assets/web/offer-guzzi.jpg" alt="Moto Guzzi V9 Bobber, Top-Gebrauchtbike" loading="lazy">
-          <span class="offer__flag">Top Gebrauchtbike</span>
-        </div>
-        <div class="offer__body">
-          <h3 class="offer__t">Moto Guzzi V9 Bobber</h3>
-          <p class="offer__meta">Baujahr 05/2025 · <span class="num">1.300 km</span></p>
-          <p class="offer__price"><b class="num">€ 7.790,–</b></p>
-        </div>
-      </article>
-    </div>
+      </a>
 
     <p class="offers__note">
       Preise inkl. USt., Stand der Veröffentlichung. Sonderausstattung teilweise gegen Aufpreis.
@@ -438,7 +432,7 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
     </div>
 
     <div class="says__grid">
-      <article class="say say--hi" data-rv>
+      <article class="say say--hi" data-rv style="--rv-d:0ms">
         <p class="say__q">Professioneller Service und sehr nahbar. Absolut zuverlässiges Personal!</p>
         <p class="say__b">Empfehlenswert.</p>
         <div class="say__foot">
@@ -447,20 +441,16 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
           <span class="say__src">Google</span>
         </div>
       </article>
-
-      <article class="say" data-rv style="--rv-d:80ms">
+      <article class="say" data-rv style="--rv-d:40ms">
         <p class="say__q">Top Erfahrung bei Schwarz Motorized!</p>
-        <p class="say__b">Sehr nettes und freundliches Personal, das einem wirklich das Gefühl gibt,
-          willkommen zu sein. Die Beratung war kompetent und ausführlich. Man merkt, dass die
-          Mitarbeiter wissen, wovon sie sprechen. Dazu noch faire Preise.</p>
+        <p class="say__b">Sehr nettes und freundliches Personal, das einem wirklich das Gefühl gibt, willkommen zu sein. Die Beratung war kompetent und ausführlich. Man merkt, dass die Mitarbeiter wissen, wovon sie sprechen. Dazu noch faire Preise.</p>
         <div class="say__foot">
           <img class="say__av" src="assets/web/av-predrag.jpg" alt="" loading="lazy" width="72" height="72">
           <span><span class="say__n">Predrag B.</span><br><span class="say__ride">fährt: Aprilia Tuono V4</span></span>
           <span class="say__src">Google</span>
         </div>
       </article>
-
-      <article class="say" data-rv style="--rv-d:160ms">
+      <article class="say" data-rv style="--rv-d:80ms">
         <p class="say__q">100 % Empfehlung</p>
         <p class="say__b">Perfekte Arbeit!</p>
         <div class="say__foot">
@@ -469,37 +459,33 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
           <span class="say__src">Google</span>
         </div>
       </article>
-
-      <article class="say" data-rv style="--rv-d:40ms">
+      <article class="say" data-rv style="--rv-d:120ms">
         <p class="say__q">Sehr kompetentes und sympathisches Team!</p>
         <p class="say__b">Werde ich auf jeden Fall weiterempfehlen!</p>
         <div class="say__foot">
-          <img class="say__av" src="assets/web/av-georg.jpg" alt="" loading="lazy" width="200" height="200">
+          <img class="say__av" src="assets/web/av-georg.jpg" alt="" loading="lazy" width="72" height="72">
           <span><span class="say__n">Georg S.</span><br><span class="say__ride">fährt: Aprilia RSV4</span></span>
           <span class="say__src">Facebook</span>
         </div>
       </article>
-
-      <article class="say say--hi" data-rv style="--rv-d:120ms">
+      <article class="say say--hi" data-rv style="--rv-d:160ms">
         <p class="say__q">Fachlich kompetent und lösungsorientiert!</p>
         <p class="say__b">Sehr empfehlenswert. Das Team bringt frischen Wind in den Seewinkel.</p>
         <div class="say__foot">
-          <img class="say__av" src="assets/web/av-ursula.jpg" alt="" loading="lazy" width="200" height="200">
+          <img class="say__av" src="assets/web/av-ursula.jpg" alt="" loading="lazy" width="72" height="72">
           <span><span class="say__n">Ursula S.</span><br><span class="say__ride">fährt: Aprilia Caponord</span></span>
           <span class="say__src">Facebook</span>
         </div>
       </article>
-
       <article class="say" data-rv style="--rv-d:200ms">
         <p class="say__q">Tolle Beratung, sympathische Mitarbeiter und kompetenter Service.</p>
         <p class="say__b">Ich habe mich hier sehr wohl gefühlt. Komme gerne wieder.</p>
         <div class="say__foot">
-          <img class="say__av" src="assets/web/av-v.jpg" alt="" loading="lazy" width="400" height="400">
+          <img class="say__av" src="assets/web/av-v.jpg" alt="" loading="lazy" width="72" height="72">
           <span><span class="say__n">Vera S.</span><br><span class="say__ride">fährt: SYM 125</span></span>
           <span class="say__src">Google</span>
         </div>
       </article>
-    </div>
   </div>
 </section>
 
@@ -515,7 +501,7 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
     </div>
 
     <div class="team__grid">
-      <article class="team__i" data-rv>
+      <article class="team__i" data-rv style="--rv-d:0ms">
         <div class="team__media"><img src="assets/web/team-thomas.jpg" alt="Ing. Thomas Schwarz" loading="lazy"></div>
         <div class="team__cap"><h3 class="team__n">Ing. Thomas Schwarz</h3><p class="team__r">Geschäftsführer, Verkauf</p></div>
       </article>
@@ -531,7 +517,6 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
         <div class="team__media"><img src="assets/web/team-max.jpg" alt="Max Barwik" loading="lazy"></div>
         <div class="team__cap"><h3 class="team__n">Max Barwik</h3><p class="team__r">Mechaniker</p></div>
       </article>
-    </div>
   </div>
 </section>
 
@@ -549,124 +534,77 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
     <!-- Gruppe 1 -->
     <div class="faq__group">
       <p class="faq__gt">Service &amp; Werkstatt</p>
-
       <div class="faq__i">
         <button class="faq__q" type="button">Bietet ihr Service und Reparaturen für Aprilia an?
           <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
-        <div class="faq__a"><div><p>Ja. Wir führen Service- und Reparaturarbeiten für Aprilia Motorräder durch – von
-          regelmäßigen Wartungen und Ölwechseln bis hin zu umfangreicheren Reparaturen und Verschleißarbeiten.
-          Durch unsere Erfahrung mit Aprilia Motorrädern und unseren eigenen Einsatz auf der Rennstrecke
-          kennen wir die besonderen Anforderungen sportlicher Bikes.</p></div></div>
+        <div class="faq__a"><div><p>Ja. Wir führen Service- und Reparaturarbeiten für Aprilia Motorräder durch – von regelmäßigen Wartungen und Ölwechseln bis hin zu umfangreicheren Reparaturen und Verschleißarbeiten. Durch unsere Erfahrung mit Aprilia Motorrädern und unseren eigenen Einsatz auf der Rennstrecke kennen wir die besonderen Anforderungen sportlicher Bikes.</p></div></div>
       </div>
-
       <div class="faq__i">
         <button class="faq__q" type="button">Serviciert ihr auch Motorräder anderer Marken?
           <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
-        <div class="faq__a"><div><p>Ja. Neben Aprilia betreuen wir auch Motorräder anderer Marken. Unser Schwerpunkt liegt
-          dabei auf sportlichen Motorrädern und Naked Bikes. Wir führen Wartungen, Servicearbeiten, Reparaturen und
-          den Austausch von Verschleißteilen durch. Bei komplexen markenspezifischen Diagnosen und elektronischer
-          Fehlersuche empfehlen wir den jeweiligen Markenbetrieb – dort stehen die vollständige Herstellersoftware
-          und die fahrzeugspezifischen Informationen zur Verfügung.</p></div></div>
+        <div class="faq__a"><div><p>Ja. Neben Aprilia betreuen wir auch Motorräder anderer Marken. Unser Schwerpunkt liegt dabei auf sportlichen Motorrädern und Naked Bikes. Wir führen Wartungen, Servicearbeiten, Reparaturen und den Austausch von Verschleißteilen durch. Bei komplexen markenspezifischen Diagnosen und elektronischer Fehlersuche empfehlen wir den jeweiligen Markenbetrieb – dort stehen die vollständige Herstellersoftware und die fahrzeugspezifischen Informationen zur Verfügung.</p></div></div>
       </div>
-
       <div class="faq__i">
         <button class="faq__q" type="button">Sind Verschleißteile bei Fremdmarken ein Problem?
           <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
-        <div class="faq__a"><div><p>Nein. Bremsbeläge, Bremsscheiben, Kettenkits, Flüssigkeiten, Filter oder andere
-          übliche Wartungs- und Verschleißteile können wir auch bei Motorrädern anderer Marken tauschen.</p></div></div>
+        <div class="faq__a"><div><p>Nein. Bremsbeläge, Bremsscheiben, Kettenkits, Flüssigkeiten, Filter oder andere übliche Wartungs- und Verschleißteile können wir auch bei Motorrädern anderer Marken tauschen.</p></div></div>
       </div>
-
       <div class="faq__i">
         <button class="faq__q" type="button">Macht ihr auch das §57a-Pickerl?
           <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
-        <div class="faq__a"><div><p>Ja. Wir führen §57a-Begutachtungen für Motorräder nach Terminvereinbarung durch.
-          So kannst du die gesetzlich vorgeschriebene Überprüfung direkt bei uns machen lassen.</p></div></div>
+        <div class="faq__a"><div><p>Ja. Wir führen §57a-Begutachtungen für Motorräder nach Terminvereinbarung durch. So kannst du die gesetzlich vorgeschriebene Überprüfung direkt bei uns machen lassen.</p></div></div>
       </div>
-
       <div class="faq__i">
         <button class="faq__q" type="button">Kann ich bei euch Reifen wechseln lassen?
           <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
-        <div class="faq__a"><div><p>Ja. Wir bieten Reifenmontage und Reifenwechsel für Motorräder aller Marken an.
-          Die neuen Reifen bestellst du direkt bei uns – wir kümmern uns um Auswahl, Bestellung und fachgerechte
-          Montage. Bitte beachte: Wir montieren ausschließlich Reifen, die über Schwarz Motorized bestellt wurden.
-          Von Kunden mitgebrachte Reifen montieren wir nicht.</p></div></div>
+        <div class="faq__a"><div><p>Ja. Wir bieten Reifenmontage und Reifenwechsel für Motorräder aller Marken an. Die neuen Reifen bestellst du direkt bei uns – wir kümmern uns um Auswahl, Bestellung und fachgerechte Montage. Bitte beachte: Wir montieren ausschließlich Reifen, die über Schwarz Motorized bestellt wurden. Von Kunden mitgebrachte Reifen montieren wir nicht.</p></div></div>
       </div>
     </div>
 
-    <!-- Gruppe 2 -->
     <div class="faq__group">
       <p class="faq__gt">Racing &amp; Umbau</p>
-
       <div class="faq__i">
         <button class="faq__q" type="button">Baut ihr Motorräder für die Rennstrecke um?
           <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
-        <div class="faq__a"><div><p>Ja, das ist einer unserer Schwerpunkte. Wir bauen Motorräder nach deinen
-          Anforderungen für den Renneinsatz um – von Fahrwerk und Bremsen über Ergonomie und Elektronik bis hin
-          zu Rennverkleidung und weiteren Performance-Komponenten.</p></div></div>
+        <div class="faq__a"><div><p>Ja, das ist einer unserer Schwerpunkte. Wir bauen Motorräder nach deinen Anforderungen für den Renneinsatz um – von Fahrwerk und Bremsen über Ergonomie und Elektronik bis hin zu Rennverkleidung und weiteren Performance-Komponenten.</p></div></div>
       </div>
-
       <div class="faq__i">
         <button class="faq__q" type="button">Auch eine Aprilia RS 660 oder RSV4?
           <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
-        <div class="faq__a"><div><p>Beide sind unsere Spezialgebiete. Die RS 660 eignet sich hervorragend für den
-          Rennstreckeneinsatz und lässt sich individuell zum Racebike aufbauen. Bei der RSV4 unterstützen wir dich
-          bei Auswahl und Montage von Performance-, Fahrwerks-, Brems-, Elektronik- und Racing-Komponenten –
-          abgestimmt auf deinen Fahrstil und dein Einsatzgebiet.</p></div></div>
+        <div class="faq__a"><div><p>Beide sind unsere Spezialgebiete. Die RS 660 eignet sich hervorragend für den Rennstreckeneinsatz und lässt sich individuell zum Racebike aufbauen. Bei der RSV4 unterstützen wir dich bei Auswahl und Montage von Performance-, Fahrwerks-, Brems-, Elektronik- und Racing-Komponenten – abgestimmt auf deinen Fahrstil und dein Einsatzgebiet.</p></div></div>
       </div>
-
       <div class="faq__i">
         <button class="faq__q" type="button">Was ist ECU-Flash und für welche Modelle geht das?
           <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
-        <div class="faq__a"><div><p>Beim ECU-Flash wird die Motorsteuerung gezielt auf das Motorrad und seinen
-          Einsatzbereich abgestimmt – etwa in Verbindung mit einer geänderten Auspuffanlage oder für die Rennstrecke.
-          Wir bieten das für alle V4- und 660er-Modelle an. Gerade bei RSV4 und RS 660 ist eine professionelle
-          Abstimmung ein wichtiger Bestandteil jedes Rennstreckenumbaus. Wir beraten dich, welche Anpassungen für
-          dein Bike sinnvoll sind.</p></div></div>
+        <div class="faq__a"><div><p>Beim ECU-Flash wird die Motorsteuerung gezielt auf das Motorrad und seinen Einsatzbereich abgestimmt – etwa in Verbindung mit einer geänderten Auspuffanlage oder für die Rennstrecke. Wir bieten das für alle V4- und 660er-Modelle an. Gerade bei RSV4 und RS 660 ist eine professionelle Abstimmung ein wichtiger Bestandteil jedes Rennstreckenumbaus.</p></div></div>
       </div>
-
       <div class="faq__i">
         <button class="faq__q" type="button">Gibt es speziellen Racing-Service?
           <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
-        <div class="faq__a"><div><p>Ja. Bei Rennstreckenmotorrädern sind regelmäßige Kontrollen besonders wichtig.
-          Wir berücksichtigen Verschleiß, Einsatzbedingungen und – bei entsprechenden Aprilia Modellen – die vom
-          Motorrad erfassten Belastungs- bzw. Stresskilometer. So lassen sich Ventilservice, Ventiltausch und
-          Motorrevisionen gezielt planen, statt sie dem Zufall zu überlassen.</p></div></div>
+        <div class="faq__a"><div><p>Ja. Bei Rennstreckenmotorrädern sind regelmäßige Kontrollen besonders wichtig. Wir berücksichtigen Verschleiß, Einsatzbedingungen und – bei entsprechenden Aprilia Modellen – die vom Motorrad erfassten Belastungs- bzw. Stresskilometer. So lassen sich Ventilservice, Ventiltausch und Motorrevisionen gezielt planen, statt sie dem Zufall zu überlassen.</p></div></div>
       </div>
     </div>
 
-    <!-- Gruppe 3 -->
     <div class="faq__group">
       <p class="faq__gt">Kaufen &amp; Mieten</p>
-
       <div class="faq__i">
         <button class="faq__q" type="button">Seid ihr offizieller Aprilia Händler?
           <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
-        <div class="faq__a"><div><p>Ja. Schwarz Motorized ist offizieller Aprilia Händler und Ansprechpartner für
-          Aprilia, Moto Morini, Sym, Vent und UM Motors. Neben dem Verkauf bieten wir Service, Wartung, Reparaturen
-          und individuelle Umbauten an.</p></div></div>
+        <div class="faq__a"><div><p>Ja. Schwarz Motorized ist offizieller Aprilia Händler und Ansprechpartner für Aprilia, Moto Morini, Sym, Vent und UM Motors. Neben dem Verkauf bieten wir Service, Wartung, Reparaturen und individuelle Umbauten an.</p></div></div>
       </div>
-
       <div class="faq__i">
         <button class="faq__q" type="button">Bietet ihr Probefahrten an?
           <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
-        <div class="faq__a"><div><p>Ja. Für viele unserer Vorführmotorräder kannst du nach Terminvereinbarung eine
-          Probefahrt machen. Und wenn du einmal auf der Rennstrecke fahren möchtest, sprich uns an – auch dafür
-          haben wir eine Lösung.</p></div></div>
+        <div class="faq__a"><div><p>Ja. Für viele unserer Vorführmotorräder kannst du nach Terminvereinbarung eine Probefahrt machen. Und wenn du einmal auf der Rennstrecke fahren möchtest, sprich uns an – auch dafür haben wir eine Lösung.</p></div></div>
       </div>
-
       <div class="faq__i">
         <button class="faq__q" type="button">Kann ich ein Motorrad bei euch mieten?
           <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
-        <div class="faq__a"><div><p>Ja. Je nach Verfügbarkeit kannst du ausgewählte Vorführmotorräder für mehrere
-          Tage mieten. Entscheidest du dich danach für den Kauf, rechnen wir dir die Mietkosten auf den Kaufpreis an.</p></div></div>
+        <div class="faq__a"><div><p>Ja. Je nach Verfügbarkeit kannst du ausgewählte Vorführmotorräder für mehrere Tage mieten. Entscheidest du dich danach für den Kauf, rechnen wir dir die Mietkosten auf den Kaufpreis an.</p></div></div>
       </div>
     </div>
-  </div>
 </section>
 
-<!-- ==========================================================
-     SECTION 12 — KONTAKT / STANDORT
-     ========================================================== -->
 <section class="contact" id="kontakt">
   <div class="contact__media">
     <img src="assets/web/standort-nacht.jpg" alt="" loading="lazy" aria-hidden="true">
@@ -702,7 +640,7 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
         </li>
         <li class="info__i">
           <span class="info__k">Öffnungszeiten</span>
-          <span class="info__v num">Mo – Fr &nbsp;07:30 – 12:00<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:00 – 17:30
+          <span class="info__v num">Mo – Fr&nbsp;&nbsp;07:30 – 12:00<br><span style="opacity:0" aria-hidden="true">Mo – Fr</span>&nbsp;&nbsp;13:00 – 17:30
             <small>Samstag und Sonntag geschlossen</small></span>
         </li>
         <li class="info__i">
@@ -717,6 +655,9 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
     </div>
   </div>
 </section>
+
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "MotorcycleDealer", "name": "Schwarz Motorized", "legalName": "Autohaus Schwarz e.U.", "url": "https://motorized.at/", "telephone": "+43 2173 80060", "email": "schwarz@motorized.at", "image": "https://motorized.at/assets/icons/og.jpg", "address": {"@type": "PostalAddress", "streetAddress": "Betriebsgebiet Nord 4", "postalCode": "7123", "addressLocality": "Mönchhof", "addressRegion": "Burgenland", "addressCountry": "AT"}, "openingHours": ["Mo-Fr 07:30-12:00", "Mo-Fr 13:00-17:30"]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Bietet ihr Service und Reparaturen für Aprilia an?", "acceptedAnswer": {"@type": "Answer", "text": "Ja. Wir führen Service- und Reparaturarbeiten für Aprilia Motorräder durch – von regelmäßigen Wartungen und Ölwechseln bis hin zu umfangreicheren Reparaturen und Verschleißarbeiten. Durch unsere Erfahrung mit Aprilia Motorrädern und unseren eigenen Einsatz auf der Rennstrecke kennen wir die besonderen Anforderungen sportlicher Bikes."}}, {"@type": "Question", "name": "Serviciert ihr auch Motorräder anderer Marken?", "acceptedAnswer": {"@type": "Answer", "text": "Ja. Neben Aprilia betreuen wir auch Motorräder anderer Marken. Unser Schwerpunkt liegt dabei auf sportlichen Motorrädern und Naked Bikes. Wir führen Wartungen, Servicearbeiten, Reparaturen und den Austausch von Verschleißteilen durch. Bei komplexen markenspezifischen Diagnosen und elektronischer Fehlersuche empfehlen wir den jeweiligen Markenbetrieb – dort stehen die vollständige Herstellersoftware und die fahrzeugspezifischen Informationen zur Verfügung."}}, {"@type": "Question", "name": "Sind Verschleißteile bei Fremdmarken ein Problem?", "acceptedAnswer": {"@type": "Answer", "text": "Nein. Bremsbeläge, Bremsscheiben, Kettenkits, Flüssigkeiten, Filter oder andere übliche Wartungs- und Verschleißteile können wir auch bei Motorrädern anderer Marken tauschen."}}, {"@type": "Question", "name": "Macht ihr auch das §57a-Pickerl?", "acceptedAnswer": {"@type": "Answer", "text": "Ja. Wir führen §57a-Begutachtungen für Motorräder nach Terminvereinbarung durch. So kannst du die gesetzlich vorgeschriebene Überprüfung direkt bei uns machen lassen."}}, {"@type": "Question", "name": "Kann ich bei euch Reifen wechseln lassen?", "acceptedAnswer": {"@type": "Answer", "text": "Ja. Wir bieten Reifenmontage und Reifenwechsel für Motorräder aller Marken an. Die neuen Reifen bestellst du direkt bei uns – wir kümmern uns um Auswahl, Bestellung und fachgerechte Montage. Bitte beachte: Wir montieren ausschließlich Reifen, die über Schwarz Motorized bestellt wurden. Von Kunden mitgebrachte Reifen montieren wir nicht."}}, {"@type": "Question", "name": "Baut ihr Motorräder für die Rennstrecke um?", "acceptedAnswer": {"@type": "Answer", "text": "Ja, das ist einer unserer Schwerpunkte. Wir bauen Motorräder nach deinen Anforderungen für den Renneinsatz um – von Fahrwerk und Bremsen über Ergonomie und Elektronik bis hin zu Rennverkleidung und weiteren Performance-Komponenten."}}, {"@type": "Question", "name": "Auch eine Aprilia RS 660 oder RSV4?", "acceptedAnswer": {"@type": "Answer", "text": "Beide sind unsere Spezialgebiete. Die RS 660 eignet sich hervorragend für den Rennstreckeneinsatz und lässt sich individuell zum Racebike aufbauen. Bei der RSV4 unterstützen wir dich bei Auswahl und Montage von Performance-, Fahrwerks-, Brems-, Elektronik- und Racing-Komponenten – abgestimmt auf deinen Fahrstil und dein Einsatzgebiet."}}, {"@type": "Question", "name": "Was ist ECU-Flash und für welche Modelle geht das?", "acceptedAnswer": {"@type": "Answer", "text": "Beim ECU-Flash wird die Motorsteuerung gezielt auf das Motorrad und seinen Einsatzbereich abgestimmt – etwa in Verbindung mit einer geänderten Auspuffanlage oder für die Rennstrecke. Wir bieten das für alle V4- und 660er-Modelle an. Gerade bei RSV4 und RS 660 ist eine professionelle Abstimmung ein wichtiger Bestandteil jedes Rennstreckenumbaus."}}, {"@type": "Question", "name": "Gibt es speziellen Racing-Service?", "acceptedAnswer": {"@type": "Answer", "text": "Ja. Bei Rennstreckenmotorrädern sind regelmäßige Kontrollen besonders wichtig. Wir berücksichtigen Verschleiß, Einsatzbedingungen und – bei entsprechenden Aprilia Modellen – die vom Motorrad erfassten Belastungs- bzw. Stresskilometer. So lassen sich Ventilservice, Ventiltausch und Motorrevisionen gezielt planen, statt sie dem Zufall zu überlassen."}}, {"@type": "Question", "name": "Seid ihr offizieller Aprilia Händler?", "acceptedAnswer": {"@type": "Answer", "text": "Ja. Schwarz Motorized ist offizieller Aprilia Händler und Ansprechpartner für Aprilia, Moto Morini, Sym, Vent und UM Motors. Neben dem Verkauf bieten wir Service, Wartung, Reparaturen und individuelle Umbauten an."}}, {"@type": "Question", "name": "Bietet ihr Probefahrten an?", "acceptedAnswer": {"@type": "Answer", "text": "Ja. Für viele unserer Vorführmotorräder kannst du nach Terminvereinbarung eine Probefahrt machen. Und wenn du einmal auf der Rennstrecke fahren möchtest, sprich uns an – auch dafür haben wir eine Lösung."}}, {"@type": "Question", "name": "Kann ich ein Motorrad bei euch mieten?", "acceptedAnswer": {"@type": "Answer", "text": "Ja. Je nach Verfügbarkeit kannst du ausgewählte Vorführmotorräder für mehrere Tage mieten. Entscheidest du dich danach für den Kauf, rechnen wir dir die Mietkosten auf den Kaufpreis an."}}]}</script>
 </main>
 
 <footer class="ft">
@@ -743,6 +684,8 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
         <a href="impressum/">Impressum</a>
         <a href="agb/">AGB</a>
         <a href="datenschutz/">Datenschutz</a>
+        <a href="cookies/">Cookies</a>
+        <a href="#" data-cookie-settings>Cookie-Einstellungen</a>
       </nav>
       <span class="ft__cr">© <span class="num">2026</span> Autohaus Schwarz e.U.</span>
       <span class="ft__by">designed with love by <b>outlize®</b></span>
@@ -751,5 +694,6 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
 </footer>
 
 <script src="js/main.js" defer></script>
+<script src="js/consent.js" defer></script>
 </body>
 </html>

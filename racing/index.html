@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Racing &amp; Rennstreckenumbau — Schwarz Motorized</title>
-<meta name="description" content="Rennstreckenumbauten für Aprilia RSV4, RS 660 und Tuono V4. Fahrwerk, Bremsen, Ergonomie und ECU Flash by ROM Racing — exklusiv in Österreich.">
+<title>Rennstreckenumbau &amp; Racing-Setup — Schwarz Motorized</title>
+<meta name="description" content="Rennstreckenumbau, Fahrwerks-Setup und ECU Flash by ROM Racing für Aprilia RSV4, RS 660 und Tuono V4. Vom ersten Trackday bis zur Rundenzeit. Kostenloses Racing-Gespräch.">
 <link rel="canonical" href="https://motorized.at/racing/">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Schwarz Motorized">
 <meta property="og:locale" content="de_AT">
-<meta property="og:title" content="Racing &amp; Rennstreckenumbau — Schwarz Motorized">
-<meta property="og:description" content="Rennstreckenumbauten für Aprilia RSV4, RS 660 und Tuono V4. Fahrwerk, Bremsen, Ergonomie und ECU Flash by ROM Racing — exklusiv in Österreich.">
+<meta property="og:title" content="Rennstreckenumbau &amp; Racing-Setup — Schwarz Motorized">
+<meta property="og:description" content="Rennstreckenumbau, Fahrwerks-Setup und ECU Flash by ROM Racing für Aprilia RSV4, RS 660 und Tuono V4. Vom ersten Trackday bis zur Rundenzeit. Kostenloses Racing-Gespräch.">
 <meta property="og:url" content="https://motorized.at/racing/">
 <meta property="og:image" content="https://motorized.at/assets/icons/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -28,6 +28,8 @@
    und die Seite ist ganz normal sichtbar. */
 document.documentElement.classList.add("js");
 setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.remove("js"); }, 3000);
+window.SM_TRACKING = {"gtm_id": "", "facebook_pixel_id": "", "aktiv": false};
+window.SM_BASE = "../";
 </script>
 
 <link rel="preload" href="../fonts/antonio-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -94,93 +96,105 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
 
 <section class="phero phero--media">
   <div class="phero__media">
-    <img src="../assets/web/racing-hero.jpg" alt="Rennmotorrad von Schwarz Motorized mit Startnummer 141 im Wheelie auf der Rennstrecke" fetchpriority="high">
+    <img src="../assets/web/racing-hero.jpg" alt="Rennmotorrad von Schwarz Motorized mit Startnummer 141 auf der Rennstrecke" fetchpriority="high">
   </div>
   <div class="phero__scrim" aria-hidden="true"></div>
   <div class="wrap">
     <nav class="crumbs" aria-label="Brotkrumen">
         <a href="../">Startseite</a><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg><span aria-current="page">Racing</span>
       </nav>
-    <h1 class="phero__h">Dein Rennbike.<br>Dein Setup.<br><em>Dein Vorsprung.</em></h1>
+    <h1 class="phero__h">Rennstrecke<br>ohne <em>Rätselraten.</em></h1>
     <p class="lead phero__lead">
-      Vom kompromisslosen Superbike bis zum effizienten Trainingsgerät — wir entwickeln
-      dein Rennmotorrad exakt nach deinem Anspruch.
+      Wir bauen und stimmen dein Motorrad ab — für den ersten Trackday genauso wie für die
+      Rundenzeit, die dir noch fehlt. Kein Teilekatalog, sondern ein Setup, das zu dir passt.
     </p>
     <div class="phero__acts">
-      <a class="btn" href="../#kontakt"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Racing-Beratung sichern</a>
-      <a class="btn btn--ghost" href="../bikes/">Bikes ansehen</a>
+      <a class="btn" href="#anfrage"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Kostenloses Racing-Gespräch</a>
+      <a class="btn btn--ghost" href="#ablauf">Wie das abläuft</a>
     </div>
+    <ul class="trust" >
+      <li class="trust__i"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg><span><b>ECU Flash by ROM Racing</b> — exklusiv in Österreich</span></li>
+      <li class="trust__i"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg><span><b>Offizieller Aprilia Händler</b> — RSV4, RS 660, Tuono</span></li>
+      <li class="trust__i"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg><span><b>Eigenes Bike unter #141</b> — wir fahren selbst</span></li>
+    </ul>
   </div>
 </section>
 
-<section class="sec manifest">
+<section class="sec paths">
   <div class="glow glow--soft" aria-hidden="true"></div>
   <div class="wrap">
-    <p class="idx"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Warum racing</p>
-    <div class="manifest__grid">
-      <h2 class="manifest__h" data-rv>Wir verkaufen keine Motorräder.<br>Wir bauen <em>Rennmaschinen.</em></h2>
-      <div class="manifest__copy" data-rv style="--rv-d:120ms">
-        <p>Jedes Bike entsteht mit einem klaren Ziel: maximale Performance, perfekte
-           Abstimmung und absolute Zuverlässigkeit auf der Rennstrecke.</p>
-        <p>Ob Profi oder ambitionierter Einsteiger — wir holen dich genau dort ab, wo du stehst.
-           Und wir sagen dir ehrlich, was dein Bike braucht und was nicht.</p>
-      </div>
+    <p class="idx"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Zwei Wege auf die Strecke</p>
+    <div class="paths__head">
+      <h2 class="paths__h" data-rv>Wo stehst du gerade?</h2>
+      <p class="lead" data-rv style="--rv-d:100ms">
+        Beide Wege enden am selben Punkt: einem Motorrad, das genau das macht, was du willst.
+        Der Weg dorthin ist ein anderer.
+      </p>
     </div>
-
-    <ul class="stats" data-rv style="--rv-d:200ms">
-      <li class="stats__i"><span class="stats__k">RSV4</span><span class="stats__v">Unser Spezialgebiet — Performance, Fahrwerk, Elektronik</span></li>
-      <li class="stats__i"><span class="stats__k">RS 660</span><span class="stats__v">Ideal für den Einstieg auf die Rennstrecke</span></li>
-      <li class="stats__i"><span class="stats__k">Tuono V4</span><span class="stats__v">Naked Bike mit Superbike-Genen</span></li>
-      <li class="stats__i"><span class="stats__k num">#141</span><span class="stats__v">Unsere eigene Startnummer</span></li>
-    </ul>
+    <div class="paths__grid">
+      <article class="path" data-rv style="--rv-d:0ms">
+        <p class="path__k"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Du hast schon ein Bike</p>
+        <h3 class="path__h">Du fährst schon —<br>aber es geht mehr.</h3>
+        <p class="path__p">Du warst auf der Strecke und merkst: Das Bike kann mehr, oder es arbeitet gegen dich. Das Heck stempelt beim Bremsen, die Elektronik regelt zu früh, nach zwei Sessions lässt die Bremse nach. Das sind keine Fahrfehler — das ist Setup.</p>
+        <ul class="path__l"><li>Fahrwerks-Setup auf dein Gewicht und deine Strecke</li><li>ECU Flash by ROM Racing — Abstimmung statt Kompromiss</li><li>Bremsanlage, Beläge und Leitungen, die eine Session durchhalten</li><li>Racing-Service nach Belastung, nicht nach Kalender</li></ul>
+        <a class="btn" href="#anfrage"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Setup-Gespräch vereinbaren</a>
+      </article>
+      <article class="path" data-rv style="--rv-d:120ms">
+        <p class="path__k"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Du willst einsteigen</p>
+        <h3 class="path__h">Du willst auf<br>die Strecke.</h3>
+        <p class="path__p">Erster Trackday, und du weißt nicht, ob dein Bike passt — oder ob du dir gleich eine richtige Maschine holen sollst. Beides geht. Wir sagen dir, was dein Straßenbike wirklich braucht, um sicher auf die Strecke zu dürfen.</p>
+        <ul class="path__l"><li>Straßenbike trackday-tauglich machen — Abklebe- oder Vollumbau</li><li>Gebrauchte Rennmaschine aus unserem Bestand</li><li>Neuaufbau auf RSV4, RS 660 oder Tuono V4</li><li>Vorführer mieten und erst danach entscheiden</li></ul>
+        <a class="btn btn--cyan" href="#anfrage"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Einstieg besprechen</a>
+      </article>
+    </div>
   </div>
 </section>
 
 <section class="sec svc">
   <div class="wrap">
-    <p class="idx"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Was wir aufbauen</p>
+    <p class="idx"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Was wir konkret machen</p>
     <div class="svc__head">
       <h2 class="svc__h" data-rv>Von der Schraube<br>bis zum Kennfeld.</h2>
       <p class="lead" data-rv style="--rv-d:120ms">
-        Ein Rennstreckenumbau ist kein Zubehörkatalog. Wir stimmen die Komponenten
-        aufeinander ab — sonst arbeitet das Bike gegen dich.
+        Ein Rennstreckenumbau ist kein Zubehörkatalog. Die Komponenten müssen zueinander
+        passen — sonst arbeitet das Bike gegen dich.
       </p>
     </div>
 
     <div class="svc__list" id="svcList">
       <div class="svc__peek" id="svcPeek" aria-hidden="true"><img alt="" id="svcPeekImg"></div>
 
-      <a class="svc__row" href="../#kontakt" data-img="../assets/web/svc-race.jpg" data-rv>
+      <a class="svc__row" href="#anfrage" data-img="../assets/web/svc-race.jpg" data-rv>
         <div class="svc__in">
           <h3 class="svc__t">Fahrwerk &amp; Bremsen</h3>
-          <p class="svc__d">Federelemente, Geometrie, Bremsanlage und Beläge — abgestimmt auf dein Gewicht, dein Tempo und deine Strecke.</p>
+          <p class="svc__d">Federelemente auf dein Gewicht, Geometrie auf deine Strecke, Bremsanlage auf deinen Bremspunkt. Das ist der größte Hebel — und der, den die meisten auslassen.</p>
           <span class="svc__go"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></span>
         </div>
         <div class="svc__img"><img src="../assets/web/svc-race.jpg" alt="Aprilia RSV4 Factory mit Carbon-Rennverkleidung" loading="lazy"></div>
       </a>
 
-      <a class="svc__row" href="../#kontakt" data-img="../assets/web/svc-ecu.jpg" data-rv style="--rv-d:80ms">
+      <a class="svc__row" href="#anfrage" data-img="../assets/web/svc-ecu.jpg" data-rv style="--rv-d:80ms">
         <div class="svc__in">
           <h3 class="svc__t">ECU Flash by ROM Racing</h3>
-          <p class="svc__d">Individuelle Abstimmung der Motorsteuerung für alle V4- und 660er-Modelle. Exklusiv in Österreich bei uns.</p>
+          <p class="svc__d">Motorsteuerung abgestimmt auf Auspuff, Strecke und Fahrstil. Für alle V4- und 660er-Modelle — exklusiv in Österreich bei uns.</p>
           <span class="svc__go"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></span>
         </div>
         <div class="svc__img"><img src="../assets/web/svc-ecu.jpg" alt="Laptop mit Kennfeld-Tabellen, per Diagnosekabel mit einem Motorrad verbunden" loading="lazy"></div>
       </a>
 
-      <a class="svc__row" href="../#kontakt" data-img="../assets/web/carbon.jpg" data-rv style="--rv-d:160ms">
+      <a class="svc__row" href="#anfrage" data-img="../assets/web/carbon.jpg" data-rv style="--rv-d:160ms">
         <div class="svc__in">
           <h3 class="svc__t">Verkleidung &amp; Ergonomie</h3>
-          <p class="svc__d">Rennverkleidung, Sitzposition, Rasten und Lenker. Damit du auf der Strecke arbeiten kannst statt zu kämpfen.</p>
+          <p class="svc__d">Rennverkleidung, Rasten, Lenker, Sitzposition. Damit du auf der Strecke arbeiten kannst statt zu kämpfen.</p>
           <span class="svc__go"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></span>
         </div>
         <div class="svc__img"><img src="../assets/web/carbon.jpg" alt="Carbon-Verkleidungsteil mit Sicherungsdraht und Werkzeug auf der Werkbank" loading="lazy"></div>
       </a>
 
-      <a class="svc__row" href="../#kontakt" data-img="../assets/web/svc-service.jpg" data-rv style="--rv-d:240ms">
+      <a class="svc__row" href="#anfrage" data-img="../assets/web/svc-service.jpg" data-rv style="--rv-d:240ms">
         <div class="svc__in">
           <h3 class="svc__t">Racing-Service</h3>
-          <p class="svc__d">Wir berücksichtigen Verschleiß, Einsatzbedingungen und bei Aprilia die erfassten Stresskilometer — Ventilservice und Revision werden geplant, nicht abgewartet.</p>
+          <p class="svc__d">Wir planen Ventilservice und Revision nach Belastung — bei Aprilia über die erfassten Stresskilometer. So steht dein Motor nicht mitten in der Saison.</p>
           <span class="svc__go"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></span>
         </div>
         <div class="svc__img"><img src="../assets/web/svc-service.jpg" alt="Hände mit Drehmomentschlüssel an der Hinterradaufhängung eines Sportmotorrads" loading="lazy"></div>
@@ -189,30 +203,242 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
   </div>
 </section>
 
-<section class="sec why">
-  <div class="glow glow--cool glow--soft" aria-hidden="true"></div>
+<section class="sec scopes">
   <div class="wrap">
-    <p class="idx"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Dein Racebike individuell</p>
-    <div class="why__head"><h2 class="why__h" data-rv>Was du bei uns bekommst.</h2></div>
-    <div class="why__grid">
-      <article class="why__i" data-rv style="--rv-d:0ms">
-        <h3 class="why__t">Perfekte Abstimmung</h3>
-        <p class="why__d">Wir optimieren jedes Detail — von Fahrwerk und Bremsen bis zur Motorsteuerung — auf deine Strecke, deinen Fahrstil und dein Ziel.</p>
-      </article>
-      <article class="why__i" data-rv style="--rv-d:100ms">
-        <h3 class="why__t">Alles aus einer Hand</h3>
-        <p class="why__d">Vom Kauf über den kompletten Umbau bis zum Racing-Service. Du bekommst nicht nur ein Bike, sondern ein startklares Paket.</p>
-      </article>
-      <article class="why__i" data-rv style="--rv-d:200ms">
-        <h3 class="why__t">Erfahrung von der Strecke</h3>
-        <p class="why__d">Wir fahren selbst unter der Startnummer 141. Was wir an deinem Bike machen, haben wir vorher selbst gebraucht.</p>
-      </article>
+    <p class="idx"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Was kostet das?</p>
+    <div class="scopes__head">
+      <h2 class="scopes__h" data-rv>Drei Ausbaustufen.</h2>
+      <p class="lead" data-rv style="--rv-d:100ms">
+        Was dein Umbau kostet, hängt vom Bike und vom Ziel ab — pauschale Preise wären
+        geraten. Diese drei Stufen zeigen dir, worüber wir reden. Nach dem ersten Gespräch
+        bekommst du ein konkretes, schriftliches Angebot.
+      </p>
     </div>
-    <div class="why__acts" data-rv>
-      <a class="btn" href="../#kontakt"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Beratungstermin vereinbaren</a>
+    <div class="scopes__grid">
+      <article class="scope" data-rv style="--rv-d:0ms">
+        <h3 class="scope__t">Trackday-tauglich</h3>
+        <p class="scope__s">Dein Straßenbike für den ersten Einsatz.</p>
+        <ul class="scope__l"><li>Sicherheitscheck und Abnahme-Vorbereitung</li><li>Bremsflüssigkeit, Beläge, Reifen</li><li>Abklebung oder Demontage der Straßenteile</li><li>Grund-Setup für dein Gewicht</li></ul>
+      </article>
+      <article class="scope" data-rv style="--rv-d:100ms">
+        <h3 class="scope__t">Basis-Racebike</h3>
+        <p class="scope__s">Für alle, die regelmäßig fahren.</p>
+        <ul class="scope__l"><li>Rennverkleidung und Sturzschutz</li><li>Fahrwerk abgestimmt, Federelemente überarbeitet</li><li>Ergonomie: Rasten, Lenker, Sitzposition</li><li>ECU Flash auf Strecke und Auspuff</li></ul>
+      </article>
+      <article class="scope" data-rv style="--rv-d:200ms">
+        <h3 class="scope__t">Vollausbau</h3>
+        <p class="scope__s">Wenn die Rundenzeit zählt.</p>
+        <ul class="scope__l"><li>Fahrwerk auf Rennniveau, Geometrie vermessen</li><li>Bremsanlage komplett auf Racing-Spec</li><li>Elektronik, Datenaufzeichnung, Getriebe-Optionen</li><li>Betreuung an der Strecke und laufende Setup-Arbeit</li></ul>
+      </article>
     </div>
   </div>
 </section>
+
+<section class="sec steps" id="ablauf">
+  <div class="glow glow--cool glow--soft" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="idx"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Ablauf</p>
+    <div class="steps__head">
+      <h2 class="steps__h" data-rv>In vier Schritten<br>auf die Strecke.</h2>
+    </div>
+    <ol class="steps__list">
+      <li class="step" data-rv style="--rv-d:0ms">
+        <span class="step__n num">01</span>
+        <div>
+          <h3 class="step__t">Gespräch</h3>
+          <p class="step__d">Kostenlos und unverbindlich. Du erzählst uns, was du fährst, wo du hin willst und was dich aktuell stört. Wir sagen dir ehrlich, was Sinn ergibt — und was nicht.</p>
+        </div>
+      </li>
+      <li class="step" data-rv style="--rv-d:90ms">
+        <span class="step__n num">02</span>
+        <div>
+          <h3 class="step__t">Bestandsaufnahme</h3>
+          <p class="step__d">Wir schauen uns dein Bike an: Fahrwerk, Bremsen, Elektronik, Verschleiß. Danach weißt du, wo du stehst und was der Umbau wirklich kostet.</p>
+        </div>
+      </li>
+      <li class="step" data-rv style="--rv-d:180ms">
+        <span class="step__n num">03</span>
+        <div>
+          <h3 class="step__t">Aufbau &amp; Abstimmung</h3>
+          <p class="step__d">Wir bauen um und stimmen ab — Federelemente auf dein Gewicht, Motorsteuerung auf deine Strecke, Ergonomie auf deine Größe.</p>
+        </div>
+      </li>
+      <li class="step" data-rv style="--rv-d:270ms">
+        <span class="step__n num">04</span>
+        <div>
+          <h3 class="step__t">Strecke &amp; Betreuung</h3>
+          <p class="step__d">Setup-Anpassungen nach dem ersten Einsatz, Racing-Service nach Belastung statt nach Kalender. Wir bleiben dran.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec says">
+  <div class="wrap">
+    <p class="idx"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Was Kunden sagen</p>
+    <div class="says__head">
+      <h2 class="says__h" data-rv>Leute, die bei uns<br>schrauben lassen.</h2>
+    </div>
+    <div class="says__grid">
+      <article class="say say--hi" data-rv style="--rv-d:0ms">
+        <p class="say__q">Professioneller Service und sehr nahbar. Absolut zuverlässiges Personal!</p>
+        <p class="say__b">Empfehlenswert.</p>
+        <div class="say__foot">
+          <img class="say__av" src="../assets/web/av-alejandro.jpg" alt="" loading="lazy" width="72" height="72">
+          <span><span class="say__n">Alejandro</span><br><span class="say__ride">fährt: Yamaha MT-09</span></span>
+          <span class="say__src">Google</span>
+        </div>
+      </article>
+      <article class="say" data-rv style="--rv-d:40ms">
+        <p class="say__q">Top Erfahrung bei Schwarz Motorized!</p>
+        <p class="say__b">Sehr nettes und freundliches Personal, das einem wirklich das Gefühl gibt, willkommen zu sein. Die Beratung war kompetent und ausführlich. Man merkt, dass die Mitarbeiter wissen, wovon sie sprechen. Dazu noch faire Preise.</p>
+        <div class="say__foot">
+          <img class="say__av" src="../assets/web/av-predrag.jpg" alt="" loading="lazy" width="72" height="72">
+          <span><span class="say__n">Predrag B.</span><br><span class="say__ride">fährt: Aprilia Tuono V4</span></span>
+          <span class="say__src">Google</span>
+        </div>
+      </article>
+      <article class="say" data-rv style="--rv-d:80ms">
+        <p class="say__q">100 % Empfehlung</p>
+        <p class="say__b">Perfekte Arbeit!</p>
+        <div class="say__foot">
+          <img class="say__av" src="../assets/web/av-m.jpg" alt="" loading="lazy" width="72" height="72">
+          <span><span class="say__n">Martin U.</span><br><span class="say__ride">fährt: Aprilia RSV4</span></span>
+          <span class="say__src">Google</span>
+        </div>
+      </article>
+      <article class="say" data-rv style="--rv-d:120ms">
+        <p class="say__q">Sehr kompetentes und sympathisches Team!</p>
+        <p class="say__b">Werde ich auf jeden Fall weiterempfehlen!</p>
+        <div class="say__foot">
+          <img class="say__av" src="../assets/web/av-georg.jpg" alt="" loading="lazy" width="72" height="72">
+          <span><span class="say__n">Georg S.</span><br><span class="say__ride">fährt: Aprilia RSV4</span></span>
+          <span class="say__src">Facebook</span>
+        </div>
+      </article>
+      <article class="say say--hi" data-rv style="--rv-d:160ms">
+        <p class="say__q">Fachlich kompetent und lösungsorientiert!</p>
+        <p class="say__b">Sehr empfehlenswert. Das Team bringt frischen Wind in den Seewinkel.</p>
+        <div class="say__foot">
+          <img class="say__av" src="../assets/web/av-ursula.jpg" alt="" loading="lazy" width="72" height="72">
+          <span><span class="say__n">Ursula S.</span><br><span class="say__ride">fährt: Aprilia Caponord</span></span>
+          <span class="say__src">Facebook</span>
+        </div>
+      </article>
+      <article class="say" data-rv style="--rv-d:200ms">
+        <p class="say__q">Tolle Beratung, sympathische Mitarbeiter und kompetenter Service.</p>
+        <p class="say__b">Ich habe mich hier sehr wohl gefühlt. Komme gerne wieder.</p>
+        <div class="say__foot">
+          <img class="say__av" src="../assets/web/av-v.jpg" alt="" loading="lazy" width="72" height="72">
+          <span><span class="say__n">Vera S.</span><br><span class="say__ride">fährt: SYM 125</span></span>
+          <span class="say__src">Google</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec anfrage" id="anfrage">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="anfrage__grid">
+      <div>
+        <p class="idx"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Racing-Gespräch</p>
+        <h2 class="anfrage__h" data-rv>Erzähl uns,<br>was du <em>vorhast.</em></h2>
+        <p class="lead" data-rv style="--rv-d:100ms">
+          Kostenlos und unverbindlich. Wir melden uns in der Regel am nächsten Werktag —
+          und sagen dir ehrlich, ob und wie wir dir weiterhelfen können.
+        </p>
+        <ul class="anfrage__facts" data-rv style="--rv-d:160ms">
+          <li><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg><span>Antwort meist am nächsten Werktag</span></li>
+          <li><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg><span>Kostenlos und unverbindlich</span></li>
+          <li><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg><span>Auch für Bikes, die nicht von uns sind</span></li>
+        </ul>
+        <p class="anfrage__alt" data-rv style="--rv-d:200ms">
+          Lieber direkt reden? <a class="tlink" href="tel:+43217380060">+43 2173 80060</a>
+        </p>
+      </div>
+
+      <form class="af" id="racingForm" data-mail="schwarz@motorized.at" novalidate>
+        <p class="af__lead">Drei Fragen, dann wissen wir Bescheid.</p>
+
+        <div class="af__f">
+          <label class="af__l" for="af-bike">Welches Motorrad fährst du?</label>
+          <input class="af__i" type="text" id="af-bike" name="bike" placeholder="z. B. Aprilia RS 660, Baujahr 2023" required>
+        </div>
+
+        <div class="af__f">
+          <label class="af__l" for="af-ziel">Wo willst du hin?</label>
+          <select class="af__i" id="af-ziel" name="ziel" required>
+            <option value="">Bitte auswählen</option>
+            <option>Erster Trackday — Bike tauglich machen</option>
+            <option>Ich fahre schon — Setup verbessern</option>
+            <option>Rennmaschine kaufen oder neu aufbauen</option>
+            <option>ECU Flash / Abstimmung</option>
+            <option>Racing-Service für die Saison</option>
+            <option>Noch unklar — bitte beraten</option>
+          </select>
+        </div>
+
+        <div class="af__f">
+          <label class="af__l" for="af-text">Was ist dir wichtig?</label>
+          <textarea class="af__i af__i--ta" id="af-text" name="text" rows="4"
+            placeholder="Was stört dich aktuell, was soll besser werden, wann willst du fahren?"></textarea>
+        </div>
+
+        <div class="af__f af__f--row">
+          <div>
+            <label class="af__l" for="af-name">Name</label>
+            <input class="af__i" type="text" id="af-name" name="name" required>
+          </div>
+          <div>
+            <label class="af__l" for="af-tel">Telefon oder E-Mail</label>
+            <input class="af__i" type="text" id="af-tel" name="kontakt" required>
+          </div>
+        </div>
+
+        <button class="btn af__go" type="submit"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Anfrage senden</button>
+        <p class="af__note">
+          Der Button öffnet dein E-Mail-Programm mit einer fertig ausgefüllten Nachricht an
+          schwarz@motorized.at. Es werden keine Daten an Dritte übertragen.
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="faq">
+  <div class="wrap">
+    <p class="idx"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Häufige Fragen</p>
+    <div class="faq__head">
+      <h2 class="faq__h" data-rv>Was uns Racer<br>am häufigsten fragen.</h2>
+    </div>
+    <div class="faq__group">
+      <div class="faq__i">
+        <button class="faq__q" type="button">Baut ihr Motorräder für die Rennstrecke um?
+          <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+        <div class="faq__a"><div><p>Ja, das ist einer unserer Schwerpunkte. Wir bauen Motorräder nach deinen Anforderungen für den Renneinsatz um – von Fahrwerk und Bremsen über Ergonomie und Elektronik bis hin zu Rennverkleidung und weiteren Performance-Komponenten.</p></div></div>
+      </div>
+      <div class="faq__i">
+        <button class="faq__q" type="button">Auch eine Aprilia RS 660 oder RSV4?
+          <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+        <div class="faq__a"><div><p>Beide sind unsere Spezialgebiete. Die RS 660 eignet sich hervorragend für den Rennstreckeneinsatz und lässt sich individuell zum Racebike aufbauen. Bei der RSV4 unterstützen wir dich bei Auswahl und Montage von Performance-, Fahrwerks-, Brems-, Elektronik- und Racing-Komponenten – abgestimmt auf deinen Fahrstil und dein Einsatzgebiet.</p></div></div>
+      </div>
+      <div class="faq__i">
+        <button class="faq__q" type="button">Was ist ECU-Flash und für welche Modelle geht das?
+          <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+        <div class="faq__a"><div><p>Beim ECU-Flash wird die Motorsteuerung gezielt auf das Motorrad und seinen Einsatzbereich abgestimmt – etwa in Verbindung mit einer geänderten Auspuffanlage oder für die Rennstrecke. Wir bieten das für alle V4- und 660er-Modelle an. Gerade bei RSV4 und RS 660 ist eine professionelle Abstimmung ein wichtiger Bestandteil jedes Rennstreckenumbaus.</p></div></div>
+      </div>
+      <div class="faq__i">
+        <button class="faq__q" type="button">Gibt es speziellen Racing-Service?
+          <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+        <div class="faq__a"><div><p>Ja. Bei Rennstreckenmotorrädern sind regelmäßige Kontrollen besonders wichtig. Wir berücksichtigen Verschleiß, Einsatzbedingungen und – bei entsprechenden Aprilia Modellen – die vom Motorrad erfassten Belastungs- bzw. Stresskilometer. So lassen sich Ventilservice, Ventiltausch und Motorrevisionen gezielt planen, statt sie dem Zufall zu überlassen.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Baut ihr Motorräder für die Rennstrecke um?", "acceptedAnswer": {"@type": "Answer", "text": "Ja, das ist einer unserer Schwerpunkte. Wir bauen Motorräder nach deinen Anforderungen für den Renneinsatz um – von Fahrwerk und Bremsen über Ergonomie und Elektronik bis hin zu Rennverkleidung und weiteren Performance-Komponenten."}}, {"@type": "Question", "name": "Auch eine Aprilia RS 660 oder RSV4?", "acceptedAnswer": {"@type": "Answer", "text": "Beide sind unsere Spezialgebiete. Die RS 660 eignet sich hervorragend für den Rennstreckeneinsatz und lässt sich individuell zum Racebike aufbauen. Bei der RSV4 unterstützen wir dich bei Auswahl und Montage von Performance-, Fahrwerks-, Brems-, Elektronik- und Racing-Komponenten – abgestimmt auf deinen Fahrstil und dein Einsatzgebiet."}}, {"@type": "Question", "name": "Was ist ECU-Flash und für welche Modelle geht das?", "acceptedAnswer": {"@type": "Answer", "text": "Beim ECU-Flash wird die Motorsteuerung gezielt auf das Motorrad und seinen Einsatzbereich abgestimmt – etwa in Verbindung mit einer geänderten Auspuffanlage oder für die Rennstrecke. Wir bieten das für alle V4- und 660er-Modelle an. Gerade bei RSV4 und RS 660 ist eine professionelle Abstimmung ein wichtiger Bestandteil jedes Rennstreckenumbaus."}}, {"@type": "Question", "name": "Gibt es speziellen Racing-Service?", "acceptedAnswer": {"@type": "Answer", "text": "Ja. Bei Rennstreckenmotorrädern sind regelmäßige Kontrollen besonders wichtig. Wir berücksichtigen Verschleiß, Einsatzbedingungen und – bei entsprechenden Aprilia Modellen – die vom Motorrad erfassten Belastungs- bzw. Stresskilometer. So lassen sich Ventilservice, Ventiltausch und Motorrevisionen gezielt planen, statt sie dem Zufall zu überlassen."}}]}</script>
 
 </main>
 
@@ -240,6 +466,8 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
         <a href="../impressum/">Impressum</a>
         <a href="../agb/">AGB</a>
         <a href="../datenschutz/">Datenschutz</a>
+        <a href="../cookies/">Cookies</a>
+        <a href="#" data-cookie-settings>Cookie-Einstellungen</a>
       </nav>
       <span class="ft__cr">© <span class="num">2026</span> Autohaus Schwarz e.U.</span>
       <span class="ft__by">designed with love by <b>outlize®</b></span>
@@ -248,5 +476,6 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
 </footer>
 
 <script src="../js/main.js" defer></script>
+<script src="../js/consent.js" defer></script>
 </body>
 </html>

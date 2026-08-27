@@ -195,6 +195,55 @@
     });
   });
 
+
+  /* ---------------------------------------------------------------
+     8) Racing-Anfrage: baut aus dem Formular eine fertige E-Mail
+     Kein Server, kein Dienstleister — es öffnet das Mailprogramm
+     des Besuchers mit vorausgefülltem Betreff und Text.
+     --------------------------------------------------------------- */
+  var form = document.getElementById('racingForm');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      var fields = ['bike', 'ziel', 'name', 'kontakt'];
+      var ok = true;
+      fields.forEach(function (n) {
+        var el = form.elements[n];
+        if (!el) return;
+        var empty = !String(el.value || '').trim();
+        el.setAttribute('aria-invalid', empty ? 'true' : 'false');
+        if (empty && ok) { el.focus(); ok = false; }
+      });
+      var errBox = form.querySelector('.af__err');
+      if (!ok) {
+        if (!errBox) {
+          errBox = document.createElement('p');
+          errBox.className = 'af__err';
+          form.querySelector('.af__go').before(errBox);
+        }
+        errBox.textContent = 'Bitte fülle Motorrad, Ziel, Name und Kontakt aus.';
+        return;
+      }
+      if (errBox) errBox.remove();
+
+      var v = function (n) { return String((form.elements[n] || {}).value || '').trim(); };
+      var lines = [
+        'Hallo Schwarz Motorized,', '',
+        'ich hätte gerne ein Racing-Gespräch.', '',
+        'Motorrad: ' + v('bike'),
+        'Ziel: ' + v('ziel'), ''
+      ];
+      if (v('text')) lines.push('Was mir wichtig ist:', v('text'), '');
+      lines.push('Name: ' + v('name'), 'Erreichbar unter: ' + v('kontakt'), '', 'Danke und liebe Grüße');
+
+      var mail = form.getAttribute('data-mail') || 'schwarz@motorized.at';
+      window.location.href = 'mailto:' + mail
+        + '?subject=' + encodeURIComponent('Racing-Anfrage: ' + v('bike'))
+        + '&body=' + encodeURIComponent(lines.join('\n'));
+    });
+  }
+
   /* ---------------------------------------------------------------
      7) Sanftes Springen zu Ankern, Header-Höhe berücksichtigt
      --------------------------------------------------------------- */

@@ -1,0 +1,176 @@
+[
+  {
+    "slug": "moto-guzzi-v9-bobber",
+    "name": "Moto Guzzi V9 Bobber",
+    "kategorie": "gebraucht",
+    "baujahr": "05/2025",
+    "km": "1.300 km",
+    "preis": "€ 7.790,–",
+    "preis_ab": false,
+    "bild": "bike-guzzi-v9.jpg",
+    "alt": "Moto Guzzi V9 Bobber in Mattschwarz",
+    "kurz": "Entspannter Bobber mit dem charaktervollen Guzzi-Twin. Aus erster Hand, kaum gelaufen.",
+    "highlights": [
+      "Erste Hand",
+      "Scheckheftgepflegt",
+      "Sofort verfügbar"
+    ],
+    "aktiv": true,
+    "startseite": true,
+    "flag": "Top Gebrauchtbike",
+    "specs": ""
+  },
+  {
+    "slug": "bmw-m-1000-r",
+    "name": "BMW M 1000 R",
+    "kategorie": "gebraucht",
+    "baujahr": "2024",
+    "km": "8.718 km",
+    "preis": "€ 22.990,–",
+    "preis_ab": false,
+    "bild": "bike-bmw-m1000r.jpg",
+    "alt": "BMW M 1000 R in M-Lackierung",
+    "kurz": "Hyper-Naked mit Superbike-Technik. Kompromisslos schnell, alltagstauglich geblieben.",
+    "highlights": [
+      "M-Paket",
+      "Sehr gepflegt"
+    ],
+    "aktiv": true,
+    "startseite": false,
+    "flag": "",
+    "specs": ""
+  },
+  {
+    "slug": "aprilia-tuono-v4-1100-e5",
+    "name": "Aprilia Tuono V4 1100 E5+",
+    "kategorie": "vorfuehrer",
+    "baujahr": "03/2026",
+    "km": "1.440 km",
+    "preis": "€ 23.590,–",
+    "preis_ab": false,
+    "bild": "bike-tuono-e5.jpg",
+    "alt": "Aprilia Tuono V4 1100 E5+",
+    "kurz": "Unser Vorführer. Der V4-Sound und die Elektronik der aktuellen Generation.",
+    "highlights": [
+      "Vorführmotorrad",
+      "Aktuelles Modell",
+      "Miete anrechenbar"
+    ],
+    "aktiv": true,
+    "startseite": false,
+    "flag": "Vorführer",
+    "specs": ""
+  },
+  {
+    "slug": "aprilia-rsv4-1100-factory-e5",
+    "name": "Aprilia RSV4 1100 Factory E5",
+    "kategorie": "gebraucht",
+    "baujahr": "04/2022",
+    "km": "5.783 km",
+    "preis": "€ 22.590,–",
+    "preis_ab": false,
+    "bild": "bike-rsv4-e5.jpg",
+    "alt": "Aprilia RSV4 1100 Factory E5",
+    "kurz": "Die Factory mit Öhlins-Fahrwerk. Unser Spezialgebiet — auf Wunsch direkt rennbereit aufgebaut.",
+    "highlights": [
+      "Öhlins-Fahrwerk",
+      "Rennstreckenumbau möglich"
+    ],
+    "aktiv": true,
+    "startseite": false,
+    "flag": "",
+    "specs": ""
+  },
+  {
+    "slug": "aprilia-tuono-v4-1100-2023",
+    "name": "Aprilia Tuono V4 1100",
+    "kategorie": "gebraucht",
+    "baujahr": "2023",
+    "km": "24.423 km",
+    "preis": "€ 18.900,–",
+    "preis_ab": false,
+    "bild": "bike-tuono-2023.jpg",
+    "alt": "Aprilia Tuono V4 1100",
+    "kurz": "Gut eingefahrene Tuono mit ehrlicher Laufleistung und lückenloser Historie.",
+    "highlights": [
+      "Servicehistorie lückenlos"
+    ],
+    "aktiv": true,
+    "startseite": false,
+    "flag": "",
+    "specs": ""
+  },
+  {
+    "slug": "aprilia-tuono-v4-factory-1100-e4",
+    "name": "Aprilia Tuono V4 Factory 1100 E4",
+    "kategorie": "gebraucht",
+    "baujahr": "05/2021",
+    "km": "16.928 km",
+    "preis": "€ 14.590,–",
+    "preis_ab": false,
+    "bild": "bike-tuono-e4.jpg",
+    "alt": "Aprilia Tuono V4 Factory 1100 E4",
+    "kurz": "Der günstige Einstieg in die V4-Welt. Factory-Ausstattung zum fairen Kurs.",
+    "highlights": [
+      "Preis-Leistung"
+    ],
+    "aktiv": true,
+    "startseite": false,
+    "flag": "",
+    "specs": ""
+  },
+  {
+    "slug": "aprilia-rs-125",
+    "name": "Aprilia RS 125",
+    "kategorie": "gebraucht",
+    "baujahr": "2024",
+    "km": "1.731 km",
+    "preis": "€ 7.200,–",
+    "preis_ab": false,
+    "bild": "bike-rs125.jpg",
+    "alt": "Aprilia RS 125",
+    "kurz": "A1-tauglicher Einstieg mit echter Sportoptik. Ideal für den ersten Trackday.",
+    "highlights": [
+      "A1-Führerschein",
+      "Trackday-tauglich"
+    ],
+    "aktiv": true,
+    "startseite": false,
+    "flag": "",
+    "specs": ""
+  },
+  {
+    "slug": "aprilia-tuono-v4-1100-factory-neu",
+    "name": "Aprilia Tuono V4 1100 Factory",
+    "kategorie": "aktion",
+    "baujahr": "",
+    "km": "",
+    "preis": "€ 21.490,–",
+    "preis_ab": true,
+    "bild": "offer-tuono.jpg",
+    "alt": "Aprilia Tuono V4 1100 Factory",
+    "kurz": "Naked Superbike mit 175 PS V4.",
+    "specs": "Naked Superbike · 175 PS V4",
+    "highlights": [],
+    "aktiv": true,
+    "startseite": true,
+    "flag": "Cool Deal Aktion"
+  },
+  {
+    "slug": "aprilia-tuareg-660-neu",
+    "name": "Aprilia Tuareg 660",
+    "kategorie": "aktion",
+    "baujahr": "",
+    "km": "",
+    "preis": "€ 12.490,–",
+    "preis_ab": true,
+    "bild": "offer-tuareg.jpg",
+    "alt": "Aprilia Tuareg 660",
+    "kurz": "Adventure mit 80 PS Twin.",
+    "specs": "Adventure · 80 PS Twin",
+    "highlights": [],
+    "aktiv": true,
+    "startseite": true,
+    "flag": "Anmeldeaktion"
+  }
+]

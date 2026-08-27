@@ -28,6 +28,8 @@
    und die Seite ist ganz normal sichtbar. */
 document.documentElement.classList.add("js");
 setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.remove("js"); }, 3000);
+window.SM_TRACKING = {"gtm_id": "", "facebook_pixel_id": "", "aktiv": false};
+window.SM_BASE = "../";
 </script>
 
 <link rel="preload" href="../fonts/antonio-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -111,7 +113,7 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
       <p>Behörde gem. ECG (E-Commerce Gesetz): Bezirkshauptmannschaft Neusiedl am See<br />Weitere Aufsichtsbehörde (gem. ECG): keine</p>
       <p><strong>Offenlegung nach Mediengesetz</strong></p>
       <p>Medieninhaber: Ing. Thomas Schwarz<br />Firmensitz (Ort der Hauptniederlassung) Betriebsgebiet Nord 4 ,7123 Mönchhof<br />Unternehmensgegenstand Kfz- Werkstätte und Kfz- Handel<br />Mitglied der Wirtschaftskammer Burgenland<br />Fachgruppe / Berufszweig:<br />LG Fahrzeughandel Einzelhandel mit KFZ-Bestandteilen, KFZ-Zubehör, Serviceeinr. Handel mit Automobilen, Motorrädern inkl. Bereifung, Zubehör<br />LI Fahrzeugtechnik Kraftfahrzeugtechnik<br />Etwaige spezielle berufsrechtliche Vorschriften finden Sie auf der Website der Fachgruppe bzw. im Rechtsinformationssystem des Bundes</p>
-      <p><a href="" target="_blank" rel="noopener noreferrer">Informationen nach ECG</a></p>
+      <p><a href="https://firmen.wko.at/Web/Ergebnis.aspx?StandortID=0&Firma=thomas+schwarz&CategoryID=0" target="_blank" rel="noopener noreferrer">Informationen nach ECG</a></p>
       <p><strong>Links</strong></p>
       <p>Links die zu Internetseiten von Dritten führen sind nicht unter der Kontrolle von Autohaus Schwarz e.U. und wir sind für deren Inhalt nicht verantwortlich. Diese Links sind nur als Unterstützung für den Betrachter gedacht. Wir möchten daher nicht den Eindruck erwecken, dass der Inhalt dieser Seiten, Teil unserer Internetpräsentation sei.</p>
       <p><strong>Inhalt</strong></p>
@@ -150,6 +152,8 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
         <a href="../impressum/">Impressum</a>
         <a href="../agb/">AGB</a>
         <a href="../datenschutz/">Datenschutz</a>
+        <a href="../cookies/">Cookies</a>
+        <a href="#" data-cookie-settings>Cookie-Einstellungen</a>
       </nav>
       <span class="ft__cr">© <span class="num">2026</span> Autohaus Schwarz e.U.</span>
       <span class="ft__by">designed with love by <b>outlize®</b></span>
@@ -158,5 +162,6 @@ setTimeout(function(){ if(!window.__smInit) document.documentElement.classList.r
 </footer>
 
 <script src="../js/main.js" defer></script>
+<script src="../js/consent.js" defer></script>
 </body>
 </html>

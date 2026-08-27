@@ -25,7 +25,10 @@ python3 -m http.server 4330
 | `/` | `index.html` | Startseite — Hero, Leistungen, Racing, Angebote, Mieten, Testimonials, Team, FAQ, Kontakt |
 | `/racing/` | `racing/index.html` | Rennstreckenumbau, ECU Flash, Racing-Service |
 | `/bikes/` | `bikes/index.html` | Pre-Owned & Demo Bikes mit Preisen |
-| `/impressum/` · `/datenschutz/` · `/agb/` | | Rechtstexte |
+| `/racing/` | `racing/index.html` | **Landingpage** — auf Anfragen optimiert, zwei Zielgruppen |
+| `/bikes/<modell>/` | | Detailseite je Motorrad, entsteht automatisch |
+| `/impressum/` · `/datenschutz/` · `/agb/` · `/cookies/` | | Rechtstexte |
+| `/admin/` | `admin/index.html` | CMS zum Pflegen der Inhalte |
 | — | `404.html` | Fehlerseite |
 
 ## Aufbau
@@ -40,23 +43,72 @@ assets/web/        Bilder, web-optimiert
 assets/partners/   Marken-Logos
 assets/logo/       Wortmarke (SVG)
 assets/icons/      Favicon, Share-Bild
-tools/rebuild.py   optional — erzeugt Header/Footer auf allen Seiten neu
+content/           die Inhalte als JSON — das, was im CMS bearbeitet wird
+admin/             das CMS (Login, Formulare, GitHub-Anbindung)
+tools/rebuild.py   erzeugt alle HTML-Seiten aus content/
+.github/workflows/ baut die Seiten neu und veröffentlicht auf Pages
 docs/              Analyse der alten Seite, verworfene Webflow-Variante
 ```
 
-## Etwas ändern
+## Inhalte pflegen — das CMS
 
-**Inhalt einer Seite** — die HTML-Datei direkt bearbeiten. Fertig.
+Unter **`/admin/`** liegt ein kleines Redaktionssystem. Damit lassen sich ohne Code ändern:
 
-**Navigation oder Footer** (steht auf allen 7 Seiten identisch) — entweder in allen
-Dateien suchen und ersetzen, oder `tools/rebuild.py` anpassen und einmal ausführen:
+- **Motorräder** — anlegen, bearbeiten, ausblenden, Reihenfolge, Bilder hochladen.
+  Für jedes sichtbare Motorrad entsteht automatisch eine Detailseite.
+- **Leistungen** auf der Startseite
+- **Team**
+- **FAQ** in Gruppen
+- **Rezensionen**
+- **Kontaktdaten** — Adresse, Telefon, Öffnungszeiten, Buchungslink
+- **Tracking** — Google Tag Manager und Facebook-Pixel
+
+### Anmeldung
+
+Es gibt keinen eigenen Benutzer und kein Passwort — die Anmeldung läuft über einen
+**GitHub-Token**. Wer keinen Token hat, kommt nicht rein.
+
+1. Auf [github.com/settings/personal-access-tokens](https://github.com/settings/personal-access-tokens)
+   einen **Fine-grained Token** erzeugen.
+2. Bei *Repository access* nur dieses Repository auswählen.
+3. Unter *Permissions → Repository permissions* den Punkt **Contents** auf
+   **Read and write** stellen.
+4. Token kopieren, unter `/admin/` einfügen, Repository als `benutzername/repository`
+   angeben.
+
+Der Token liegt danach nur im Browser des Nutzers (localStorage) und geht ausschließlich
+an `api.github.com`. Setz ein Ablaufdatum — läuft er ab, erzeugst du einfach einen neuen.
+
+### Was beim Speichern passiert
+
+„Änderungen veröffentlichen" schreibt alle bearbeiteten Dateien als **einen** Commit
+nach `content/`. Die GitHub Action `build.yml` baut daraufhin die HTML-Seiten neu,
+`pages.yml` veröffentlicht sie. Nach ein bis zwei Minuten ist die Änderung live.
+
+## Etwas am Layout ändern
+
+Text und Struktur, die nicht im CMS stehen (Hero, Manifest, Racing-Texte), liegen in
+`tools/rebuild.py` bzw. `tools/home-main.html`. Nach dem Bearbeiten einmal:
 
 ```bash
 python3 tools/rebuild.py
 ```
 
-Das Skript überschreibt alle Seiten aus den Vorlagen in `tools/`. Wer nur Text auf
-einer einzelnen Seite ändert, braucht es nicht.
+Direkt in `index.html` zu schreiben funktioniert auch — aber der nächste Rebuild
+überschreibt es wieder. Deshalb besser in den Vorlagen ändern.
+
+## Cookies und Tracking
+
+Solange in `content/tracking.json` keine ID eingetragen und aktiviert ist, lädt die
+Website **nichts** von fremden Servern und zeigt **kein** Cookie-Banner.
+
+Sobald du im CMS eine GTM- oder Pixel-ID einträgst und aktivierst, erscheint das Banner.
+Getestet und belegt: vor der Zustimmung wird kein einziges externes Skript geladen,
+und der Google Consent Mode steht auf `denied`. Erst bei „Alle akzeptieren" werden
+Tag Manager und Pixel nachgeladen. „Nur notwendige" lädt weiterhin nichts.
+
+Die Cookie-Seite unter `/cookies/` passt ihren Inhalt automatisch an — sie listet nur
+Dienste auf, die tatsächlich aktiv sind.
 
 ## Design-System
 
@@ -96,8 +148,12 @@ Zwei Fallstricke, die schon aufgetreten sind:
 3. **Preise und Bike-Daten gegenprüfen** — Stand der alten Seite.
 4. **Vier Bilder sind KI-generiert** (ECU-Flash, Werkstatt-Detail, Carbon-Teil,
    Nachtaufnahme im Kontaktblock). Sobald es echte Fotos gibt, austauschen.
-5. **Die Bike-Detailseiten** (`/motorraeder/<modell>`) der alten Seite gibt es hier
-   noch nicht — aktuell verlinkt die Übersicht auf den Kontakt.
+5. **Racing-Anfrageformular** öffnet aktuell das E-Mail-Programm des Besuchers
+   (kein Server nötig). Wenn Anfragen direkt ankommen sollen, braucht es einen
+   Formulardienst — dann fallen Datenschutzhinweise dafür an.
+6. **Preise auf der Racing-Seite:** Die drei Ausbaustufen nennen bewusst keine Beträge,
+   weil mir keine vorliegen. Sobald es Richtwerte gibt, gehören sie dort hin — das ist
+   der größte verbleibende Conversion-Hebel.
 
 ---
 

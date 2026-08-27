@@ -1,0 +1,65 @@
+[
+  {
+    "gruppe": "Service & Werkstatt",
+    "eintraege": [
+      {
+        "frage": "Bietet ihr Service und Reparaturen für Aprilia an?",
+        "antwort": "Ja. Wir führen Service- und Reparaturarbeiten für Aprilia Motorräder durch – von regelmäßigen Wartungen und Ölwechseln bis hin zu umfangreicheren Reparaturen und Verschleißarbeiten. Durch unsere Erfahrung mit Aprilia Motorrädern und unseren eigenen Einsatz auf der Rennstrecke kennen wir die besonderen Anforderungen sportlicher Bikes."
+      },
+      {
+        "frage": "Serviciert ihr auch Motorräder anderer Marken?",
+        "antwort": "Ja. Neben Aprilia betreuen wir auch Motorräder anderer Marken. Unser Schwerpunkt liegt dabei auf sportlichen Motorrädern und Naked Bikes. Wir führen Wartungen, Servicearbeiten, Reparaturen und den Austausch von Verschleißteilen durch. Bei komplexen markenspezifischen Diagnosen und elektronischer Fehlersuche empfehlen wir den jeweiligen Markenbetrieb – dort stehen die vollständige Herstellersoftware und die fahrzeugspezifischen Informationen zur Verfügung."
+      },
+      {
+        "frage": "Sind Verschleißteile bei Fremdmarken ein Problem?",
+        "antwort": "Nein. Bremsbeläge, Bremsscheiben, Kettenkits, Flüssigkeiten, Filter oder andere übliche Wartungs- und Verschleißteile können wir auch bei Motorrädern anderer Marken tauschen."
+      },
+      {
+        "frage": "Macht ihr auch das §57a-Pickerl?",
+        "antwort": "Ja. Wir führen §57a-Begutachtungen für Motorräder nach Terminvereinbarung durch. So kannst du die gesetzlich vorgeschriebene Überprüfung direkt bei uns machen lassen."
+      },
+      {
+        "frage": "Kann ich bei euch Reifen wechseln lassen?",
+        "antwort": "Ja. Wir bieten Reifenmontage und Reifenwechsel für Motorräder aller Marken an. Die neuen Reifen bestellst du direkt bei uns – wir kümmern uns um Auswahl, Bestellung und fachgerechte Montage. Bitte beachte: Wir montieren ausschließlich Reifen, die über Schwarz Motorized bestellt wurden. Von Kunden mitgebrachte Reifen montieren wir nicht."
+      }
+    ]
+  },
+  {
+    "gruppe": "Racing & Umbau",
+    "eintraege": [
+      {
+        "frage": "Baut ihr Motorräder für die Rennstrecke um?",
+        "antwort": "Ja, das ist einer unserer Schwerpunkte. Wir bauen Motorräder nach deinen Anforderungen für den Renneinsatz um – von Fahrwerk und Bremsen über Ergonomie und Elektronik bis hin zu Rennverkleidung und weiteren Performance-Komponenten."
+      },
+      {
+        "frage": "Auch eine Aprilia RS 660 oder RSV4?",
+        "antwort": "Beide sind unsere Spezialgebiete. Die RS 660 eignet sich hervorragend für den Rennstreckeneinsatz und lässt sich individuell zum Racebike aufbauen. Bei der RSV4 unterstützen wir dich bei Auswahl und Montage von Performance-, Fahrwerks-, Brems-, Elektronik- und Racing-Komponenten – abgestimmt auf deinen Fahrstil und dein Einsatzgebiet."
+      },
+      {
+        "frage": "Was ist ECU-Flash und für welche Modelle geht das?",
+        "antwort": "Beim ECU-Flash wird die Motorsteuerung gezielt auf das Motorrad und seinen Einsatzbereich abgestimmt – etwa in Verbindung mit einer geänderten Auspuffanlage oder für die Rennstrecke. Wir bieten das für alle V4- und 660er-Modelle an. Gerade bei RSV4 und RS 660 ist eine professionelle Abstimmung ein wichtiger Bestandteil jedes Rennstreckenumbaus."
+      },
+      {
+        "frage": "Gibt es speziellen Racing-Service?",
+        "antwort": "Ja. Bei Rennstreckenmotorrädern sind regelmäßige Kontrollen besonders wichtig. Wir berücksichtigen Verschleiß, Einsatzbedingungen und – bei entsprechenden Aprilia Modellen – die vom Motorrad erfassten Belastungs- bzw. Stresskilometer. So lassen sich Ventilservice, Ventiltausch und Motorrevisionen gezielt planen, statt sie dem Zufall zu überlassen."
+      }
+    ]
+  },
+  {
+    "gruppe": "Kaufen & Mieten",
+    "eintraege": [
+      {
+        "frage": "Seid ihr offizieller Aprilia Händler?",
+        "antwort": "Ja. Schwarz Motorized ist offizieller Aprilia Händler und Ansprechpartner für Aprilia, Moto Morini, Sym, Vent und UM Motors. Neben dem Verkauf bieten wir Service, Wartung, Reparaturen und individuelle Umbauten an."
+      },
+      {
+        "frage": "Bietet ihr Probefahrten an?",
+        "antwort": "Ja. Für viele unserer Vorführmotorräder kannst du nach Terminvereinbarung eine Probefahrt machen. Und wenn du einmal auf der Rennstrecke fahren möchtest, sprich uns an – auch dafür haben wir eine Lösung."
+      },
+      {
+        "frage": "Kann ich ein Motorrad bei euch mieten?",
+        "antwort": "Ja. Je nach Verfügbarkeit kannst du ausgewählte Vorführmotorräder für mehrere Tage mieten. Entscheidest du dich danach für den Kauf, rechnen wir dir die Mietkosten auf den Kaufpreis an."
+      }
+    ]
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "titel": "Offizieller Aprilia Händler",
+    "text": "Alle aktuellen Modelle, ehrliche Beratung, Finanzierung, Versicherung und Anmeldung — aus einer Hand.",
+    "bild": "svc-aprilia.jpg",
+    "bild_alt": "Aprilia RSV4 im Showroom von Schwarz Motorized",
+    "link": "#kontakt"
+  },
+  {
+    "titel": "ECU Flash by ROM Racing",
+    "text": "Individuelle Abstimmung der Motorsteuerung für alle V4- und 660er-Modelle. Exklusiv in Österreich bei uns.",
+    "bild": "svc-ecu.jpg",
+    "bild_alt": "Laptop mit Kennfeld-Tabellen, per Diagnosekabel mit einem Motorrad verbunden",
+    "link": "racing/"
+  },
+  {
+    "titel": "Rennstreckenumbau",
+    "text": "Fahrwerk, Bremsen, Ergonomie, Elektronik, Rennverkleidung. Wir bauen dein Traumbike rennbereit auf.",
+    "bild": "svc-race.jpg",
+    "bild_alt": "Aprilia RSV4 Factory mit Carbon-Rennverkleidung",
+    "link": "racing/"
+  },
+  {
+    "titel": "Service für alle Marken",
+    "text": "Wartung, Reparatur, Verschleißteile, §57a-Pickerl und Reifenmontage. Schnell, unkompliziert und persönlich.",
+    "bild": "svc-service.jpg",
+    "bild_alt": "Hände mit Drehmomentschlüssel an der Hinterradaufhängung eines Sportmotorrads",
+    "link": "BUCHUNG"
+  }
+]

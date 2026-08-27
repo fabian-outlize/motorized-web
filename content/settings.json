@@ -1,0 +1,17 @@
+{
+  "firma": "Autohaus Schwarz e.U.",
+  "marke": "Schwarz Motorized",
+  "strasse": "Betriebsgebiet Nord 4",
+  "plz_ort": "7123 Mönchhof",
+  "region": "Burgenland",
+  "telefon": "+43 2173 80060",
+  "telefon_link": "+43217380060",
+  "email": "schwarz@motorized.at",
+  "maps_url": "https://maps.app.goo.gl/D2jVzh5HcYnCtnNU9",
+  "buchung_url": "https://osb.motiondata-vector.com/?d=aK4R5zkrGzP73AP9STMjSadQmMsnCELL6D8Gy8GXPQxZPafxBL",
+  "oeffnungszeiten": [
+    { "tage": "Mo – Fr", "zeit": "07:30 – 12:00" },
+    { "tage": "", "zeit": "13:00 – 17:30" }
+  ],
+  "oeffnungszeiten_hinweis": "Samstag und Sonntag geschlossen"
+}
