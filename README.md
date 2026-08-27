@@ -23,9 +23,8 @@ python3 -m http.server 4330
 | Pfad | Datei | Inhalt |
 |---|---|---|
 | `/` | `index.html` | Startseite — Hero, Leistungen, Racing, Angebote, Mieten, Testimonials, Team, FAQ, Kontakt |
-| `/racing/` | `racing/index.html` | Rennstreckenumbau, ECU Flash, Racing-Service |
-| `/bikes/` | `bikes/index.html` | Pre-Owned & Demo Bikes mit Preisen |
 | `/racing/` | `racing/index.html` | **Landingpage** — auf Anfragen optimiert, zwei Zielgruppen |
+| `/bikes/` | `bikes/index.html` | Pre-Owned & Demo Bikes mit Preisen |
 | `/bikes/<modell>/` | | Detailseite je Motorrad, entsteht automatisch |
 | `/impressum/` · `/datenschutz/` · `/agb/` · `/cookies/` | | Rechtstexte |
 | `/admin/` | `admin/index.html` | CMS zum Pflegen der Inhalte |
