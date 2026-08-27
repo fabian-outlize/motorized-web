@@ -1,0 +1,62 @@
+name: Seiten bauen und veröffentlichen
+
+# Ein durchgehender Ablauf: erst die HTML-Seiten aus content/ erzeugen,
+# dann genau dieses Ergebnis veröffentlichen. Getrennte Workflows würden
+# parallel laufen — und beim Speichern im CMS den alten Stand ausliefern.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  bauen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: HTML aus content/ erzeugen
+        run: python3 tools/rebuild.py
+
+      - name: Ergebnis zurückschreiben, falls es sich geändert hat
+        run: |
+          git config user.name  "motorized-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "Keine Änderungen an den HTML-Dateien."
+          else
+            git add -A
+            git commit -m "Seiten neu gebaut [skip ci]"
+            git push
+          fi
+
+      - uses: actions/configure-pages@v5
+
+      # Lädt den Arbeitsstand hoch — also die eben erzeugten Seiten,
+      # unabhängig davon, ob der Commit oben nötig war.
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+  veroeffentlichen:
+    needs: bauen
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

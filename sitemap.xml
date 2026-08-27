@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://motorized.at/</loc><priority>1.0</priority></url>
-  <url><loc>https://motorized.at/racing/</loc><priority>0.9</priority></url>
-  <url><loc>https://motorized.at/bikes/</loc><priority>0.8</priority></url>
-  <url><loc>https://motorized.at/bikes/moto-guzzi-v9-bobber/</loc><priority>0.6</priority></url>
-  <url><loc>https://motorized.at/bikes/bmw-m-1000-r/</loc><priority>0.6</priority></url>
-  <url><loc>https://motorized.at/bikes/aprilia-tuono-v4-1100-e5/</loc><priority>0.6</priority></url>
-  <url><loc>https://motorized.at/bikes/aprilia-rsv4-1100-factory-e5/</loc><priority>0.6</priority></url>
-  <url><loc>https://motorized.at/bikes/aprilia-tuono-v4-1100-2023/</loc><priority>0.6</priority></url>
-  <url><loc>https://motorized.at/bikes/aprilia-tuono-v4-factory-1100-e4/</loc><priority>0.6</priority></url>
-  <url><loc>https://motorized.at/bikes/aprilia-rs-125/</loc><priority>0.6</priority></url>
-  <url><loc>https://motorized.at/impressum/</loc><priority>0.2</priority></url>
-  <url><loc>https://motorized.at/datenschutz/</loc><priority>0.2</priority></url>
-  <url><loc>https://motorized.at/agb/</loc><priority>0.2</priority></url>
-  <url><loc>https://motorized.at/cookies/</loc><priority>0.2</priority></url>
+  <url><loc>https://fabian-outlize.github.io/motorized-web/</loc><priority>1.0</priority></url>
+  <url><loc>https://fabian-outlize.github.io/motorized-web/racing/</loc><priority>0.9</priority></url>
+  <url><loc>https://fabian-outlize.github.io/motorized-web/bikes/</loc><priority>0.8</priority></url>
+  <url><loc>https://fabian-outlize.github.io/motorized-web/bikes/moto-guzzi-v9-bobber/</loc><priority>0.6</priority></url>
+  <url><loc>https://fabian-outlize.github.io/motorized-web/bikes/bmw-m-1000-r/</loc><priority>0.6</priority></url>
+  <url><loc>https://fabian-outlize.github.io/motorized-web/bikes/aprilia-tuono-v4-1100-e5/</loc><priority>0.6</priority></url>
+  <url><loc>https://fabian-outlize.github.io/motorized-web/bikes/aprilia-rsv4-1100-factory-e5/</loc><priority>0.6</priority></url>
+  <url><loc>https://fabian-outlize.github.io/motorized-web/bikes/aprilia-tuono-v4-1100-2023/</loc><priority>0.6</priority></url>
+  <url><loc>https://fabian-outlize.github.io/motorized-web/bikes/aprilia-tuono-v4-factory-1100-e4/</loc><priority>0.6</priority></url>
+  <url><loc>https://fabian-outlize.github.io/motorized-web/bikes/aprilia-rs-125/</loc><priority>0.6</priority></url>
+  <url><loc>https://fabian-outlize.github.io/motorized-web/impressum/</loc><priority>0.2</priority></url>
+  <url><loc>https://fabian-outlize.github.io/motorized-web/datenschutz/</loc><priority>0.2</priority></url>
+  <url><loc>https://fabian-outlize.github.io/motorized-web/agb/</loc><priority>0.2</priority></url>
+  <url><loc>https://fabian-outlize.github.io/motorized-web/cookies/</loc><priority>0.2</priority></url>
 </urlset>
