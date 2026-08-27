@@ -25,6 +25,10 @@
   };
 
   var $ = function (s, r) { return (r || document).querySelector(s); };
+
+  // Vorgabe aus admin/config.json — damit Benutzername und Repository nicht
+  // jeder von Hand eintippen muss. localStorage sticht die Vorgabe.
+  var CONFIG = { owner: '', repo: '' };
   var el = function (tag, cls, txt) {
     var n = document.createElement(tag);
     if (cls) n.className = cls;
@@ -107,6 +111,7 @@
     var btn = $('#loginBtn'), err = $('#loginErr');
     var token = $('#token').value.trim();
     var repoStr = (localStorage.getItem(LS_REPO) || '').trim();
+    if (!repoStr && CONFIG.owner && CONFIG.repo) repoStr = CONFIG.owner + '/' + CONFIG.repo;
 
     err.hidden = true;
     btn.disabled = true; btn.textContent = 'Verbinde…';
@@ -663,8 +668,10 @@
   }
 
   /* ------------------------------------------------- Automatisch anmelden */
+  function boot() {
   var saved = localStorage.getItem(LS_TOKEN);
-  var savedRepo = localStorage.getItem(LS_REPO);
+  var savedRepo = localStorage.getItem(LS_REPO) || (CONFIG.owner && CONFIG.repo
+    ? CONFIG.owner + '/' + CONFIG.repo : '');
   if (saved && savedRepo) {
     var parts = savedRepo.split('/');
     $('#loginBtn').textContent = 'Verbinde…';
@@ -677,4 +684,11 @@
       $('#loginErr').hidden = false;
     });
   }
+  }
+
+  fetch('config.json', { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (c) { if (c && c.owner && c.repo) CONFIG = c; })
+    .catch(function () {})
+    .then(boot);
 })();
