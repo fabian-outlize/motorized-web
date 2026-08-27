@@ -43,6 +43,7 @@ assets/partners/   Marken-Logos
 assets/logo/       Wortmarke (SVG)
 assets/icons/      Favicon, Share-Bild
 content/           die Inhalte als JSON — das, was im CMS bearbeitet wird
+content/seo.json   Meta-Titel, Beschreibungen und Teilbilder je Seite
 admin/             das CMS (Login, Formulare, GitHub-Anbindung)
 tools/rebuild.py   erzeugt alle HTML-Seiten aus content/
 .github/workflows/ baut die Seiten neu und veröffentlicht auf Pages
@@ -59,8 +60,15 @@ Unter **`/admin/`** liegt ein kleines Redaktionssystem. Damit lassen sich ohne C
 - **Team**
 - **FAQ** in Gruppen
 - **Rezensionen**
-- **Kontaktdaten** — Adresse, Telefon, Öffnungszeiten, Buchungslink
+- **SEO & Teilen** — Titel und Beschreibung für Google, Bild für WhatsApp/Facebook/LinkedIn,
+  mit Zeichenzähler und Live-Vorschau beider Darstellungen
+- **Kontaktdaten** — Adresse, Telefon, Öffnungszeiten, Buchungslink, Vorschau-Modus
 - **Tracking** — Google Tag Manager und Facebook-Pixel
+
+Die Listen sind eingeklappt: eine Zeile je Eintrag mit Vorschaubild, Kennzahlen und Status.
+Ein Klick öffnet das Formular, und es ist immer nur eines offen. Offene Änderungen sammeln
+sich in einer Leiste am unteren Rand, die sich erst zeigt, wenn es etwas zu speichern gibt —
+mit „Veröffentlichen" und „Verwerfen".
 
 ### Anmeldung
 

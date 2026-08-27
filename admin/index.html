@@ -64,7 +64,7 @@
       <span class="top__repo" id="repoLabel"></span>
       <span class="top__spacer"></span>
       <span class="top__state" id="state"></span>
-      <button class="btn" id="publishBtn" type="button" disabled>Änderungen veröffentlichen</button>
+      <a class="btn btn--quiet" id="viewBtn" href="../" target="_blank" rel="noopener">Website ansehen</a>
       <button class="btn btn--quiet" id="logoutBtn" type="button">Abmelden</button>
     </div>
   </header>
@@ -72,6 +72,18 @@
   <div class="shell">
     <nav class="side" id="side" aria-label="Bereiche"></nav>
     <main class="main" id="main"></main>
+  </div>
+</div>
+
+<div class="savebar" id="savebar">
+  <div class="savebar__in">
+    <div>
+      <div class="savebar__t" id="savebarT">Änderungen offen</div>
+      <div class="savebar__d">Erst nach dem Veröffentlichen sind sie auf der Website sichtbar.</div>
+    </div>
+    <span class="savebar__spacer"></span>
+    <button class="btn btn--quiet" id="discardBtn" type="button">Verwerfen</button>
+    <button class="btn btn--primary" id="publishBtn" type="button">Veröffentlichen</button>
   </div>
 </div>
 

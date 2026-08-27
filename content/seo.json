@@ -1,0 +1,40 @@
+{
+  "og_bild_standard": "",
+  "seiten": {
+    "start": {
+      "titel": "Schwarz Motorized — Aprilia Händler & Racing Center",
+      "beschreibung": "Offizieller Aprilia Händler im Burgenland. Service für alle Marken, ECU Flash by ROM Racing exklusiv in Österreich und kompromisslose Rennstreckenumbauten.",
+      "og_bild": ""
+    },
+    "racing": {
+      "titel": "Rennstreckenumbau & Racing-Setup — Schwarz Motorized",
+      "beschreibung": "Fahrwerk, Bremsen und ECU Flash für Aprilia RSV4, RS 660 und Tuono V4. Vom ersten Trackday bis zur Rundenzeit. Kostenloses Racing-Gespräch.",
+      "og_bild": "racing-hero.jpg"
+    },
+    "bikes": {
+      "titel": "Pre-Owned & Demo Bikes — Schwarz Motorized",
+      "beschreibung": "Gepflegte Gebrauchte und Vorführer aus dem Haus: Aprilia, Moto Guzzi, BMW. Mit Baujahr, Kilometerstand und Preis. Probefahrt nach Vereinbarung.",
+      "og_bild": ""
+    },
+    "impressum": {
+      "titel": "Impressum — Schwarz Motorized",
+      "beschreibung": "Impressum und Offenlegung nach §25 MedienG — Autohaus Schwarz e.U., Mönchhof, Burgenland.",
+      "og_bild": ""
+    },
+    "datenschutz": {
+      "titel": "Datenschutz — Schwarz Motorized",
+      "beschreibung": "Wie wir mit personenbezogenen Daten umgehen. Autohaus Schwarz e.U., Mönchhof.",
+      "og_bild": ""
+    },
+    "agb": {
+      "titel": "AGB — Schwarz Motorized",
+      "beschreibung": "Allgemeine Geschäftsbedingungen von Autohaus Schwarz e.U., Mönchhof, Burgenland.",
+      "og_bild": ""
+    },
+    "cookies": {
+      "titel": "Cookies — Schwarz Motorized",
+      "beschreibung": "Welche Cookies und Dienste diese Website verwendet und wie du deine Auswahl jederzeit änderst.",
+      "og_bild": ""
+    }
+  }
+}

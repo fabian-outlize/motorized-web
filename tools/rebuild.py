@@ -38,6 +38,7 @@ def load(name):
 
 S = load("settings.json")
 TRACK = load("tracking.json")
+SEO = load("seo.json")
 # Basisadresse der Seite. Für eine Vorschau unter github.io hier die
 # Vorschau-Adresse eintragen, damit Link-Vorschauen und canonical stimmen.
 SITE = S.get("site_url", "https://motorized.at").rstrip("/")
@@ -71,7 +72,7 @@ NAV = [
 
 
 # ============================================================== Seitengerüst
-def head(depth, title, desc, canonical, noindex=False):
+def head(depth, title, desc, canonical, noindex=False, og_image=None):
     r = lambda p: rel(depth, p)
     base = "../" * depth
     tcfg = json.dumps({
@@ -81,6 +82,9 @@ def head(depth, title, desc, canonical, noindex=False):
     }, ensure_ascii=False)
     robots = ('<meta name="robots" content="noindex, nofollow">\n'
               if (noindex or NOINDEX) else "")
+    std = SEO.get("og_bild_standard") or ""
+    pick = og_image or std
+    og = (SITE + "/assets/web/" + pick) if pick else (SITE + "/assets/icons/og.jpg")
     return f"""<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -96,7 +100,7 @@ def head(depth, title, desc, canonical, noindex=False):
 <meta property="og:title" content="{html.escape(title)}">
 <meta property="og:description" content="{html.escape(desc)}">
 <meta property="og:url" content="{SITE}{canonical}">
-<meta property="og:image" content="{SITE}/assets/icons/og.jpg">
+<meta property="og:image" content="{og}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -226,14 +230,22 @@ def footer(depth):
 """
 
 
+def seo_meta(key, fallback_title, fallback_desc):
+    """Titel, Beschreibung und Teilbild aus seo.json — mit Rückfallwerten."""
+    e = SEO.get("seiten", {}).get(key, {})
+    return (e.get("titel") or fallback_title,
+            e.get("beschreibung") or fallback_desc,
+            e.get("og_bild") or "")
+
+
 def crumbs(depth, label):
     return (f'<nav class="crumbs" aria-label="Brotkrumen">\n'
             f'        <a href="{rel(depth, "")}">Startseite</a>{CHEV}'
             f'<span aria-current="page">{label}</span>\n      </nav>')
 
 
-def page(depth, *, title, desc, canonical, active, body, noindex=False):
-    return (head(depth, title, desc, canonical, noindex) + header(depth, active)
+def page(depth, *, title, desc, canonical, active, body, noindex=False, og_image=None):
+    return (head(depth, title, desc, canonical, noindex, og_image) + header(depth, active)
             + '\n<main id="main">\n' + body + '\n</main>\n' + footer(depth))
 
 
@@ -433,12 +445,12 @@ def build_home():
             .replace("<!--FAQ-->", faq_block())
             .replace("<!--KONTAKT-->", kontakt_block(0)))
     main += "\n" + local_business_schema() + "\n" + faq_schema()
-    write("index.html", page(
-        0,
-        title="Schwarz Motorized — Aprilia Händler & Racing Performance Center | Mönchhof",
-        desc=("Offizieller Aprilia Händler im Burgenland. Service für alle Marken, ECU Flash "
-              "by ROM Racing exklusiv in Österreich und kompromisslose Rennstreckenumbauten."),
-        canonical="/", active=None, body=main))
+    ti, de, og = seo_meta("start",
+        "Schwarz Motorized — Aprilia Händler & Racing Performance Center | Mönchhof",
+        "Offizieller Aprilia Händler im Burgenland. Service für alle Marken, ECU Flash "
+        "by ROM Racing exklusiv in Österreich und kompromisslose Rennstreckenumbauten.")
+    write("index.html", page(0, title=ti, desc=de, canonical="/", active=None,
+                             body=main, og_image=og))
 
 
 # ============================================== Racing — Conversion-Landing
@@ -737,13 +749,11 @@ def build_racing():
 </section>
 {faq_schema('Racing & Umbau')}
 """
-    write("racing/index.html", page(
-        d,
-        title="Rennstreckenumbau & Racing-Setup — Schwarz Motorized",
-        desc=("Rennstreckenumbau, Fahrwerks-Setup und ECU Flash by ROM Racing für Aprilia "
-              "RSV4, RS 660 und Tuono V4. Vom ersten Trackday bis zur Rundenzeit. "
-              "Kostenloses Racing-Gespräch."),
-        canonical="/racing/", active="Racing", body=body))
+    ti, de, og = seo_meta("racing", "Rennstreckenumbau & Racing-Setup — Schwarz Motorized",
+        "Rennstreckenumbau, Fahrwerks-Setup und ECU Flash by ROM Racing für Aprilia "
+        "RSV4, RS 660 und Tuono V4. Vom ersten Trackday bis zur Rundenzeit.")
+    write("racing/index.html", page(d, title=ti, desc=de, canonical="/racing/",
+                                    active="Racing", body=body, og_image=og))
 
 
 # ===================================================================== Bikes
@@ -820,11 +830,11 @@ def build_bikes():
   </div>
 </section>
 """
-    write("bikes/index.html", page(
-        d, title="Pre-Owned & Demo Bikes — Schwarz Motorized",
-        desc=("Gebrauchte Motorräder und Vorführer bei Schwarz Motorized in Mönchhof: "
-              "Aprilia, Moto Guzzi, BMW. Mit Baujahr, Kilometerstand und Preis."),
-        canonical="/bikes/", active="Bikes", body=body))
+    ti, de, og = seo_meta("bikes", "Pre-Owned & Demo Bikes — Schwarz Motorized",
+        "Gebrauchte Motorräder und Vorführer bei Schwarz Motorized in Mönchhof: "
+        "Aprilia, Moto Guzzi, BMW. Mit Baujahr, Kilometerstand und Preis.")
+    write("bikes/index.html", page(d, title=ti, desc=de, canonical="/bikes/",
+                                   active="Bikes", body=body, og_image=og))
 
     for b in bikes:
         build_bike_detail(b)
@@ -896,7 +906,8 @@ def build_bike_detail(b):
     write(f"bikes/{b['slug']}/index.html", page(
         d, title=f"{b['name']} — {b['preis']} | Schwarz Motorized",
         desc=(b.get("kurz") or f"{b['name']} bei Schwarz Motorized in Mönchhof.")[:170],
-        canonical=f"/bikes/{b['slug']}/", active="Bikes", body=body))
+        canonical=f"/bikes/{b['slug']}/", active="Bikes", body=body,
+        og_image=b.get("bild", "")))
 
 
 # ============================================================== Rechtsseiten
@@ -942,6 +953,7 @@ LEGAL_NOTE = {
 
 
 def build_legal(slug, title, h1, desc):
+    title, desc, og = seo_meta(slug, title, desc)
     with open(os.path.join(PARTS, f"legal-{slug}.json"), encoding="utf-8") as f:
         nodes = json.load(f)
     note = ""
@@ -964,8 +976,8 @@ def build_legal(slug, title, h1, desc):
   </div>
 </section>
 """
-    write(f"{slug}/index.html", page(1, title=title, desc=desc,
-                                     canonical=f"/{slug}/", active=None, body=body))
+    write(f"{slug}/index.html", page(1, title=title, desc=desc, canonical=f"/{slug}/",
+                                     active=None, body=body, og_image=og))
 
 
 def build_cookies():
@@ -1033,10 +1045,10 @@ def build_cookies():
   </div>
 </section>
 """
-    write("cookies/index.html", page(
-        1, title="Cookies — Schwarz Motorized",
-        desc="Welche Cookies und Dienste diese Website verwendet und wie du deine Auswahl änderst.",
-        canonical="/cookies/", active=None, body=body))
+    ti, de, og = seo_meta("cookies", "Cookies — Schwarz Motorized",
+        "Welche Cookies und Dienste diese Website verwendet und wie du deine Auswahl änderst.")
+    write("cookies/index.html", page(1, title=ti, desc=de, canonical="/cookies/",
+                                     active=None, body=body, og_image=og))
 
 
 # ======================================================================= 404
