@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+._*
+
+# Editor / Tooling
+.vscode/
+.idea/
+.claude/
+
+# Arbeitsmaterial, das nicht ins Repo gehört
+_source/
+_scratch/
+*.log
