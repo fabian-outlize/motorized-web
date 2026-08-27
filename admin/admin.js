@@ -139,11 +139,25 @@
     if (f) { f.hidden = false; $('#repo').value = knownRepo(); }
   }
 
+  function dbg(line) {
+    var box = $('#loginLog');
+    if (!box) return;
+    box.hidden = false;
+    var t = new Date().toISOString().slice(11, 19);
+    box.textContent += (box.textContent ? '\n' : '') + t + '  ' + line;
+    box.scrollTop = box.scrollHeight;
+    console.log('[CMS]', line);
+  }
+
+  window.addEventListener('unhandledrejection', function (e) {
+    dbg('UNBEHANDELT: ' + (e.reason && e.reason.message || e.reason));
+  });
+
   function fail(msg) {
     var err = $('#loginErr');
     err.textContent = msg;
     err.hidden = false;
-    console.warn('[CMS]', msg);
+    dbg('FEHLER: ' + msg);
   }
 
   $('#loginForm').addEventListener('submit', function (e) {
@@ -171,18 +185,25 @@
     }
 
     btn.disabled = true; btn.textContent = 'Verbinde…';
-    console.log('[CMS] verbinde mit', parts.join('/'));
+    $('#loginLog').textContent = '';
+    dbg('Start — Repository ' + parts.join('/') + ', Token ' + token.length + ' Zeichen'
+        + ' (' + token.slice(0, 11) + '…)');
 
     login(token, parts[0], parts[1], function (txt) {
       btn.textContent = txt;
+      dbg(txt);
     }).then(function () {
+      dbg('Alle Daten geladen — öffne die Oberfläche');
       if ($('#remember').checked) {
         localStorage.setItem(LS_TOKEN, token);
         localStorage.setItem(LS_REPO, parts.join('/'));
       }
-      start();
+      try { start(); }
+      catch (uiEx) { dbg('Oberfläche konnte nicht aufgebaut werden: ' + uiEx.message); throw uiEx; }
     }).catch(function (ex) {
       var m = String(ex && ex.message || ex);
+      dbg('Abbruch: ' + m);
+      if (ex && ex.stack) dbg(String(ex.stack).split('\n').slice(0, 3).join(' | '));
       console.warn('[CMS] Anmeldung fehlgeschlagen:', m);
       if (/Failed to fetch|NetworkError|Load failed/i.test(m)) {
         fail('Keine Verbindung zu api.github.com. Blockt ein Adblocker oder eine '
