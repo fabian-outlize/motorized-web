@@ -48,10 +48,16 @@
   }
 
   /* --------------------------------------------------------- GitHub-API */
+  var API_TIMEOUT = 20000;   // nach 20 s gilt eine Anfrage als hängen geblieben
+
   function api(path, opts) {
     opts = opts || {};
+    var ctl = typeof AbortController === 'function' ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, API_TIMEOUT);
+
     return fetch(API + path, {
       method: opts.method || 'GET',
+      signal: ctl ? ctl.signal : undefined,
       headers: {
         'Authorization': 'Bearer ' + state.token,
         'Accept': 'application/vnd.github+json',
@@ -59,14 +65,22 @@
       },
       body: opts.body ? JSON.stringify(opts.body) : undefined
     }).then(function (r) {
+      clearTimeout(timer);
       if (!r.ok) {
         return r.text().then(function (t) {
           var msg = r.status + ' ' + r.statusText;
           try { msg = JSON.parse(t).message || msg; } catch (e) {}
-          throw new Error(msg);
+          throw new Error(msg + ' (' + path + ')');
         });
       }
       return r.status === 204 ? null : r.json();
+    }, function (netErr) {
+      clearTimeout(timer);
+      if (netErr && netErr.name === 'AbortError') {
+        throw new Error('Zeitüberschreitung nach 20 Sekunden bei ' + path
+          + ' — die Anfrage an GitHub kam nicht zurück.');
+      }
+      throw netErr;
     });
   }
 
@@ -85,19 +99,26 @@
   var FILES = ['settings.json', 'tracking.json', 'services.json',
                'bikes.json', 'team.json', 'faq.json', 'testimonials.json'];
 
-  function login(token, owner, repo) {
+  function login(token, owner, repo, onStep) {
+    var step = onStep || function () {};
     state.token = token; state.owner = owner; state.repo = repo;
+    step('Verbinde…');
     return api(repoPath('')).then(function (r) {
       state.branch = r.default_branch || 'main';
+      var done = 0;
+      step('Lade Inhalte 0/' + FILES.length + '…');
       return Promise.all(FILES.map(function (f) {
         return api(repoPath('/contents/content/' + f + '?ref=' + state.branch))
           .then(function (res) {
             var txt = b64decode(res.content);
             state.files[f] = JSON.parse(txt);
             state.original[f] = JSON.stringify(state.files[f]);
+            done++;
+            step('Lade Inhalte ' + done + '/' + FILES.length + '…');
           });
       }));
     }).then(function () {
+      step('Lade Bilder…');
       return api(repoPath('/contents/assets/web?ref=' + state.branch))
         .then(function (list) {
           state.images = list.filter(function (x) { return x.type === 'file'; })
@@ -152,7 +173,9 @@
     btn.disabled = true; btn.textContent = 'Verbinde…';
     console.log('[CMS] verbinde mit', parts.join('/'));
 
-    login(token, parts[0], parts[1]).then(function () {
+    login(token, parts[0], parts[1], function (txt) {
+      btn.textContent = txt;
+    }).then(function () {
       if ($('#remember').checked) {
         localStorage.setItem(LS_TOKEN, token);
         localStorage.setItem(LS_REPO, parts.join('/'));
@@ -170,6 +193,9 @@
         showRepoField();
         fail('Repository „' + parts.join('/') + '" nicht gefunden — oder der Token hat keinen '
              + 'Zugriff darauf. Bei „Repository access" muss dieses Repository ausgewählt sein.');
+      } else if (/Zeitüberschreitung/.test(m)) {
+        fail(m + ' Meist blockt eine Erweiterung (Adblocker, Privacy-Tool, VPN) die '
+             + 'Verbindung zu api.github.com. Versuch es einmal in einem privaten Fenster.');
       } else if (/403/.test(m) || /rate limit/i.test(m)) {
         fail('GitHub verweigert den Zugriff (403). Fehlt dem Token die Berechtigung '
              + '„Contents: Read and write"?');
@@ -718,7 +744,8 @@
     var parts = savedRepo.split('/');
     $('#loginBtn').textContent = 'Verbinde…';
     $('#loginBtn').disabled = true;
-    login(saved, parts[0], parts[1]).then(start).catch(function (ex) {
+    login(saved, parts[0], parts[1], function (txt) { $('#loginBtn').textContent = txt; })
+      .then(start).catch(function (ex) {
       localStorage.removeItem(LS_TOKEN);
       $('#loginBtn').disabled = false;
       $('#loginBtn').textContent = 'Anmelden';
