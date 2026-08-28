@@ -1121,17 +1121,24 @@ def build_robots():
 
 
 def build_admin():
-    """Setzt den Fingerabdruck in admin/index.html, damit auch das CMS
-    nach einer Aenderung sofort neu geladen wird."""
+    """Setzt den Fingerabdruck in die Admin-Seiten, damit Browser nach einer
+    Aenderung sofort die neue Fassung laden."""
     import re as _re
-    p = os.path.join(ROOT, "admin", "index.html")
-    s = open(p, encoding="utf-8").read()
-    s = _re.sub(r'href="admin\.css(\?v=[a-f0-9]+)?"',
-                f'href="admin.css?v={stamp("admin/admin.css")}"', s)
-    s = _re.sub(r'src="admin\.js(\?v=[a-f0-9]+)?"',
-                f'src="admin.js?v={stamp("admin/admin.js")}"', s)
-    open(p, "w", encoding="utf-8").write(s)
-    print(f"  {'admin/index.html':36} gestempelt")
+    files = {"admin.css": "admin/admin.css", "github.js": "admin/github.js",
+             "login.js": "admin/login.js", "app.js": "admin/app.js"}
+    for page in ("admin/index.html", "admin/app.html"):
+        p = os.path.join(ROOT, page)
+        if not os.path.exists(p):
+            continue
+        s = open(p, encoding="utf-8").read()
+        for name, rel_ in files.items():
+            esc_ = _re.escape(name)
+            s = _re.sub(r'href="' + esc_ + r'(\?v=[a-f0-9]+)?"',
+                        f'href="{name}?v={stamp(rel_)}"', s)
+            s = _re.sub(r'src="' + esc_ + r'(\?v=[a-f0-9]+)?"',
+                        f'src="{name}?v={stamp(rel_)}"', s)
+        open(p, "w", encoding="utf-8").write(s)
+        print(f"  {page:36} gestempelt")
 
 
 def build_sitemap():

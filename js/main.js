@@ -196,6 +196,37 @@
   });
 
 
+
+  /* ---------------------------------------------------------------
+     9) Konversions-Ereignisse für Werbung
+     Meldet wichtige Handlungen an den dataLayer. Das ist für sich
+     genommen kein Tracking — es wird nur ausgewertet, wenn der
+     Besucher zugestimmt hat und der Tag Manager dadurch läuft.
+     Auslöser im GTM auf diese Ereignisnamen setzen:
+       sm_anruf · sm_email · sm_termin · sm_anfrage · sm_bike_anfrage
+     --------------------------------------------------------------- */
+  window.dataLayer = window.dataLayer || [];
+  function ereignis(name, daten) {
+    var d = { event: name, seite: location.pathname };
+    if (daten) for (var k in daten) if (daten.hasOwnProperty(k)) d[k] = daten[k];
+    window.dataLayer.push(d);
+  }
+
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href]');
+    if (!a) return;
+    var href = a.getAttribute('href') || '';
+    if (href.indexOf('tel:') === 0) {
+      ereignis('sm_anruf', { nummer: href.replace('tel:', '') });
+    } else if (href.indexOf('mailto:') === 0) {
+      var betreff = /\?subject=([^&]*)/.exec(href);
+      ereignis(href.indexOf('subject=Anfrage') > -1 ? 'sm_bike_anfrage' : 'sm_email',
+               { betreff: betreff ? decodeURIComponent(betreff[1]) : '' });
+    } else if (href.indexOf('osb.motiondata-vector.com') > -1) {
+      ereignis('sm_termin', { quelle: a.textContent.trim().slice(0, 40) });
+    }
+  }, true);
+
   /* ---------------------------------------------------------------
      8) Racing-Anfrage: baut aus dem Formular eine fertige E-Mail
      Kein Server, kein Dienstleister — es öffnet das Mailprogramm
@@ -236,6 +267,8 @@
       ];
       if (v('text')) lines.push('Was mir wichtig ist:', v('text'), '');
       lines.push('Name: ' + v('name'), 'Erreichbar unter: ' + v('kontakt'), '', 'Danke und liebe Grüße');
+
+      ereignis('sm_anfrage', { bike: v('bike'), ziel: v('ziel') });
 
       var mail = form.getAttribute('data-mail') || 'schwarz@motorized.at';
       window.location.href = 'mailto:' + mail

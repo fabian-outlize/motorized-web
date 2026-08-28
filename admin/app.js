@@ -1,34 +1,11 @@
 /* ==========================================================================
-   CMS für motorized.at
-   --------------------------------------------------------------------------
-   Kein Server. Die Seite spricht direkt mit der GitHub-API:
-   Inhalte lesen → im Browser bearbeiten → als EIN Commit zurückschreiben.
-   Danach baut die GitHub Action die HTML-Seiten neu.
-
-   Der Token liegt nur im Browser des Nutzers (localStorage). Er wird nie an
-   uns oder Dritte übertragen — nur an api.github.com.
+   Das CMS. Liegt bewusst auf einer eigenen Seite — wer hier landet, ist
+   angemeldet. Ohne gespeicherten Token geht es zurück zur Anmeldung.
    ========================================================================== */
 (function () {
   'use strict';
 
-  var API = 'https://api.github.com';
-  var LS_TOKEN = 'sm-cms-token';
-  var LS_REPO = 'sm-cms-repo';
-
-  var state = {
-    token: null, owner: null, repo: null, branch: 'main',
-    files: {},        // pfad -> geparster Inhalt
-    original: {},     // pfad -> JSON-String beim Laden
-    images: [],       // Dateinamen in assets/web
-    uploads: {},      // pfad -> base64 (neu hochgeladene Bilder)
-    view: 'bikes'
-  };
-
   var $ = function (s, r) { return (r || document).querySelector(s); };
-
-  // Vorgabe aus admin/config.json — damit Benutzername und Repository nicht
-  // jeder von Hand eintippen muss. localStorage sticht die Vorgabe.
-  var CONFIG = { owner: '', repo: '' };
   var el = function (tag, cls, txt) {
     var n = document.createElement(tag);
     if (cls) n.className = cls;
@@ -36,7 +13,18 @@
     return n;
   };
 
-  /* ------------------------------------------------------------- Toast */
+  var state = SM.state;
+  var view = 'bikes';
+  var open_ = null;      // welcher Eintrag gerade aufgeklappt ist
+  var filter = '';       // Suchbegriff
+  var kat = 'alle';      // Segmentfilter bei den Motorrädern
+  var drag = null, dropAt = 0;
+
+  function clearMarks() {
+    Array.prototype.forEach.call(document.querySelectorAll('.is-over, .is-over-after'),
+      function (n) { n.classList.remove('is-over', 'is-over-after'); });
+  }
+
   var toastT;
   function toast(msg, warn) {
     var t = $('#toast');
@@ -47,333 +35,103 @@
     toastT = setTimeout(function () { t.hidden = true; }, warn ? 6000 : 3000);
   }
 
-  /* --------------------------------------------------------- GitHub-API */
-  var API_TIMEOUT = 20000;   // nach 20 s gilt eine Anfrage als hängen geblieben
-
-  function api(path, opts) {
-    opts = opts || {};
-    var ctl = typeof AbortController === 'function' ? new AbortController() : null;
-    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, API_TIMEOUT);
-
-    return fetch(API + path, {
-      method: opts.method || 'GET',
-      signal: ctl ? ctl.signal : undefined,
-      headers: {
-        'Authorization': 'Bearer ' + state.token,
-        'Accept': 'application/vnd.github+json',
-        'X-GitHub-Api-Version': '2022-11-28'
-      },
-      body: opts.body ? JSON.stringify(opts.body) : undefined
-    }).then(function (r) {
-      clearTimeout(timer);
-      if (!r.ok) {
-        return r.text().then(function (t) {
-          var msg = r.status + ' ' + r.statusText;
-          try { msg = JSON.parse(t).message || msg; } catch (e) {}
-          throw new Error(msg + ' (' + path + ')');
-        });
-      }
-      return r.status === 204 ? null : r.json();
-    }, function (netErr) {
-      clearTimeout(timer);
-      if (netErr && netErr.name === 'AbortError') {
-        throw new Error('Zeitüberschreitung nach 20 Sekunden bei ' + path
-          + ' — die Anfrage an GitHub kam nicht zurück.');
-      }
-      throw netErr;
-    });
-  }
-
-  function repoPath(p) {
-    return '/repos/' + state.owner + '/' + state.repo + p;
-  }
-
-  function b64encode(str) {
-    return btoa(unescape(encodeURIComponent(str)));
-  }
-  function b64decode(str) {
-    return decodeURIComponent(escape(atob(str.replace(/\n/g, ''))));
-  }
-
-  /* ------------------------------------------------------------ Anmelden */
-  var FILES = ['settings.json', 'tracking.json', 'services.json',
-               'bikes.json', 'team.json', 'faq.json', 'testimonials.json', 'seo.json'];
-
-  function login(token, owner, repo, onStep) {
-    var step = onStep || function () {};
-    state.token = token; state.owner = owner; state.repo = repo;
-    step('Verbinde…');
-    return api(repoPath('')).then(function (r) {
-      state.branch = r.default_branch || 'main';
-      var done = 0;
-      step('Lade Inhalte 0/' + FILES.length + '…');
-      return Promise.all(FILES.map(function (f) {
-        return api(repoPath('/contents/content/' + f + '?ref=' + state.branch))
-          .then(function (res) {
-            var txt = b64decode(res.content);
-            state.files[f] = JSON.parse(txt);
-            state.original[f] = JSON.stringify(state.files[f]);
-            done++;
-            step('Lade Inhalte ' + done + '/' + FILES.length + '…');
-          });
-      }));
-    }).then(function () {
-      step('Lade Bilder…');
-      return api(repoPath('/contents/assets/web?ref=' + state.branch))
-        .then(function (list) {
-          state.images = list.filter(function (x) { return x.type === 'file'; })
-                             .map(function (x) { return x.name; }).sort();
-        }).catch(function () { state.images = []; });
-    });
-  }
-
-  function knownRepo() {
-    var ls = (localStorage.getItem(LS_REPO) || '').trim();
-    if (ls) return ls;
-    if (CONFIG.owner && CONFIG.repo) return CONFIG.owner + '/' + CONFIG.repo;
-    return '';
-  }
-
-  function showRepoField() {
-    var f = $('#repoField');
-    if (f) { f.hidden = false; $('#repo').value = knownRepo(); }
-  }
-
-  function dbg(line) {
-    var box = $('#loginLog');
-    if (!box) return;
-    box.hidden = false;
-    var t = new Date().toISOString().slice(11, 19);
-    box.textContent += (box.textContent ? '\n' : '') + t + '  ' + line;
-    box.scrollTop = box.scrollHeight;
-    console.log('[CMS]', line);
-  }
-
-  window.addEventListener('unhandledrejection', function (e) {
-    dbg('UNBEHANDELT: ' + (e.reason && e.reason.message || e.reason));
-  });
-
-  function fail(msg) {
-    var err = $('#loginErr');
-    err.textContent = msg;
-    err.hidden = false;
-    dbg('FEHLER: ' + msg);
-  }
-
-  $('#loginForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var btn = $('#loginBtn'), err = $('#loginErr');
-    err.hidden = true;
-
-    var token = $('#token').value.trim();
-    if (!token) { fail('Bitte zuerst den GitHub-Token einfügen.'); $('#token').focus(); return; }
-
-    var repoStr = ($('#repo') && $('#repo').value.trim()) || knownRepo();
-    if (!repoStr) {
-      showRepoField();
-      fail('Ich konnte das Repository nicht automatisch erkennen — bitte unten eintragen '
-           + '(Form: benutzername/repository) und erneut auf Anmelden klicken.');
-      return;
-    }
-
-    repoStr = repoStr.replace(/^https?:\/\/github\.com\//, '').replace(/\.git$/, '').replace(/\/+$/, '');
-    var parts = repoStr.split('/');
-    if (parts.length !== 2 || !parts[0] || !parts[1]) {
-      showRepoField();
-      fail('„' + repoStr + '" sieht nicht wie ein Repository aus. Erwartet: benutzername/repository');
-      return;
-    }
-
-    btn.disabled = true; btn.textContent = 'Verbinde…';
-    $('#loginLog').textContent = '';
-    dbg('Start — Repository ' + parts.join('/') + ', Token ' + token.length + ' Zeichen'
-        + ' (' + token.slice(0, 11) + '…)');
-
-    login(token, parts[0], parts[1], function (txt) {
-      btn.textContent = txt;
-      dbg(txt);
-    }).then(function () {
-      dbg('Alle Daten geladen — öffne die Oberfläche');
-      if ($('#remember').checked) {
-        localStorage.setItem(LS_TOKEN, token);
-        localStorage.setItem(LS_REPO, parts.join('/'));
-      }
-      try { start(); }
-      catch (uiEx) { dbg('Oberfläche konnte nicht aufgebaut werden: ' + uiEx.message); throw uiEx; }
-    }).catch(function (ex) {
-      var m = String(ex && ex.message || ex);
-      dbg('Abbruch: ' + m);
-      if (ex && ex.stack) dbg(String(ex.stack).split('\n').slice(0, 3).join(' | '));
-      console.warn('[CMS] Anmeldung fehlgeschlagen:', m);
-      if (/Failed to fetch|NetworkError|Load failed/i.test(m)) {
-        fail('Keine Verbindung zu api.github.com. Blockt ein Adblocker oder eine '
-             + 'Erweiterung die Anfrage? Bitte kurz deaktivieren und erneut versuchen.');
-      } else if (/Bad credentials|401/.test(m)) {
-        fail('Der Token wird von GitHub abgelehnt. Ist er vollständig kopiert und noch gültig?');
-      } else if (/Not Found|404/.test(m)) {
-        showRepoField();
-        fail('Repository „' + parts.join('/') + '" nicht gefunden — oder der Token hat keinen '
-             + 'Zugriff darauf. Bei „Repository access" muss dieses Repository ausgewählt sein.');
-      } else if (/Zeitüberschreitung/.test(m)) {
-        fail(m + ' Meist blockt eine Erweiterung (Adblocker, Privacy-Tool, VPN) die '
-             + 'Verbindung zu api.github.com. Versuch es einmal in einem privaten Fenster.');
-      } else if (/403/.test(m) || /rate limit/i.test(m)) {
-        fail('GitHub verweigert den Zugriff (403). Fehlt dem Token die Berechtigung '
-             + '„Contents: Read and write"?');
-      } else {
-        fail('Anmeldung fehlgeschlagen: ' + m);
-      }
-    }).then(function () {
-      btn.disabled = false; btn.textContent = 'Anmelden';
-    });
-  });
-
-  $('#logoutBtn').addEventListener('click', function () {
-    if (dirty().length && !confirm('Es gibt ungespeicherte Änderungen. Wirklich abmelden?')) return;
-    localStorage.removeItem(LS_TOKEN);
-    location.reload();
-  });
-
-  /* -------------------------------------------------------- Änderungen */
-  function dirty() {
-    return FILES.filter(function (f) {
-      return JSON.stringify(state.files[f]) !== state.original[f];
-    });
-  }
+  function dirty() { return SM.dirty(); }
 
   function touched() {
     var n = dirty().length + Object.keys(state.uploads).length;
-    var bar = $('#savebar'), st = $('#state');
-    bar.classList.toggle('is-on', n > 0);
+    $('#savebar').classList.toggle('is-on', n > 0);
     $('#savebarT').textContent = n === 1 ? '1 Änderung offen' : n + ' Änderungen offen';
-    if (!n) { st.className = 'top__state'; st.textContent = ''; }
     renderSide();
   }
 
   window.addEventListener('beforeunload', function (e) {
-    if (dirty().length || Object.keys(state.uploads).length) {
-      e.preventDefault(); e.returnValue = '';
-    }
+    if (dirty().length || Object.keys(state.uploads).length) { e.preventDefault(); e.returnValue = ''; }
+  });
+
+  /* ------------------------------------------------------- Veröffentlichen */
+  $('#publishBtn').addEventListener('click', function () {
+    var b = this;
+    b.disabled = true; b.textContent = 'Veröffentliche…';
+    SM.publish().then(function () {
+      touched(); render();
+      toast('Gespeichert. Die Website aktualisiert sich in ein bis zwei Minuten.');
+    }).catch(function (ex) {
+      toast('Fehler beim Veröffentlichen: ' + (ex.message || ex), true);
+    }).then(function () {
+      b.disabled = false; b.textContent = 'Veröffentlichen'; touched();
+    });
   });
 
   $('#discardBtn').addEventListener('click', function () {
     if (!confirm('Alle offenen Änderungen verwerfen und den zuletzt veröffentlichten Stand laden?')) return;
-    FILES.forEach(function (f) { state.files[f] = JSON.parse(state.original[f]); });
-    state.uploads = {};
-    open_ = null;
+    SM.FILES.forEach(function (f) { state.files[f] = JSON.parse(state.original[f]); });
+    state.uploads = {}; open_ = null;
     touched(); render();
     toast('Änderungen verworfen.');
   });
 
-  /* ----------------------------------------------------- Veröffentlichen */
-  $('#publishBtn').addEventListener('click', function () {
-    var changed = dirty();
-    var uploads = Object.keys(state.uploads);
-    if (!changed.length && !uploads.length) return;
-
-    var btn = this;
-    btn.disabled = true; btn.textContent = 'Veröffentliche…';
-
-    var ref, baseCommit, baseTree;
-    api(repoPath('/git/ref/heads/' + state.branch))
-      .then(function (r) {
-        ref = r; return api(repoPath('/git/commits/' + r.object.sha));
-      })
-      .then(function (c) {
-        baseCommit = c; baseTree = c.tree.sha;
-        var blobs = changed.map(function (f) {
-          return api(repoPath('/git/blobs'), {
-            method: 'POST',
-            body: { content: JSON.stringify(state.files[f], null, 2) + '\n', encoding: 'utf-8' }
-          }).then(function (b) { return { path: 'content/' + f, sha: b.sha }; });
-        }).concat(uploads.map(function (p) {
-          return api(repoPath('/git/blobs'), {
-            method: 'POST', body: { content: state.uploads[p], encoding: 'base64' }
-          }).then(function (b) { return { path: p, sha: b.sha }; });
-        }));
-        return Promise.all(blobs);
-      })
-      .then(function (entries) {
-        return api(repoPath('/git/trees'), {
-          method: 'POST',
-          body: {
-            base_tree: baseTree,
-            tree: entries.map(function (e) {
-              return { path: e.path, mode: '100644', type: 'blob', sha: e.sha };
-            })
-          }
-        });
-      })
-      .then(function (tree) {
-        var what = changed.map(function (f) { return f.replace('.json', ''); });
-        if (uploads.length) what.push(uploads.length + ' Bild(er)');
-        return api(repoPath('/git/commits'), {
-          method: 'POST',
-          body: {
-            message: 'Inhalte aktualisiert: ' + what.join(', '),
-            tree: tree.sha, parents: [baseCommit.sha]
-          }
-        });
-      })
-      .then(function (commit) {
-        return api(repoPath('/git/refs/heads/' + state.branch), {
-          method: 'PATCH', body: { sha: commit.sha }
-        });
-      })
-      .then(function () {
-        changed.forEach(function (f) { state.original[f] = JSON.stringify(state.files[f]); });
-        state.uploads = {};
-        touched();
-        $('#state').className = 'top__state is-ok';
-        $('#state').textContent = 'Veröffentlicht — die Seite baut jetzt neu (1–2 Minuten)';
-        toast('Gespeichert. Die Website aktualisiert sich in ein bis zwei Minuten.');
-        render();
-      })
-      .catch(function (ex) {
-        toast('Fehler beim Veröffentlichen: ' + (ex.message || ex), true);
-      })
-      .then(function () {
-        btn.textContent = 'Änderungen veröffentlichen';
-        touched();
-      });
-  });
-
-  /* --------------------------------------------------------- Navigation */
-  var VIEWS = [
-    { id: 'bikes',        label: 'Motorräder',  ico: '\u{1F3CD}', file: 'bikes.json' },
-    { id: 'services',     label: 'Leistungen',  ico: '\u{1F527}', file: 'services.json' },
-    { id: 'team',         label: 'Team',        ico: '\u{1F464}', file: 'team.json' },
-    { id: 'faq',          label: 'FAQ',         ico: '\u{2753}',  file: 'faq.json' },
-    { id: 'testimonials', label: 'Rezensionen', ico: '\u{2B50}',  file: 'testimonials.json' },
-    { id: 'seo',          label: 'SEO & Teilen',ico: '\u{1F50D}', file: 'seo.json' },
-    { id: 'settings',     label: 'Kontaktdaten',ico: '\u{1F4CD}', file: 'settings.json' },
-    { id: 'tracking',     label: 'Tracking',    ico: '\u{1F4CA}', file: 'tracking.json' }
+  /* -------------------------------------------------------------- Sidebar */
+  var GROUPS = [
+    { label: 'Inhalte', items: [
+      { id: 'bikes',        label: 'Motorräder',   ico: '\u{1F3CD}', file: 'bikes.json' },
+      { id: 'services',     label: 'Leistungen',   ico: '\u{1F527}', file: 'services.json' },
+      { id: 'team',         label: 'Team',         ico: '\u{1F464}', file: 'team.json' },
+      { id: 'faq',          label: 'FAQ',          ico: '❓',    file: 'faq.json' },
+      { id: 'testimonials', label: 'Rezensionen',  ico: '⭐',    file: 'testimonials.json' }
+    ]},
+    { label: 'Einstellungen', items: [
+      { id: 'seo',      label: 'SEO & Teilen', ico: '\u{1F50D}', file: 'seo.json' },
+      { id: 'settings', label: 'Kontaktdaten', ico: '\u{1F4CD}', file: 'settings.json' },
+      { id: 'tracking', label: 'Tracking',     ico: '\u{1F4CA}', file: 'tracking.json' }
+    ]}
   ];
-
-  var open_ = null;      // welcher Eintrag gerade aufgeklappt ist
-  var filter = '';       // Suchbegriff der aktuellen Liste
 
   function renderSide() {
     var side = $('#side');
     side.innerHTML = '';
-    VIEWS.forEach(function (v) {
-      var b = el('button', 'side__b' + (state.view === v.id ? ' is-on' : ''));
-      b.type = 'button';
-      b.append(el('span', 'side__ico', v.ico), el('span', null, v.label));
-      var data = state.files[v.file];
-      if (JSON.stringify(data) !== state.original[v.file]) {
-        var d = el('span', 'dot');
-        d.title = 'ungespeicherte Änderungen';
-        b.append(d);
-      } else if (Array.isArray(data)) {
-        b.append(el('span', 'count', data.length));
-      }
-      b.addEventListener('click', function () {
-        state.view = v.id; open_ = null; filter = ''; render();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    var brand = el('div', 'side__brand');
+    var logo = el('div', 'side__logo');
+    logo.innerHTML = '<svg viewBox="0 0 217 217"><path d="M0 217L74.082 108.5L0 0H44.6104L118.692 108.5L44.6104 217H0ZM98.3076 217L172.39 108.5L98.3076 0H142.918L217 108.5L142.918 217H98.3076Z"/></svg>';
+    var names = el('div');
+    names.append(el('div', 'side__name', 'Schwarz Motorized'),
+                 el('div', 'side__sub', state.owner + '/' + state.repo));
+    brand.append(logo, names);
+    side.append(brand);
+
+    GROUPS.forEach(function (g) {
+      side.append(el('div', 'side__group', g.label));
+      g.items.forEach(function (v) {
+        var b = el('button', 'side__b' + (view === v.id ? ' is-on' : ''));
+        b.type = 'button';
+        b.append(el('span', null, v.ico), el('span', null, v.label));
+        var data = state.files[v.file];
+        if (JSON.stringify(data) !== state.original[v.file]) {
+          var d = el('span', 'dot'); d.title = 'ungespeicherte Änderungen'; b.append(d);
+        } else if (Array.isArray(data)) {
+          b.append(el('span', 'count', data.length));
+        }
+        b.addEventListener('click', function () {
+          view = v.id; open_ = null; filter = ''; kat = 'alle';
+          render(); window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        side.append(b);
       });
-      side.append(b);
     });
+
+    var foot = el('div', 'side__foot');
+    var look = el('a', 'side__b', null);
+    look.href = '../'; look.target = '_blank'; look.rel = 'noopener';
+    look.append(el('span', null, '↗'), el('span', null, 'Website ansehen'));
+    var out = el('button', 'side__b');
+    out.type = 'button';
+    out.append(el('span', null, '⏻'), el('span', null, 'Abmelden'));
+    out.addEventListener('click', function () {
+      if (dirty().length && !confirm('Es gibt ungespeicherte Änderungen. Wirklich abmelden?')) return;
+      SM.forget(); location.href = 'index.html';
+    });
+    foot.append(look, out);
+    side.append(foot);
   }
 
   /* ------------------------------------------------------- Feld-Helfer */
@@ -522,6 +280,16 @@
     head.type = 'button';
     head.setAttribute('aria-expanded', String(isOpen));
 
+    if (opts.sort) {
+      var grip = el('span', 'item__grip');
+      grip.title = 'Zum Sortieren ziehen';
+      grip.setAttribute('aria-hidden', 'true');
+      grip.addEventListener('mousedown', function () { it.draggable = true; });
+      grip.addEventListener('mouseup', function () { it.draggable = false; });
+      grip.addEventListener('click', function (e) { e.stopPropagation(); });
+      head.append(grip);
+    }
+
     if (opts.thumb !== undefined) {
       var th = el('img', 'item__thumb' + (opts.round ? ' item__thumb--round' : ''));
       th.alt = '';
@@ -536,9 +304,11 @@
     head.append(main);
 
     (opts.tags || []).forEach(function (t) {
-      if (t) head.append(el('span', 'item__tag' + (t.cls ? ' ' + t.cls : ''), t.text));
+      if (t) head.append(el('span', 'pill' + (t.cls ? ' ' + t.cls : ''), t.text));
     });
-    head.append(el('span', 'item__caret', '▼'));
+    var car = el('span', 'item__caret');
+    car.innerHTML = '<svg class="ico" viewBox="0 0 24 24" style="width:.85rem;height:.85rem"><path d="m6 9 6 6 6-6"/></svg>';
+    head.append(car);
 
     head.addEventListener('click', function () {
       open_ = isOpen ? null : key;
@@ -551,6 +321,46 @@
       }
     });
     it.append(head);
+
+    if (opts.sort) {
+      var arr = opts.sort.arr, idx = opts.sort.index;
+      it.addEventListener('dragstart', function (e) {
+        drag = { arr: arr, from: idx };
+        it.classList.add('is-dragging');
+        document.body.classList.add('dragmode');
+        try { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', String(idx)); } catch (err) {}
+      });
+      it.addEventListener('dragend', function () {
+        it.draggable = false;
+        it.classList.remove('is-dragging');
+        document.body.classList.remove('dragmode');
+        clearMarks();
+        drag = null;
+      });
+      it.addEventListener('dragover', function (e) {
+        if (!drag || drag.arr !== arr) return;
+        e.preventDefault();
+        var r = it.getBoundingClientRect();
+        var after = (e.clientY - r.top) > r.height / 2;
+        clearMarks();
+        it.classList.add(after ? 'is-over-after' : 'is-over');
+        dropAt = idx + (after ? 1 : 0);
+      });
+      it.addEventListener('drop', function (e) {
+        if (!drag || drag.arr !== arr) return;
+        e.preventDefault();
+        var from = drag.from, to = dropAt;
+        clearMarks();
+        if (to > from) to--;
+        if (to !== from && to >= 0 && to <= arr.length - 1) {
+          arr.splice(to, 0, arr.splice(from, 1)[0]);
+          open_ = null;
+          touched(); render();
+          toast('Reihenfolge geändert.');
+        }
+        drag = null;
+      });
+    }
 
     if (isOpen) {
       var body = el('div', 'item__b');
@@ -585,36 +395,53 @@
   }
 
   function panel(opts) {
-    var p = el('div', 'panel');
-    var h = el('div', 'panel__h');
-    var r = el('div', 'panel__row');
-    var t = el('div');
-    t.append(el('h2', 'panel__t', opts.title));
-    if (opts.desc) t.append(el('p', 'panel__d', opts.desc));
-    r.append(t);
-    if (opts.head) { var sp = el('span'); sp.style.flex = '1'; r.append(sp); opts.head.forEach(function (n) { r.append(n); }); }
-    h.append(r);
-    if (opts.search) h.append(opts.search);
-    p.append(h);
-
-    var b = el('div', 'panel__b' + (opts.flush ? ' panel__b--flush' : ''));
-    if (!opts.body.length) {
-      b.append(el('div', 'empty', opts.empty || 'Noch nichts angelegt.'));
-    } else {
-      opts.body.forEach(function (n) { b.append(n); });
+    var p = el('div', 'card');
+    if (opts.title) {
+      var h = el('div', 'card__h');
+      h.append(el('h2', 'card__t', opts.title));
+      if (opts.desc) h.append(el('p', 'card__d', opts.desc));
+      p.append(h);
     }
+    var b = el('div', 'card__b' + (opts.flush ? ' card__b--list' : ''));
+    if (!opts.body.length) b.append(el('div', 'empty', opts.empty || 'Noch nichts angelegt.'));
+    else opts.body.forEach(function (n) { b.append(n); });
     p.append(b);
-    if (opts.add) { var bar = el('div', 'addbar'); bar.append(opts.add); p.append(bar); }
+    if (opts.add) { var f = el('div', 'card__f'); f.append(opts.add); p.append(f); }
     return p;
+  }
+
+  /* Filter- und Suchleiste ueber der Liste */
+  function bar(nodes) {
+    var w = el('div', 'bar');
+    nodes.forEach(function (n) { if (n) w.append(n); });
+    return w;
+  }
+
+  function segmented(options, current, onPick) {
+    var w = el('div', 'seg');
+    options.forEach(function (o) {
+      var b = el('button', current === o.id ? 'is-on' : '');
+      b.type = 'button';
+      b.append(el('span', null, o.label));
+      if (o.n != null) b.append(el('span', 'n', o.n));
+      b.addEventListener('click', function () { onPick(o.id); });
+      w.append(b);
+    });
+    return w;
   }
 
   function searchBox(placeholder) {
     var w = el('div', 'search');
+    w.innerHTML = '<svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>';
     var i = el('input');
     i.type = 'search'; i.placeholder = placeholder; i.value = filter;
-    i.addEventListener('input', function () { filter = i.value; render(); requestAnimationFrame(function () {
-      var f = document.querySelector('.search input'); if (f) { f.focus(); f.setSelectionRange(f.value.length, f.value.length); }
-    }); });
+    i.addEventListener('input', function () {
+      filter = i.value; render();
+      requestAnimationFrame(function () {
+        var f = document.querySelector('.search input');
+        if (f) { f.focus(); f.setSelectionRange(f.value.length, f.value.length); }
+      });
+    });
     w.append(i);
     return w;
   }
@@ -629,9 +456,11 @@
     var arr = state.files['bikes.json'];
     var nodes = [];
     arr.forEach(function (b, i) {
+      if (kat !== 'alle' && b.kategorie !== kat) return;
       if (!matches(b.name + ' ' + b.kategorie + ' ' + (b.baujahr || ''))) return;
       var KAT = { gebraucht: 'Gebraucht', vorfuehrer: 'Vorführer', aktion: 'Neu-Aktion' };
       nodes.push(item('bike' + i, {
+        sort: { arr: arr, index: i },
         thumb: b.bild,
         title: b.name,
         sub: [KAT[b.kategorie] || b.kategorie, b.baujahr, b.km, b.preis].filter(Boolean).join('  ·  '),
@@ -688,27 +517,39 @@
       }));
     });
 
-    return panel({
-      title: 'Motorräder',
-      desc: 'Steht auf der Bikes-Seite und — wenn angehakt — auf der Startseite. Jedes sichtbare Motorrad bekommt automatisch eine eigene Detailseite.',
-      search: arr.length > 4 ? searchBox('Motorrad suchen…') : null,
+    var zaehl = function (k) {
+      return arr.filter(function (x) { return k === 'alle' || x.kategorie === k; }).length;
+    };
+    var wrap = el('div');
+    wrap.append(bar([
+      segmented([
+        { id: 'alle', label: 'Alle', n: zaehl('alle') },
+        { id: 'gebraucht', label: 'Gebraucht', n: zaehl('gebraucht') },
+        { id: 'vorfuehrer', label: 'Vorführer', n: zaehl('vorfuehrer') },
+        { id: 'aktion', label: 'Aktionen', n: zaehl('aktion') }
+      ], kat, function (id) { kat = id; open_ = null; render(); }),
+      searchBox('Motorrad suchen…')
+    ]));
+    wrap.append(panel({
       body: nodes, flush: true,
-      empty: filter ? 'Kein Motorrad gefunden.' : 'Noch kein Motorrad angelegt.',
+      empty: filter || kat !== 'alle' ? 'Kein Motorrad gefunden.' : 'Noch kein Motorrad angelegt.',
       add: btn('+ Motorrad hinzufügen', 'btn--primary', function () {
         arr.unshift({
           slug: 'neues-bike-' + Date.now(), name: 'Neues Motorrad', kategorie: 'gebraucht',
           baujahr: '', km: '', preis: '', preis_ab: false, bild: '', alt: '', kurz: '',
           specs: '', highlights: [], aktiv: false, startseite: false, flag: ''
         });
-        filter = ''; open_ = 'bike0'; touched(); render();
+        filter = ''; kat = 'alle'; open_ = 'bike0'; touched(); render();
       })
-    });
+    }));
+    return wrap;
   }
 
   function viewServices() {
     var arr = state.files['services.json'];
     var nodes = arr.map(function (s, i) {
       return item('svc' + i, {
+        sort: { arr: arr, index: i },
         thumb: s.bild, title: s.titel, sub: s.text,
         body: function () {
           return [
@@ -744,6 +585,7 @@
     var arr = state.files['team.json'];
     var nodes = arr.map(function (m, i) {
       return item('team' + i, {
+        sort: { arr: arr, index: i },
         thumb: m.bild, round: true, title: m.name, sub: m.rolle,
         body: function () {
           return [
@@ -758,7 +600,6 @@
       });
     });
     return panel({
-      title: 'Team', desc: 'Die Reihenfolge hier ist die Reihenfolge auf der Startseite.',
       body: nodes, flush: true,
       add: btn('+ Person hinzufügen', 'btn--primary', function () {
         arr.push({ name: 'Neue Person', rolle: '', bild: '' });
@@ -776,6 +617,7 @@
       g.eintraege.forEach(function (e, ei) {
         if (!matches(e.frage + ' ' + e.antwort)) return;
         inner.push(item('faq' + gi + '-' + ei, {
+          sort: { arr: g.eintraege, index: ei },
           title: e.frage,
           sub: (e.antwort || '').slice(0, 90),
           body: function () {
@@ -834,6 +676,7 @@
     var arr = state.files['testimonials.json'];
     var nodes = arr.map(function (t, i) {
       return item('say' + i, {
+        sort: { arr: arr, index: i },
         thumb: t.avatar, round: true,
         title: t.zitat || '(ohne Zitat)',
         sub: t.name + (t.faehrt ? '  ·  fährt: ' + t.faehrt : ''),
@@ -857,8 +700,6 @@
       });
     });
     return panel({
-      title: 'Rezensionen',
-      desc: 'Echte Bewertungen von Google und Facebook. Bitte nur übernehmen, nicht erfinden — sonst wird aus Vertrauen schnell das Gegenteil.',
       body: nodes, flush: true,
       add: btn('+ Rezension hinzufügen', 'btn--primary', function () {
         arr.push({ zitat: '', text: '', quelle: 'Google', name: '', faehrt: '', avatar: '', hervorheben: false });
@@ -959,11 +800,7 @@
 
     var wrap = el('div');
     wrap.style.display = 'grid'; wrap.style.gap = '1rem';
-    wrap.append(panel({
-      title: 'SEO & Teilen',
-      desc: 'Was Google im Suchergebnis anzeigt und wie der Link in WhatsApp, Facebook oder LinkedIn aussieht. Die Vorschau unten zeigt es dir live.',
-      body: nodes, flush: true
-    }));
+    wrap.append(panel({ body: nodes, flush: true }));
     wrap.append(std);
     return wrap;
   }
@@ -1025,7 +862,30 @@
       checkbox('Tracking aktiv', t.aktiv, function (v) { t.aktiv = v; }),
       el('div', 'note note--warn',
         'Wenn du Tracking aktivierst, muss die Datenschutzerklärung die eingesetzten Dienste '
-        + 'nennen. Die Cookie-Seite aktualisiert sich automatisch — die Datenschutzerklärung nicht.')
+        + 'nennen. Die Cookie-Seite aktualisiert sich automatisch — die Datenschutzerklärung nicht.'),
+      (function () {
+        var box = el('div', 'note');
+        box.append(el('strong', null, 'Diese Ereignisse meldet die Website von selbst:'));
+        var ul = el('ul');
+        ul.style.cssText = 'margin:.5rem 0 0;padding-left:1.1rem;display:grid;gap:.25rem';
+        [['sm_anruf', 'jemand tippt auf eine Telefonnummer'],
+         ['sm_termin', 'jemand öffnet die Online-Terminbuchung'],
+         ['sm_anfrage', 'das Racing-Formular wurde abgeschickt'],
+         ['sm_bike_anfrage', 'jemand fragt ein bestimmtes Motorrad an'],
+         ['sm_email', 'jemand klickt auf eine E-Mail-Adresse']].forEach(function (r) {
+          var li = el('li');
+          var c = el('code', null, r[0]);
+          c.style.cssText = 'font-family:var(--mono);font-size:12px;background:#fff;padding:.05rem .3rem;border-radius:4px';
+          li.append(c, ' — ' + r[1]);
+          ul.append(li);
+        });
+        box.append(ul);
+        box.append(el('div', null,
+          'Im Tag Manager legst du dafür Auslöser vom Typ „Benutzerdefiniertes Ereignis" an und '
+          + 'verknüpfst sie mit deinen Conversion-Tags.'));
+        box.lastChild.style.cssText = 'margin-top:.55rem';
+        return box;
+      })()
     ];
     return panel({ title: 'Tracking & Cookies',
       desc: 'Google Tag Manager und Facebook-Pixel, gesteuert über das Cookie-Banner.',
@@ -1037,44 +897,50 @@
     testimonials: viewTestimonials, seo: viewSeo, settings: viewSettings, tracking: viewTracking
   };
 
+  var TITEL = {
+    bikes: ['Motorräder', 'Alles, was auf der Bikes-Seite und der Startseite steht.'],
+    services: ['Leistungen', 'Die vier Punkte im Bereich „What we offer".'],
+    team: ['Team', 'Wer auf der Startseite vorgestellt wird.'],
+    faq: ['FAQ', 'Häufige Fragen, gruppiert nach Thema.'],
+    testimonials: ['Rezensionen', 'Bewertungen von Google und Facebook.'],
+    seo: ['SEO & Teilen', 'Was Google zeigt und wie geteilte Links aussehen.'],
+    settings: ['Kontaktdaten', 'Adresse, Zeiten und die Grundeinstellungen der Website.'],
+    tracking: ['Tracking', 'Tag Manager, Pixel und das Cookie-Banner.']
+  };
+
   function render() {
     renderSide();
     var m = $('#main');
     m.innerHTML = '';
-    m.append(RENDER[state.view]());
+    var t = TITEL[view];
+    var head = el('div', 'head');
+    var box = el('div');
+    box.append(el('h1', 'head__t', t[0]), el('p', 'head__d', t[1]));
+    head.append(box);
+    m.append(head);
+    m.append(RENDER[view]());
   }
 
-  function start() {
-    $('#login').hidden = true;
-    $('#app').hidden = false;
-    $('#repoLabel').textContent = state.owner + '/' + state.repo;
-    touched();
-    render();
-  }
-
-  /* ------------------------------------------------- Automatisch anmelden */
-  function boot() {
-  var saved = localStorage.getItem(LS_TOKEN);
-  var savedRepo = localStorage.getItem(LS_REPO) || (CONFIG.owner && CONFIG.repo
-    ? CONFIG.owner + '/' + CONFIG.repo : '');
-  if (saved && savedRepo) {
-    var parts = savedRepo.split('/');
-    $('#loginBtn').textContent = 'Verbinde…';
-    $('#loginBtn').disabled = true;
-    login(saved, parts[0], parts[1], function (txt) { $('#loginBtn').textContent = txt; })
-      .then(start).catch(function (ex) {
-      localStorage.removeItem(LS_TOKEN);
-      $('#loginBtn').disabled = false;
-      $('#loginBtn').textContent = 'Anmelden';
-      $('#loginErr').textContent = 'Gespeicherter Token funktioniert nicht mehr: ' + (ex.message || ex);
-      $('#loginErr').hidden = false;
+  /* ------------------------------------------------------------- Start */
+  SM.loadConfig().then(function () {
+    var s = SM.saved();
+    if (!s.token || !s.repo) { location.replace('index.html'); return; }
+    var parts = s.repo.split('/');
+    $('#main').innerHTML = '<div class="empty">Lade Inhalte…</div>';
+    SM.connect(s.token, parts[0], parts[1], function (txt) {
+      $('#main').innerHTML = '<div class="empty">' + txt + '</div>';
+    }).then(function () {
+      touched(); render();
+    }).catch(function (ex) {
+      $('#main').innerHTML = '';
+      var box = el('div', 'card');
+      var b = el('div', 'card__b');
+      b.append(el('p', 'login__err', SM.describeError(ex, s.repo)));
+      var again = el('button', 'btn btn--primary', 'Zur Anmeldung');
+      again.addEventListener('click', function () { SM.forget(); location.href = 'index.html'; });
+      b.append(again);
+      box.append(b);
+      $('#main').append(box);
     });
-  }
-  }
-
-  fetch('config.json', { cache: 'no-store' })
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (c) { if (c && c.owner && c.repo) CONFIG = c; })
-    .catch(function () {})
-    .then(boot);
+  });
 })();

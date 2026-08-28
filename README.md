@@ -44,7 +44,9 @@ assets/logo/       Wortmarke (SVG)
 assets/icons/      Favicon, Share-Bild
 content/           die Inhalte als JSON — das, was im CMS bearbeitet wird
 content/seo.json   Meta-Titel, Beschreibungen und Teilbilder je Seite
-admin/             das CMS (Login, Formulare, GitHub-Anbindung)
+admin/index.html   Anmeldung
+admin/app.html     das CMS selbst (eigene Seite)
+admin/github.js    gemeinsame GitHub-Anbindung beider Seiten
 tools/rebuild.py   erzeugt alle HTML-Seiten aus content/
 .github/workflows/ baut die Seiten neu und veröffentlicht auf Pages
 docs/              Analyse der alten Seite, verworfene Webflow-Variante
@@ -119,6 +121,22 @@ Index, nur ohne Beschreibung. Der umgekehrte Weg ist der sichere.
 **Vor dem echten Livegang ausschalten**, sonst findet Google die Seite nie.
 Zusammen mit `site_url` sind das die zwei Werte, die beim Umzug auf die echte
 Domain angepasst werden müssen.
+
+## Konversions-Ereignisse für Werbung
+
+Die Website meldet wichtige Handlungen an den `dataLayer`. Im Tag Manager legst du
+dafür Auslöser vom Typ „Benutzerdefiniertes Ereignis" an:
+
+| Ereignis | Wann |
+|---|---|
+| `sm_anruf` | jemand tippt auf eine Telefonnummer |
+| `sm_termin` | jemand öffnet die Online-Terminbuchung |
+| `sm_anfrage` | das Racing-Formular wurde abgeschickt |
+| `sm_bike_anfrage` | jemand fragt ein bestimmtes Motorrad an |
+| `sm_email` | jemand klickt auf eine E-Mail-Adresse |
+
+Die Meldung selbst ist kein Tracking — sie landet nur im `dataLayer`. Ausgewertet
+wird sie erst, wenn der Besucher zugestimmt hat und der Tag Manager dadurch läuft.
 
 ## Cookies und Tracking
 

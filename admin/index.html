@@ -3,26 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Inhalte pflegen — Schwarz Motorized</title>
+<title>Anmelden — Schwarz Motorized</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="../assets/icons/favicon.png">
-<link rel="stylesheet" href="admin.css?v=15548186">
+<link rel="stylesheet" href="admin.css?v=5cfa75c9">
 </head>
 <body>
 
-<!-- ============================================================ Anmeldung -->
-<div class="login" id="login">
+<div class="login">
   <form class="login__box" id="loginForm">
+    <div class="login__mark">
+      <svg viewBox="0 0 217 217" aria-hidden="true"><path d="M0 217L74.082 108.5L0 0H44.6104L118.692 108.5L44.6104 217H0ZM98.3076 217L172.39 108.5L98.3076 0H142.918L217 108.5L142.918 217H98.3076Z"/></svg>
+      <span>Schwarz Motorized</span>
+    </div>
+
     <h1 class="login__h">Inhalte pflegen</h1>
     <p class="login__t">
       Zum Anmelden brauchst du einen GitHub-Token mit Schreibrechten auf dieses
-      Repository. Der Token bleibt in diesem Browser und wird nirgends sonst gespeichert.
+      Repository. Er bleibt in diesem Browser und wird nirgends sonst gespeichert.
     </p>
 
     <label class="f">
       <span class="f__l">GitHub-Token</span>
       <input class="f__i" type="password" id="token" autocomplete="current-password"
-             placeholder="github_pat_… oder ghp_…" required>
+             placeholder="github_pat_… oder ghp_…">
     </label>
 
     <label class="f" id="repoField" hidden>
@@ -37,7 +41,7 @@
       <span>Angemeldet bleiben (auf diesem Gerät)</span>
     </label>
 
-    <button class="btn btn--primary" type="submit" id="loginBtn">Anmelden</button>
+    <button class="btn btn--primary btn--block" type="submit" id="loginBtn">Anmelden</button>
     <p class="login__err" id="loginErr" hidden></p>
     <pre class="login__log" id="loginLog" hidden></pre>
 
@@ -47,7 +51,7 @@
         <li>Auf <a href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener">github.com/settings/personal-access-tokens</a> gehen.</li>
         <li><em>Generate new token</em> → <em>Fine-grained</em>.</li>
         <li>Bei <em>Repository access</em> nur dieses eine Repository auswählen.</li>
-        <li>Bei <em>Permissions → Repository permissions</em> den Punkt
+        <li>Unter <em>Permissions → Repository permissions</em> den Punkt
             <strong>Contents</strong> auf <strong>Read and write</strong> stellen.</li>
         <li>Token erzeugen, kopieren und hier einfügen.</li>
       </ol>
@@ -56,39 +60,7 @@
   </form>
 </div>
 
-<!-- ================================================================== App -->
-<div class="app" id="app" hidden>
-  <header class="top">
-    <div class="top__in">
-      <span class="top__brand">Inhalte pflegen</span>
-      <span class="top__repo" id="repoLabel"></span>
-      <span class="top__spacer"></span>
-      <span class="top__state" id="state"></span>
-      <a class="btn btn--quiet" id="viewBtn" href="../" target="_blank" rel="noopener">Website ansehen</a>
-      <button class="btn btn--quiet" id="logoutBtn" type="button">Abmelden</button>
-    </div>
-  </header>
-
-  <div class="shell">
-    <nav class="side" id="side" aria-label="Bereiche"></nav>
-    <main class="main" id="main"></main>
-  </div>
-</div>
-
-<div class="savebar" id="savebar">
-  <div class="savebar__in">
-    <div>
-      <div class="savebar__t" id="savebarT">Änderungen offen</div>
-      <div class="savebar__d">Erst nach dem Veröffentlichen sind sie auf der Website sichtbar.</div>
-    </div>
-    <span class="savebar__spacer"></span>
-    <button class="btn btn--quiet" id="discardBtn" type="button">Verwerfen</button>
-    <button class="btn btn--primary" id="publishBtn" type="button">Veröffentlichen</button>
-  </div>
-</div>
-
-<div class="toast" id="toast" hidden></div>
-
-<script src="admin.js?v=554b4832"></script>
+<script src="github.js?v=402cebe0"></script>
+<script src="login.js?v=1f0c2b95"></script>
 </body>
 </html>
