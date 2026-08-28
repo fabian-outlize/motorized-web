@@ -247,6 +247,11 @@
         } else if (!v.file) {
           b.append(el('span', 'count', state.images.length));
         }
+        if (v.id === 'seo' && state.files['settings.json'].noindex) {
+          var w = el('span', 'pill is-note', 'Vorschau');
+          w.style.cssText += ';margin-left:auto;font-size:10px';
+          b.append(w);
+        }
         b.addEventListener('click', function () {
           view = v.id; open_ = null; filter = ''; kat = 'alle';
           render(); window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -746,65 +751,86 @@
 
   function viewFaq() {
     var groups = state.files['faq.json'];
-    var nodes = [];
+    var wrap = el('div');
+
+    wrap.append(bar([searchBox('Frage suchen…')]));
+
+    wrap.append(panel({
+      body: [el('div', 'note',
+        'Die Gruppe „Racing & Umbau" erscheint zusätzlich auf der Racing-Seite. '
+        + 'Benennst du sie um, verschwindet sie dort — dann bitte Bescheid geben.')]
+    }));
+
     groups.forEach(function (g, gi) {
-      var inner = [];
-      inner.push(field('Name der Gruppe', g.gruppe, function (v) { g.gruppe = v; }));
+      var karte = el('div', 'card');
+
+      var kopf = el('div', 'card__h');
+      var zeile = el('div');
+      zeile.style.cssText = 'display:flex;align-items:center;gap:.6rem;flex-wrap:wrap';
+      zeile.append(el('h2', 'card__t', g.gruppe || '(ohne Namen)'));
+      zeile.append(el('span', 'pill', g.eintraege.length + ' Fragen'));
+      var luecke = el('span'); luecke.style.flex = '1';
+      zeile.append(luecke);
+      moveBtns(groups, gi).forEach(function (n) { zeile.append(n); });
+      zeile.append(btn('Gruppe löschen', 'btn--danger', function () {
+        if (confirm('Gruppe „' + g.gruppe + '" mit allen ' + g.eintraege.length
+                    + ' Fragen löschen?')) {
+          groups.splice(gi, 1); open_ = null; touched(); render();
+        }
+      }));
+      kopf.append(zeile);
+      karte.append(kopf);
+
+      var koerper = el('div', 'card__b card__b--list');
+      koerper.append(field('Name der Gruppe', g.gruppe, function (v) { g.gruppe = v; }));
+
+      var sichtbar = 0;
       g.eintraege.forEach(function (e, ei) {
         if (!matches(e.frage + ' ' + e.antwort)) return;
-        inner.push(item('faq' + gi + '-' + ei, {
+        sichtbar++;
+        koerper.append(item('faq' + gi + '-' + ei, {
           sort: { arr: g.eintraege, index: ei },
           title: e.frage,
           sub: (e.antwort || '').slice(0, 90),
           body: function () {
             return [
               field('Frage', e.frage, function (v) { e.frage = v; }),
-              field('Antwort', e.antwort, function (v) { e.antwort = v; }, { type: 'textarea', rows: 5 })
+              field('Antwort', e.antwort, function (v) { e.antwort = v; },
+                    { type: 'textarea', rows: 5 })
             ];
           },
           actions: function () {
-            return moveBtns(g.eintraege, ei).concat([el('span', 'spacer'), delBtn(null, g.eintraege, ei, e.frage)]);
+            return moveBtns(g.eintraege, ei)
+              .concat([el('span', 'spacer'), delBtn(null, g.eintraege, ei, e.frage)]);
           }
         }));
       });
-      inner.push(btn('+ Frage hinzufügen', '', function () {
+      if (!sichtbar) {
+        koerper.append(el('div', 'empty',
+          filter ? 'Keine Frage passt zur Suche.' : 'Noch keine Frage in dieser Gruppe.'));
+      }
+      karte.append(koerper);
+
+      var fuss = el('div', 'card__f');
+      fuss.append(btn('+ Frage hinzufügen', '', function () {
         g.eintraege.push({ frage: 'Neue Frage', antwort: '' });
-        open_ = 'faq' + gi + '-' + (g.eintraege.length - 1); touched(); render();
+        filter = ''; open_ = 'faq' + gi + '-' + (g.eintraege.length - 1);
+        touched(); render();
       }));
+      karte.append(fuss);
 
-      var p = el('div', 'panel');
-      var h = el('div', 'panel__h');
-      var r = el('div', 'panel__row');
-      r.append(el('h2', 'panel__t', g.gruppe));
-      var sp = el('span'); sp.style.flex = '1'; r.append(sp);
-      moveBtns(groups, gi).forEach(function (n) { r.append(n); });
-      r.append(btn('Gruppe löschen', 'btn--danger', function () {
-        if (confirm('Gruppe „' + g.gruppe + '" mit allen Fragen löschen?')) {
-          groups.splice(gi, 1); touched(); render();
-        }
-      }));
-      h.append(r);
-      p.append(h);
-      var b = el('div', 'panel__b panel__b--flush');
-      inner.forEach(function (n) { b.append(n); });
-      p.append(b);
-      nodes.push(p);
+      wrap.append(karte);
     });
 
-    var wrap = el('div');
-    wrap.style.display = 'grid'; wrap.style.gap = '1rem';
-    var lead = panel({
-      title: 'FAQ',
-      desc: 'Nach Themen gruppiert. Erscheint auf der Startseite und wird von Google als FAQ-Ausschnitt ausgelesen. Die Gruppe „Racing & Umbau" steht zusätzlich auf der Racing-Seite.',
-      search: searchBox('Frage suchen…'),
-      body: [], empty: '',
-      add: btn('+ Gruppe hinzufügen', 'btn--primary', function () {
-        groups.push({ gruppe: 'Neue Gruppe', eintraege: [] }); touched(); render();
-      })
-    });
-    lead.querySelector('.panel__b').remove();
-    wrap.append(lead);
-    nodes.forEach(function (n) { wrap.append(n); });
+    var neueGruppe = el('div', 'card');
+    var f = el('div', 'card__b');
+    f.append(btn('+ Gruppe hinzufügen', 'btn--primary', function () {
+      groups.push({ gruppe: 'Neue Gruppe', eintraege: [] });
+      touched(); render();
+    }));
+    neueGruppe.append(f);
+    wrap.append(neueGruppe);
+
     return wrap;
   }
 
@@ -1113,8 +1139,27 @@
       ]
     });
 
+    var set = state.files['settings.json'];
+    var sicht = panel({
+      title: 'Sichtbarkeit',
+      desc: 'Ob die Website bei Google auftauchen darf — und unter welcher Adresse sie läuft.',
+      body: [
+        checkbox('Vorschau-Modus — Seite aus Google heraushalten', set.noindex,
+                 function (v) { set.noindex = v; render(); }),
+        el('div', set.noindex ? 'note note--warn' : 'note',
+           set.noindex
+             ? 'Aktiv: Jede Seite trägt ein noindex, Google nimmt sie nicht auf. '
+               + 'Vor dem echten Livegang ausschalten — sonst findet dich niemand.'
+             : 'Aus: Die Website darf in den Suchergebnissen erscheinen.'),
+        field('Adresse der Website', set.site_url,
+              function (v) { set.site_url = v.replace(/\/+$/, ''); },
+              { hint: 'Ohne Schrägstrich am Ende. Steuert die Vorschauen unten, canonical und die Sitemap.' })
+      ]
+    });
+
     var wrap = el('div');
     wrap.style.display = 'grid'; wrap.style.gap = '1rem';
+    wrap.append(sicht);
     wrap.append(panel({ body: nodes, flush: true }));
     wrap.append(std);
     return wrap;
@@ -1123,14 +1168,6 @@
   function viewSettings() {
     var s = state.files['settings.json'];
     var body = [
-      group('Sichtbarkeit', [
-        checkbox('Vorschau-Modus — Seite aus Google heraushalten', s.noindex, function (v) { s.noindex = v; }),
-        el('span', 'f__hint',
-           'Solange das an ist, trägt jede Seite ein noindex und erscheint nicht bei Google. '
-           + 'Vor dem echten Livegang ausschalten.'),
-        field('Adresse der Website', s.site_url, function (v) { s.site_url = v.replace(/\/+$/, ''); },
-              { hint: 'Ohne Schrägstrich am Ende. Steuert Link-Vorschauen, canonical und die Sitemap.' })
-      ]),
       group('Firma', [
         field('Firmenname', s.firma, function (v) { s.firma = v; }),
         row([field('Straße', s.strasse, function (v) { s.strasse = v; }),
@@ -1257,8 +1294,8 @@
     testimonials: ['Rezensionen', 'Bewertungen von Google und Facebook.'],
     aktionen: ['Aktionen', 'Zeitlich begrenzte Hinweise auf der Startseite. Laufen automatisch aus.'],
     medien: ['Medien', 'Alle Bilder der Website. Ungenutzte kannst du hier entfernen.'],
-    seo: ['SEO & Teilen', 'Was Google zeigt und wie geteilte Links aussehen.'],
-    settings: ['Kontaktdaten', 'Adresse, Zeiten und die Grundeinstellungen der Website.'],
+    seo: ['SEO & Teilen', 'Sichtbarkeit bei Google, Titel und Beschreibungen, Bilder fürs Teilen.'],
+    settings: ['Kontaktdaten', 'Adresse, Öffnungszeiten, Telefon und das Anfrageformular.'],
     tracking: ['Tracking', 'Tag Manager, Pixel und das Cookie-Banner.']
   };
 
