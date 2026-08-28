@@ -20,6 +20,7 @@ Aus content/ (und damit im CMS änderbar):
 Der Fließtext der Startseite liegt in tools/home-main.html, die Rechtstexte
 in tools/legal-*.json.
 """
+import datetime
 import hashlib
 import html
 import json
@@ -52,6 +53,7 @@ def load(name):
 S = load("settings.json")
 TRACK = load("tracking.json")
 SEO = load("seo.json")
+HEUTE = datetime.date.today().isoformat()
 # Basisadresse der Seite. Für eine Vorschau unter github.io hier die
 # Vorschau-Adresse eintragen, damit Link-Vorschauen und canonical stimmen.
 SITE = S.get("site_url", "https://motorized.at").rstrip("/")
@@ -60,6 +62,17 @@ NOINDEX = bool(S.get("noindex"))
 BOOKING = S["buchung_url"]
 TEL = S["telefon_link"]
 MAIL = S["email"]
+
+
+def laeuft(von, bis):
+    """Gilt der Eintrag heute? Leere Datumsfelder heissen: unbegrenzt.
+    Ein taeglicher Lauf der GitHub Action sorgt dafuer, dass abgelaufene
+    Eintraege von selbst verschwinden."""
+    if von and HEUTE < von:
+        return False
+    if bis and HEUTE > bis:
+        return False
+    return True
 
 
 def rel(depth, path):
@@ -366,8 +379,59 @@ def bike_card(depth, b):
       </a>"""
 
 
+def aktionen_block(depth):
+    """Band mit laufenden Aktionen. Faellt komplett weg, wenn nichts laeuft."""
+    r = lambda p: rel(depth, p)
+    aktiv = [a for a in load("aktionen.json")
+             if a.get("aktiv") and laeuft(a.get("von", ""), a.get("bis", ""))]
+    if not aktiv:
+        return ""
+    karten = []
+    for i, a in enumerate(aktiv):
+        bild = ""
+        if a.get("bild"):
+            bild = (f'\n        <div class="akt__media"><img src="{r("assets/web/" + a["bild"])}" '
+                    f'alt="" loading="lazy"></div>')
+        link = ""
+        if a.get("link"):
+            href = rel(depth, a["link"])
+            ext = ' target="_blank" rel="noopener"' if href.startswith("http") else ""
+            link = (f'\n          <a class="tlink" href="{href}"{ext}>'
+                    f'{esc(a.get("link_text") or "Mehr erfahren")} {CHEV}</a>')
+        bis = ""
+        if a.get("bis"):
+            d = a["bis"].split("-")
+            bis = f'\n          <p class="akt__bis">Noch bis {d[2]}.{d[1]}.{d[0]}</p>'
+        karten.append(f"""      <article class="akt" data-rv style="--rv-d:{i*90}ms">{bild}
+        <div class="akt__body">
+          <h3 class="akt__t">{esc(a["titel"])}</h3>
+          <p class="akt__d">{esc(a["text"])}</p>{bis}{link}
+        </div>
+      </article>""")
+    return f"""
+<section class="sec aktionen">
+  <div class="glow glow--cool glow--soft" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="idx">{CHEV}Gerade bei uns</p>
+    <div class="aktionen__head">
+      <h2 class="aktionen__h" data-rv>Was aktuell läuft.</h2>
+    </div>
+    <div class="aktionen__grid">
+{chr(10).join(karten)}
+    </div>
+  </div>
+</section>
+"""
+
+
 def kontakt_block(depth):
     r = lambda p: rel(depth, p)
+    heute = [a for a in S.get("ausnahmen", [])
+             if a.get("text") and laeuft(a.get("von", ""), a.get("bis", ""))]
+    ausnahme = ""
+    if heute:
+        ausnahme = ('<span class="info__note">' + CHEV + "<span>"
+                    + esc(heute[0]["text"]) + "</span></span>")
     zeiten = "<br>".join(
         (f'{esc(z["tage"])}&nbsp;&nbsp;{esc(z["zeit"])}' if z["tage"]
          else f'<span style="opacity:0" aria-hidden="true">Mo – Fr</span>&nbsp;&nbsp;{esc(z["zeit"])}')
@@ -409,7 +473,7 @@ def kontakt_block(depth):
         <li class="info__i">
           <span class="info__k">Öffnungszeiten</span>
           <span class="info__v num">{zeiten}
-            <small>{esc(S['oeffnungszeiten_hinweis'])}</small></span>
+            <small>{esc(S['oeffnungszeiten_hinweis'])}</small>{ausnahme}</span>
         </li>
         <li class="info__i">
           <span class="info__k">Telefon</span>
@@ -456,6 +520,7 @@ def build_home():
             .replace("<!--TESTIMONIALS-->", testimonials_block(0))
             .replace("<!--TEAM-->", team_block(0))
             .replace("<!--FAQ-->", faq_block())
+            .replace("<!--AKTIONEN-->", aktionen_block(0))
             .replace("<!--KONTAKT-->", kontakt_block(0)))
     main += "\n" + local_business_schema() + "\n" + faq_schema()
     ti, de, og = seo_meta("start",
@@ -521,6 +586,9 @@ RACING_SCOPES = [
 
 
 def build_racing():
+    hat_endpunkt = bool(S.get("formular_endpunkt"))
+    hide_mail = " hidden" if hat_endpunkt else ""
+    hide_post = "" if hat_endpunkt else " hidden"
     d = 1
     r = lambda p: rel(d, p)
     steps = "\n".join(f"""      <li class="step" data-rv style="--rv-d:{i*90}ms">
@@ -703,7 +771,7 @@ def build_racing():
         </p>
       </div>
 
-      <form class="af" id="racingForm" data-mail="{MAIL}" novalidate>
+      <form class="af" id="racingForm" data-mail="{MAIL}" data-endpunkt="{S.get("formular_endpunkt","")}" novalidate>
         <p class="af__lead">Drei Fragen, dann wissen wir Bescheid.</p>
 
         <div class="af__f">
@@ -741,10 +809,18 @@ def build_racing():
           </div>
         </div>
 
+        <p class="af__hp" aria-hidden="true">
+          <label>Bitte freilassen<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        </p>
         <button class="btn af__go" type="submit">{CHEV}Anfrage senden</button>
-        <p class="af__note">
+        <p class="af__ok" hidden>Danke! Deine Anfrage ist angekommen — wir melden uns in der Regel am nächsten Werktag.</p>
+        <p class="af__note" data-note-mail{hide_mail}>
           Der Button öffnet dein E-Mail-Programm mit einer fertig ausgefüllten Nachricht an
           {MAIL}. Es werden keine Daten an Dritte übertragen.
+        </p>
+        <p class="af__note" data-note-post{hide_post}>
+          Mit dem Absenden werden deine Angaben an uns übermittelt. Näheres in der
+          <a href="{r('datenschutz/')}">Datenschutzerklärung</a>.
         </p>
       </form>
     </div>
@@ -1120,6 +1196,26 @@ def build_robots():
           f"Sitemap: {SITE}/sitemap.xml\n")
 
 
+def build_bildliste():
+    """Schreibt auf, welche Bilder in den fertigen Seiten wirklich vorkommen.
+    Das CMS liest die Liste, damit niemand ein Bild loescht, das nur in einer
+    Vorlage steckt (Hero, Kontaktbereich, Racing) und in keinem JSON auftaucht."""
+    import re as _re
+    genutzt = set()
+    for wurzel, dirs, dateien in os.walk(ROOT):
+        dirs[:] = [d for d in dirs if d not in (".git", "tools", "admin", "_source")]
+        for d in dateien:
+            if not d.endswith((".html", ".xml")):
+                continue
+            s = open(os.path.join(wurzel, d), encoding="utf-8", errors="replace").read()
+            for m in _re.finditer(r'assets/web/([A-Za-z0-9._-]+)', s):
+                genutzt.add(m.group(1))
+    ziel = os.path.join(CONTENT, "_bilder-in-verwendung.json")
+    with open(ziel, "w", encoding="utf-8") as f:
+        json.dump(sorted(genutzt), f, ensure_ascii=False, indent=2)
+    print(f"  {'content/_bilder-in-verwendung.json':36} {len(genutzt)} Bilder")
+
+
 def build_admin():
     """Setzt den Fingerabdruck in die Admin-Seiten, damit Browser nach einer
     Aenderung sofort die neue Fassung laden."""
@@ -1171,6 +1267,7 @@ if __name__ == "__main__":
     build_404()
     build_robots()
     build_sitemap()
+    build_bildliste()
     build_admin()
     if NOINDEX:
         print("\n  ACHTUNG: Vorschau-Modus aktiv — alle Seiten stehen auf noindex.")

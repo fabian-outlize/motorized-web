@@ -38,19 +38,22 @@
   function dirty() { return SM.dirty(); }
 
   function touched() {
-    var n = dirty().length + Object.keys(state.uploads).length;
+    var n = dirty().length + Object.keys(state.uploads).length + state.deletions.length;
     $('#savebar').classList.toggle('is-on', n > 0);
     $('#savebarT').textContent = n === 1 ? '1 Änderung offen' : n + ' Änderungen offen';
     renderSide();
   }
 
   window.addEventListener('beforeunload', function (e) {
-    if (dirty().length || Object.keys(state.uploads).length) { e.preventDefault(); e.returnValue = ''; }
+    if (dirty().length || Object.keys(state.uploads).length || state.deletions.length) {
+      e.preventDefault(); e.returnValue = '';
+    }
   });
 
   /* ------------------------------------------------------- Veröffentlichen */
   $('#publishBtn').addEventListener('click', function () {
     var b = this;
+    pruefen(function () {
     b.disabled = true; b.textContent = 'Veröffentliche…';
     SM.publish().then(function () {
       touched(); render();
@@ -60,15 +63,144 @@
     }).then(function () {
       b.disabled = false; b.textContent = 'Veröffentlichen'; touched();
     });
+    });
   });
 
   $('#discardBtn').addEventListener('click', function () {
     if (!confirm('Alle offenen Änderungen verwerfen und den zuletzt veröffentlichten Stand laden?')) return;
     SM.FILES.forEach(function (f) { state.files[f] = JSON.parse(state.original[f]); });
-    state.uploads = {}; open_ = null;
+    state.uploads = {}; state.deletions = []; open_ = null;
     touched(); render();
     toast('Änderungen verworfen.');
   });
+
+
+  /* ------------------------------------------------- Änderungen prüfen */
+  var BEREICH = {
+    'bikes.json': 'Motorräder', 'services.json': 'Leistungen', 'team.json': 'Team',
+    'faq.json': 'FAQ', 'testimonials.json': 'Rezensionen', 'aktionen.json': 'Aktionen',
+    'seo.json': 'SEO & Teilen', 'settings.json': 'Kontaktdaten', 'tracking.json': 'Tracking'
+  };
+  var NAMEFELD = ['name', 'titel', 'frage', 'gruppe', 'zitat'];
+
+  function bezeichne(x, i) {
+    if (x && typeof x === 'object') {
+      for (var k = 0; k < NAMEFELD.length; k++) {
+        if (x[NAMEFELD[k]]) return String(x[NAMEFELD[k]]).slice(0, 48);
+      }
+    }
+    return 'Eintrag ' + (i + 1);
+  }
+
+  /* Vergleicht die gespeicherte mit der bearbeiteten Fassung und beschreibt
+     den Unterschied in Worten — keine technischen Diffs. */
+  function unterschiede(datei) {
+    var alt = JSON.parse(state.original[datei]);
+    var neu = state.files[datei];
+    var out = [];
+
+    if (Array.isArray(neu) && Array.isArray(alt)) {
+      // Gleich lange Listen: Eintrag fuer Eintrag vergleichen. Dadurch wird ein
+      // umbenannter Eintrag als "geaendert" erkannt und nicht als neu + entfernt.
+      var altSort = alt.map(function (y) { return JSON.stringify(y); }).slice().sort();
+      var neuSort = neu.map(function (y) { return JSON.stringify(y); }).slice().sort();
+      if (alt.length === neu.length && altSort.join('|') === neuSort.join('|')) {
+        // Gleiche Einträge, andere Reihenfolge — mehr gibt es nicht zu sagen.
+        return [['geaendert', 'Reihenfolge geändert']];
+      }
+
+      if (alt.length === neu.length) {
+        var umsortiert = false;
+        neu.forEach(function (x, i) {
+          if (JSON.stringify(alt[i]) === JSON.stringify(x)) return;
+          var woher = alt.map(function (y) { return JSON.stringify(y); }).indexOf(JSON.stringify(x));
+          if (woher > -1) { umsortiert = true; return; }
+          var name = bezeichne(x, i);
+          var altName = bezeichne(alt[i], i);
+          out.push(['geaendert', name === altName ? name : altName + ' → ' + name]);
+        });
+        if (umsortiert) out.push(['geaendert', 'Reihenfolge']);
+        return out;
+      }
+
+      var altS = alt.map(function (y) { return JSON.stringify(y); });
+      var neuS = neu.map(function (y) { return JSON.stringify(y); });
+      neu.forEach(function (x, i) {
+        if (altS.indexOf(neuS[i]) === -1) out.push(['neu', bezeichne(x, i)]);
+      });
+      alt.forEach(function (x, i) {
+        if (neuS.indexOf(altS[i]) === -1) out.push(['weg', bezeichne(x, i)]);
+      });
+      return out;
+    }
+
+    Object.keys(neu || {}).forEach(function (k) {
+      if (JSON.stringify(alt[k]) !== JSON.stringify(neu[k])) out.push(['geaendert', k]);
+    });
+    return out;
+  }
+
+  function pruefen(weiter) {
+    var box = el('div', 'modal');
+    var karte = el('div', 'modal__box');
+    karte.append(el('h2', 'modal__h', 'Das wird veröffentlicht'));
+
+    var liste = el('div', 'modal__b');
+    var geaendert = dirty();
+    geaendert.forEach(function (f) {
+      var g = el('div', 'chg');
+      g.append(el('div', 'chg__h', BEREICH[f] || f));
+      var ul = el('ul', 'chg__l');
+      unterschiede(f).forEach(function (u) {
+        var li = el('li');
+        var LABEL = { neu: 'neu', weg: 'entfernt', geaendert: 'geändert' };
+        li.append(el('span', 'chg__tag chg__tag--' + u[0], LABEL[u[0]]), el('span', null, u[1]));
+        ul.append(li);
+      });
+      g.append(ul);
+      liste.append(g);
+    });
+
+    var neueBilder = Object.keys(state.uploads);
+    if (neueBilder.length || state.deletions.length) {
+      var g2 = el('div', 'chg');
+      g2.append(el('div', 'chg__h', 'Bilder'));
+      var ul2 = el('ul', 'chg__l');
+      neueBilder.forEach(function (p) {
+        var li = el('li');
+        li.append(el('span', 'chg__tag chg__tag--neu', 'neu'), el('span', null, p.split('/').pop()));
+        ul2.append(li);
+      });
+      state.deletions.forEach(function (p) {
+        var li = el('li');
+        li.append(el('span', 'chg__tag chg__tag--weg', 'entfernt'), el('span', null, p.split('/').pop()));
+        ul2.append(li);
+      });
+      g2.append(ul2);
+      liste.append(g2);
+    }
+
+    if (!liste.children.length) liste.append(el('div', 'empty', 'Nichts zu veröffentlichen.'));
+    karte.append(liste);
+
+    var foot = el('div', 'modal__f');
+    var ab = btn('Zurück', 'btn--quiet', function () { box.remove(); });
+    var ok = el('button', 'btn btn--primary', 'Jetzt veröffentlichen');
+    ok.type = 'button';
+    ok.addEventListener('click', function () { box.remove(); weiter(); });
+    foot.append(el('span', 'modal__hint',
+      'Danach dauert es ein bis zwei Minuten, bis die Website neu gebaut ist.'));
+    foot.append(ab, ok);
+    karte.append(foot);
+
+    box.append(karte);
+    box.addEventListener('click', function (e) { if (e.target === box) box.remove(); });
+    document.addEventListener('keydown', function esc(e) {
+      if (e.key === 'Escape') { box.remove(); document.removeEventListener('keydown', esc); }
+    });
+    document.body.append(box);
+    ok.focus();
+  }
 
   /* -------------------------------------------------------------- Sidebar */
   var GROUPS = [
@@ -77,7 +209,9 @@
       { id: 'services',     label: 'Leistungen',   ico: '\u{1F527}', file: 'services.json' },
       { id: 'team',         label: 'Team',         ico: '\u{1F464}', file: 'team.json' },
       { id: 'faq',          label: 'FAQ',          ico: '❓',    file: 'faq.json' },
-      { id: 'testimonials', label: 'Rezensionen',  ico: '⭐',    file: 'testimonials.json' }
+      { id: 'testimonials', label: 'Rezensionen',  ico: '⭐',    file: 'testimonials.json' },
+      { id: 'aktionen',     label: 'Aktionen',     ico: '\u{1F4E3}', file: 'aktionen.json' },
+      { id: 'medien',       label: 'Medien',       ico: '\u{1F5BC}', file: null }
     ]},
     { label: 'Einstellungen', items: [
       { id: 'seo',      label: 'SEO & Teilen', ico: '\u{1F50D}', file: 'seo.json' },
@@ -105,11 +239,13 @@
         var b = el('button', 'side__b' + (view === v.id ? ' is-on' : ''));
         b.type = 'button';
         b.append(el('span', null, v.ico), el('span', null, v.label));
-        var data = state.files[v.file];
-        if (JSON.stringify(data) !== state.original[v.file]) {
+        var data = v.file ? state.files[v.file] : null;
+        if (v.file && JSON.stringify(data) !== state.original[v.file]) {
           var d = el('span', 'dot'); d.title = 'ungespeicherte Änderungen'; b.append(d);
         } else if (Array.isArray(data)) {
           b.append(el('span', 'count', data.length));
+        } else if (!v.file) {
+          b.append(el('span', 'count', state.images.length));
         }
         b.addEventListener('click', function () {
           view = v.id; open_ = null; filter = ''; kat = 'alle';
@@ -708,6 +844,185 @@
     });
   }
 
+
+  /* -------------------------------------------------------- Aktionen */
+  function heute() { return new Date().toISOString().slice(0, 10); }
+
+  function laufzeitText(a) {
+    if (!a.aktiv) return { text: 'aus', cls: 'is-off' };
+    var h = heute();
+    if (a.von && h < a.von) return { text: 'geplant', cls: 'is-note' };
+    if (a.bis && h > a.bis) return { text: 'abgelaufen', cls: 'is-off' };
+    return { text: 'läuft', cls: 'is-on' };
+  }
+
+  function viewAktionen() {
+    var arr = state.files['aktionen.json'];
+    var nodes = arr.map(function (a, i) {
+      var st = laufzeitText(a);
+      return item('akt' + i, {
+        sort: { arr: arr, index: i },
+        thumb: a.bild, title: a.titel, sub: a.text,
+        tags: [st],
+        body: function () {
+          return [
+            field('Titel', a.titel, function (v) { a.titel = v; }),
+            field('Text', a.text, function (v) { a.text = v; }, { type: 'textarea' }),
+            imagePicker('Bild', a.bild, function (v) { a.bild = v; }),
+            row([
+              field('Läuft ab', a.von, function (v) { a.von = v; },
+                    { type: 'date', hint: 'Leer = sofort' }),
+              field('Läuft bis', a.bis, function (v) { a.bis = v; },
+                    { type: 'date', hint: 'Leer = unbegrenzt' })
+            ]),
+            el('div', 'note',
+               'Abgelaufene Aktionen verschwinden von selbst — die Website wird dafür '
+               + 'einmal täglich neu gebaut. Du musst nichts löschen.'),
+            row([
+              field('Verlinkt auf', a.link, function (v) { a.link = v; }, {
+                type: 'select',
+                options: [{ value: '', label: '— kein Link —' },
+                          { value: '#kontakt', label: 'Kontaktbereich' },
+                          { value: 'racing/', label: 'Racing-Seite' },
+                          { value: 'bikes/', label: 'Bikes-Seite' },
+                          { value: 'BUCHUNG', label: 'Online-Terminbuchung' }]
+              }),
+              field('Beschriftung des Links', a.link_text, function (v) { a.link_text = v; },
+                    { placeholder: 'Mehr erfahren' })
+            ]),
+            checkbox('Aktion ist aktiv', a.aktiv, function (v) { a.aktiv = v; })
+          ];
+        },
+        actions: function () {
+          return moveBtns(arr, i).concat([el('span', 'spacer'), delBtn(null, arr, i, a.titel)]);
+        }
+      });
+    });
+    return panel({
+      body: nodes, flush: true,
+      empty: 'Keine Aktion angelegt. Solange nichts läuft, erscheint der Bereich gar nicht auf der Website.',
+      add: btn('+ Aktion hinzufügen', 'btn--primary', function () {
+        arr.unshift({ titel: 'Neue Aktion', text: '', bild: '', link: '', link_text: '',
+                      von: '', bis: '', aktiv: false });
+        open_ = 'akt0'; touched(); render();
+      })
+    });
+  }
+
+  /* ---------------------------------------------------------- Medien */
+  function bildVerwendung(name) {
+    var wo = [];
+    (state.files['bikes.json'] || []).forEach(function (b) {
+      if (b.bild === name) wo.push('Motorrad „' + b.name + '“');
+    });
+    (state.files['services.json'] || []).forEach(function (x) {
+      if (x.bild === name) wo.push('Leistung „' + x.titel + '“');
+    });
+    (state.files['team.json'] || []).forEach(function (x) {
+      if (x.bild === name) wo.push('Team: ' + x.name);
+    });
+    (state.files['testimonials.json'] || []).forEach(function (x) {
+      if (x.avatar === name) wo.push('Rezension von ' + x.name);
+    });
+    (state.files['aktionen.json'] || []).forEach(function (x) {
+      if (x.bild === name) wo.push('Aktion „' + x.titel + '“');
+    });
+    if (state.inVerwendung.indexOf(name) > -1 && !wo.length) {
+      wo.push('fest in einer Seitenvorlage (Hero, Racing, Kontakt …)');
+    }
+    var seo = state.files['seo.json'] || {};
+    if (seo.og_bild_standard === name) wo.push('Standard-Teilbild');
+    Object.keys(seo.seiten || {}).forEach(function (k) {
+      if (seo.seiten[k].og_bild === name) wo.push('Teilbild: ' + k);
+    });
+    return wo;
+  }
+
+  function viewMedien() {
+    var neu = Object.keys(state.uploads).map(function (p) { return p.split('/').pop(); });
+    var alle = state.images.filter(function (n) {
+      return state.deletions.indexOf('assets/web/' + n) === -1;
+    });
+
+    var grid = el('div');
+    grid.style.cssText = 'display:grid;gap:.7rem;grid-template-columns:repeat(auto-fill,minmax(9.5rem,1fr))';
+
+    alle.filter(function (n) { return matches(n); }).forEach(function (n) {
+      var wo = bildVerwendung(n);
+      var c = el('div');
+      c.style.cssText = 'border:1px solid var(--line);border-radius:var(--r-s);overflow:hidden;background:var(--card)';
+      var img = el('img');
+      img.src = '../assets/web/' + n; img.alt = n; img.loading = 'lazy';
+      img.style.cssText = 'width:100%;aspect-ratio:3/2;object-fit:cover;background:#eef0f3';
+      var b = el('div');
+      b.style.cssText = 'padding:.5rem .6rem;display:grid;gap:.3rem';
+      var t = el('div', null, n);
+      t.style.cssText = 'font-size:11.5px;font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
+      t.title = n;
+      var u = el('div', null, wo.length
+        ? (wo.length === 1 && wo[0].indexOf('Vorlage') > -1 ? 'in einer Vorlage' : wo.length + '× verwendet')
+        : 'nicht verwendet');
+      u.style.cssText = 'font-size:11px;color:' + (wo.length ? 'var(--ok)' : 'var(--ink-3)');
+      if (wo.length) u.title = wo.join('\n');
+      b.append(t, u);
+      if (neu.indexOf(n) > -1) {
+        var p = el('span', 'pill is-note', 'neu, noch nicht veröffentlicht');
+        p.style.cssText += ';font-size:10px';
+        b.append(p);
+      }
+      if (!wo.length) {
+        b.append(btn('Löschen', 'btn--danger', function () {
+          if (!confirm('„' + n + '“ wirklich löschen? Das lässt sich nur über GitHub rückgängig machen.')) return;
+          if (state.uploads['assets/web/' + n]) delete state.uploads['assets/web/' + n];
+          else state.deletions.push('assets/web/' + n);
+          state.images = state.images.filter(function (x) { return x !== n; });
+          touched(); render();
+        }));
+      }
+      c.append(img, b);
+      grid.append(c);
+    });
+
+    var up = el('label', 'btn btn--primary');
+    up.append('+ Bilder hochladen');
+    var inp = el('input');
+    inp.type = 'file'; inp.accept = 'image/jpeg,image/png,image/webp'; inp.multiple = true;
+    inp.style.display = 'none';
+    inp.addEventListener('change', function () {
+      var files = Array.prototype.slice.call(inp.files || []);
+      var zuGross = files.filter(function (f) { return f.size > 4 * 1024 * 1024; });
+      if (zuGross.length) {
+        toast(zuGross.length + ' Bild(er) über 4 MB wurden übersprungen.', true);
+      }
+      files.filter(function (f) { return f.size <= 4 * 1024 * 1024; }).forEach(function (file) {
+        var name = file.name.toLowerCase().replace(/[^a-z0-9.]+/g, '-').replace(/^-+|-+$/g, '');
+        var reader = new FileReader();
+        reader.onload = function () {
+          state.uploads['assets/web/' + name] = String(reader.result).split(',')[1];
+          if (state.images.indexOf(name) === -1) { state.images.push(name); state.images.sort(); }
+          touched(); render();
+        };
+        reader.readAsDataURL(file);
+      });
+      inp.value = '';
+    });
+    up.append(inp);
+
+    var wrap = el('div');
+    wrap.append(bar([searchBox('Dateiname suchen…')]));
+    wrap.append(panel({
+      body: [
+        el('div', 'note',
+           'Bilder, die nirgends verwendet werden, kannst du löschen. Verwendete lassen sich '
+           + 'nicht löschen — nimm sie erst im jeweiligen Eintrag heraus.'),
+        grid
+      ],
+      empty: 'Keine Bilder gefunden.',
+      add: up
+    }));
+    return wrap;
+  }
+
   /* ------------------------------------------------------ SEO & Sharing */
   var SEO_PAGES = [
     { id: 'start',       label: 'Startseite',   pfad: '' },
@@ -822,6 +1137,18 @@
              field('PLZ und Ort', s.plz_ort, function (v) { s.plz_ort = v; })]),
         field('Bundesland', s.region, function (v) { s.region = v; })
       ]),
+      group('Anfrageformular', [
+        field('Formular-Endpunkt (URL)', s.formular_endpunkt,
+              function (v) { s.formular_endpunkt = v.trim(); }, {
+          placeholder: 'https://…',
+          hint: 'Leer lassen = das Formular öffnet das E-Mail-Programm des Besuchers. '
+              + 'Trägst du hier die Adresse eines Formulardienstes ein (z. B. Formspree oder '
+              + 'Web3Forms), kommen Anfragen direkt bei dir an.'
+        }),
+        el('div', 'note note--warn',
+           'Ein Formulardienst empfängt personenbezogene Daten. Er gehört dann in die '
+           + 'Datenschutzerklärung, und es braucht in der Regel einen Auftragsverarbeitungsvertrag.')
+      ]),
       group('Erreichbarkeit', [
         row([field('Telefon (Anzeige)', s.telefon, function (v) { s.telefon = v; }),
              field('Telefon (Wählformat)', s.telefon_link, function (v) { s.telefon_link = v; },
@@ -842,6 +1169,30 @@
     });
     zeiten.push(field('Hinweis', s.oeffnungszeiten_hinweis, function (v) { s.oeffnungszeiten_hinweis = v; }));
     body.push(group('Öffnungszeiten', zeiten));
+
+    var aus = [el('div', 'note',
+      'Feiertage und Betriebsurlaub. Der Hinweis erscheint im Kontaktbereich, solange er '
+      + 'läuft — und verschwindet danach von selbst.')];
+    (s.ausnahmen || []).forEach(function (a, i) {
+      var box = el('div', 'f');
+      box.style.cssText = 'gap:.6rem;padding:.8rem;border:1px solid var(--line);border-radius:var(--r-s);background:var(--raised)';
+      box.append(row([
+        field('Von', a.von, function (v) { a.von = v; }, { type: 'date' }),
+        field('Bis', a.bis, function (v) { a.bis = v; }, { type: 'date' })
+      ]));
+      box.append(field('Text', a.text, function (v) { a.text = v; },
+                       { placeholder: 'Betriebsurlaub — wir sind ab … wieder da.' }));
+      box.append(btn('Entfernen', 'btn--danger', function () {
+        s.ausnahmen.splice(i, 1); touched(); render();
+      }));
+      aus.push(box);
+    });
+    aus.push(btn('+ Ausnahme hinzufügen', '', function () {
+      if (!s.ausnahmen) s.ausnahmen = [];
+      s.ausnahmen.push({ von: '', bis: '', text: '' });
+      touched(); render();
+    }));
+    body.push(group('Ausnahmen bei den Öffnungszeiten', aus));
 
     return panel({ title: 'Kontaktdaten',
       desc: 'Diese Angaben stehen im Kopf, im Fußbereich und im Kontaktbereich jeder Seite.',
@@ -894,7 +1245,8 @@
 
   var RENDER = {
     bikes: viewBikes, services: viewServices, team: viewTeam, faq: viewFaq,
-    testimonials: viewTestimonials, seo: viewSeo, settings: viewSettings, tracking: viewTracking
+    testimonials: viewTestimonials, aktionen: viewAktionen, medien: viewMedien,
+    seo: viewSeo, settings: viewSettings, tracking: viewTracking
   };
 
   var TITEL = {
@@ -903,6 +1255,8 @@
     team: ['Team', 'Wer auf der Startseite vorgestellt wird.'],
     faq: ['FAQ', 'Häufige Fragen, gruppiert nach Thema.'],
     testimonials: ['Rezensionen', 'Bewertungen von Google und Facebook.'],
+    aktionen: ['Aktionen', 'Zeitlich begrenzte Hinweise auf der Startseite. Laufen automatisch aus.'],
+    medien: ['Medien', 'Alle Bilder der Website. Ungenutzte kannst du hier entfernen.'],
     seo: ['SEO & Teilen', 'Was Google zeigt und wie geteilte Links aussehen.'],
     settings: ['Kontaktdaten', 'Adresse, Zeiten und die Grundeinstellungen der Website.'],
     tracking: ['Tracking', 'Tag Manager, Pixel und das Cookie-Banner.']

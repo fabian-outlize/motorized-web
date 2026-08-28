@@ -13,11 +13,11 @@ window.SM = (function () {
   var TIMEOUT = 20000;
 
   var FILES = ['settings.json', 'tracking.json', 'services.json', 'bikes.json',
-               'team.json', 'faq.json', 'testimonials.json', 'seo.json'];
+               'team.json', 'faq.json', 'testimonials.json', 'seo.json', 'aktionen.json'];
 
   var state = {
     token: null, owner: null, repo: null, branch: 'main',
-    files: {}, original: {}, images: [], uploads: {}
+    files: {}, original: {}, images: [], uploads: {}, deletions: [], inVerwendung: []
   };
 
   var CONFIG = { owner: '', repo: '' };
@@ -95,7 +95,14 @@ window.SM = (function () {
         .then(function (list) {
           state.images = list.filter(function (x) { return x.type === 'file'; })
                              .map(function (x) { return x.name; }).sort();
-        }).catch(function () { state.images = []; });
+        }).catch(function () { state.images = []; })
+        .then(function () {
+          // Vom Generator geschrieben: welche Bilder in den fertigen Seiten
+          // vorkommen — auch die, die nur in einer Vorlage stehen.
+          return api(repoPath('/contents/content/_bilder-in-verwendung.json?ref=' + state.branch))
+            .then(function (res) { state.inVerwendung = JSON.parse(b64decode(res.content)); })
+            .catch(function () { state.inVerwendung = []; });
+        });
     });
   }
 
@@ -121,6 +128,7 @@ window.SM = (function () {
   function publish() {
     var changed = dirty();
     var uploads = Object.keys(state.uploads);
+    var deletions = state.deletions.slice();
     var baseCommit, baseTree;
 
     return api(repoPath('/git/ref/heads/' + state.branch))
@@ -140,19 +148,21 @@ window.SM = (function () {
           })));
       })
       .then(function (entries) {
+        var tree = entries.map(function (e) {
+          return { path: e.path, mode: '100644', type: 'blob', sha: e.sha };
+        });
+        // sha: null loescht die Datei im neuen Baum
+        deletions.forEach(function (p) {
+          tree.push({ path: p, mode: '100644', type: 'blob', sha: null });
+        });
         return api(repoPath('/git/trees'), {
-          method: 'POST',
-          body: {
-            base_tree: baseTree,
-            tree: entries.map(function (e) {
-              return { path: e.path, mode: '100644', type: 'blob', sha: e.sha };
-            })
-          }
+          method: 'POST', body: { base_tree: baseTree, tree: tree }
         });
       })
       .then(function (tree) {
         var what = changed.map(function (f) { return f.replace('.json', ''); });
         if (uploads.length) what.push(uploads.length + ' Bild(er)');
+        if (deletions.length) what.push(deletions.length + ' Bild(er) entfernt');
         return api(repoPath('/git/commits'), {
           method: 'POST',
           body: { message: 'Inhalte aktualisiert: ' + what.join(', '),
@@ -166,6 +176,7 @@ window.SM = (function () {
       .then(function () {
         changed.forEach(function (f) { state.original[f] = JSON.stringify(state.files[f]); });
         state.uploads = {};
+        state.deletions = [];
       });
   }
 

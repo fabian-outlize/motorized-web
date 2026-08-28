@@ -7,6 +7,10 @@ name: Seiten bauen und veröffentlichen
 on:
   push:
     branches: [main]
+  # Einmal taeglich, damit abgelaufene Aktionen und Oeffnungszeiten-Ausnahmen
+  # von selbst verschwinden, auch wenn niemand etwas aendert.
+  schedule:
+    - cron: '20 3 * * *'
   workflow_dispatch:
 
 permissions:

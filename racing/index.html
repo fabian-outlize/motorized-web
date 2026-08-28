@@ -36,7 +36,7 @@ window.SM_BASE = "../";
 <link rel="preload" href="../fonts/antonio-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../css/fonts.css?v=c7479dcf">
-<link rel="stylesheet" href="../css/style.css?v=ced7edec">
+<link rel="stylesheet" href="../css/style.css?v=7ef5f0ed">
 </head>
 <body>
 
@@ -361,7 +361,7 @@ window.SM_BASE = "../";
         </p>
       </div>
 
-      <form class="af" id="racingForm" data-mail="schwarz@motorized.at" novalidate>
+      <form class="af" id="racingForm" data-mail="schwarz@motorized.at" data-endpunkt="" novalidate>
         <p class="af__lead">Drei Fragen, dann wissen wir Bescheid.</p>
 
         <div class="af__f">
@@ -399,10 +399,18 @@ window.SM_BASE = "../";
           </div>
         </div>
 
+        <p class="af__hp" aria-hidden="true">
+          <label>Bitte freilassen<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        </p>
         <button class="btn af__go" type="submit"><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Anfrage senden</button>
-        <p class="af__note">
+        <p class="af__ok" hidden>Danke! Deine Anfrage ist angekommen — wir melden uns in der Regel am nächsten Werktag.</p>
+        <p class="af__note" data-note-mail>
           Der Button öffnet dein E-Mail-Programm mit einer fertig ausgefüllten Nachricht an
           schwarz@motorized.at. Es werden keine Daten an Dritte übertragen.
+        </p>
+        <p class="af__note" data-note-post hidden>
+          Mit dem Absenden werden deine Angaben an uns übermittelt. Näheres in der
+          <a href="../datenschutz/">Datenschutzerklärung</a>.
         </p>
       </form>
     </div>
@@ -476,7 +484,7 @@ window.SM_BASE = "../";
   </div>
 </footer>
 
-<script src="../js/main.js?v=7bda75a3" defer></script>
+<script src="../js/main.js?v=3896af13" defer></script>
 <script src="../js/consent.js?v=c07c39e7" defer></script>
 </body>
 </html>

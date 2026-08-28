@@ -44,6 +44,8 @@ assets/logo/       Wortmarke (SVG)
 assets/icons/      Favicon, Share-Bild
 content/           die Inhalte als JSON — das, was im CMS bearbeitet wird
 content/seo.json   Meta-Titel, Beschreibungen und Teilbilder je Seite
+content/aktionen.json  zeitlich begrenzte Hinweise
+content/_bilder-in-verwendung.json  vom Generator geschrieben, nicht von Hand ändern
 admin/index.html   Anmeldung
 admin/app.html     das CMS selbst (eigene Seite)
 admin/github.js    gemeinsame GitHub-Anbindung beider Seiten
@@ -62,6 +64,10 @@ Unter **`/admin/`** liegt ein kleines Redaktionssystem. Damit lassen sich ohne C
 - **Team**
 - **FAQ** in Gruppen
 - **Rezensionen**
+- **Aktionen** — zeitlich begrenzte Hinweise auf der Startseite mit Von/Bis-Datum.
+  Abgelaufene verschwinden von selbst, weil die Seite einmal täglich neu gebaut wird.
+- **Medien** — alle Bilder auf einen Blick, mehrere auf einmal hochladen, ungenutzte
+  löschen. Bilder, die irgendwo verwendet werden, lassen sich nicht löschen.
 - **SEO & Teilen** — Titel und Beschreibung für Google, Bild für WhatsApp/Facebook/LinkedIn,
   mit Zeichenzähler und Live-Vorschau beider Darstellungen
 - **Kontaktdaten** — Adresse, Telefon, Öffnungszeiten, Buchungslink, Vorschau-Modus
@@ -90,7 +96,11 @@ an `api.github.com`. Setz ein Ablaufdatum — läuft er ab, erzeugst du einfach 
 
 ### Was beim Speichern passiert
 
-„Änderungen veröffentlichen" schreibt alle bearbeiteten Dateien als **einen** Commit
+Vor dem Veröffentlichen zeigt ein Fenster, **was sich genau ändert** — nach Bereichen
+sortiert und in Worten („geändert: Ing. Thomas Schwarz → Thomas Schwarz jun.",
+„Reihenfolge geändert", „neu: …"). Erst danach wird geschrieben.
+
+„Veröffentlichen" schreibt alle bearbeiteten Dateien als **einen** Commit
 nach `content/`. Die GitHub Action `build.yml` baut daraufhin die HTML-Seiten neu,
 `pages.yml` veröffentlicht sie. Nach ein bis zwei Minuten ist die Änderung live.
 
@@ -189,9 +199,10 @@ Zwei Fallstricke, die schon aufgetreten sind:
 3. **Preise und Bike-Daten gegenprüfen** — Stand der alten Seite.
 4. **Vier Bilder sind KI-generiert** (ECU-Flash, Werkstatt-Detail, Carbon-Teil,
    Nachtaufnahme im Kontaktblock). Sobald es echte Fotos gibt, austauschen.
-5. **Racing-Anfrageformular** öffnet aktuell das E-Mail-Programm des Besuchers
-   (kein Server nötig). Wenn Anfragen direkt ankommen sollen, braucht es einen
-   Formulardienst — dann fallen Datenschutzhinweise dafür an.
+5. **Racing-Anfrageformular:** Ohne hinterlegten Endpunkt öffnet es das E-Mail-Programm
+   des Besuchers. Trägst du im CMS unter *Kontaktdaten* die Adresse eines Formulardienstes
+   ein (Formspree, Web3Forms o. ä.), werden Anfragen direkt zugestellt — inklusive
+   Erfolgsmeldung und Spam-Falle. Der Dienst gehört dann in die Datenschutzerklärung.
 6. **Vorschau-Modus ist aktiv** — die Seite steht auf `noindex` und wird von Google
    nicht aufgenommen. Vor dem Livegang zusammen mit `site_url` umstellen.
 7. **Preise auf der Racing-Seite:** Die drei Ausbaustufen nennen bewusst keine Beträge,

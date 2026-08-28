@@ -234,46 +234,95 @@
      --------------------------------------------------------------- */
   var form = document.getElementById('racingForm');
   if (form) {
+    var v = function (n) { return String((form.elements[n] || {}).value || '').trim(); };
+
+    function markiere(ok) {
+      var fehlt = null;
+      ['bike', 'ziel', 'name', 'kontakt'].forEach(function (n) {
+        var el = form.elements[n];
+        if (!el) return;
+        var leer = !v(n);
+        el.setAttribute('aria-invalid', leer ? 'true' : 'false');
+        if (leer && !fehlt) fehlt = el;
+      });
+      return fehlt;
+    }
+
+    function meldung(text, istFehler) {
+      var box = form.querySelector('.af__err');
+      if (!text) { if (box) box.remove(); return; }
+      if (!box) {
+        box = document.createElement('p');
+        box.className = 'af__err';
+        form.querySelector('.af__go').before(box);
+      }
+      box.textContent = text;
+      box.style.color = istFehler ? '' : 'var(--cyan)';
+    }
+
+    function textFassung() {
+      var z = ['Motorrad: ' + v('bike'), 'Ziel: ' + v('ziel')];
+      if (v('text')) z.push('', 'Was mir wichtig ist:', v('text'));
+      z.push('', 'Name: ' + v('name'), 'Erreichbar unter: ' + v('kontakt'));
+      return z.join('\n');
+    }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
 
-      var fields = ['bike', 'ziel', 'name', 'kontakt'];
-      var ok = true;
-      fields.forEach(function (n) {
-        var el = form.elements[n];
-        if (!el) return;
-        var empty = !String(el.value || '').trim();
-        el.setAttribute('aria-invalid', empty ? 'true' : 'false');
-        if (empty && ok) { el.focus(); ok = false; }
-      });
-      var errBox = form.querySelector('.af__err');
-      if (!ok) {
-        if (!errBox) {
-          errBox = document.createElement('p');
-          errBox.className = 'af__err';
-          form.querySelector('.af__go').before(errBox);
-        }
-        errBox.textContent = 'Bitte fülle Motorrad, Ziel, Name und Kontakt aus.';
+      var fehlt = markiere();
+      if (fehlt) {
+        meldung('Bitte fülle Motorrad, Ziel, Name und Kontakt aus.', true);
+        fehlt.focus();
         return;
       }
-      if (errBox) errBox.remove();
+      meldung('');
 
-      var v = function (n) { return String((form.elements[n] || {}).value || '').trim(); };
-      var lines = [
-        'Hallo Schwarz Motorized,', '',
-        'ich hätte gerne ein Racing-Gespräch.', '',
-        'Motorrad: ' + v('bike'),
-        'Ziel: ' + v('ziel'), ''
-      ];
-      if (v('text')) lines.push('Was mir wichtig ist:', v('text'), '');
-      lines.push('Name: ' + v('name'), 'Erreichbar unter: ' + v('kontakt'), '', 'Danke und liebe Grüße');
+      // Spam-Falle: echte Menschen füllen dieses Feld nie aus
+      if (v('website')) { return; }
 
       ereignis('sm_anfrage', { bike: v('bike'), ziel: v('ziel') });
 
+      var endpunkt = form.getAttribute('data-endpunkt');
       var mail = form.getAttribute('data-mail') || 'schwarz@motorized.at';
-      window.location.href = 'mailto:' + mail
-        + '?subject=' + encodeURIComponent('Racing-Anfrage: ' + v('bike'))
-        + '&body=' + encodeURIComponent(lines.join('\n'));
+
+      if (!endpunkt) {
+        // Ohne Formulardienst: E-Mail-Programm mit fertiger Nachricht öffnen
+        window.location.href = 'mailto:' + mail
+          + '?subject=' + encodeURIComponent('Racing-Anfrage: ' + v('bike'))
+          + '&body=' + encodeURIComponent('Hallo Schwarz Motorized,\n\nich hätte gerne ein '
+              + 'Racing-Gespräch.\n\n' + textFassung() + '\n\nDanke und liebe Grüße');
+        return;
+      }
+
+      var knopf = form.querySelector('.af__go');
+      var alt = knopf.innerHTML;
+      knopf.disabled = true;
+      knopf.textContent = 'Wird gesendet…';
+
+      var daten = new FormData();
+      daten.append('Motorrad', v('bike'));
+      daten.append('Ziel', v('ziel'));
+      daten.append('Anliegen', v('text'));
+      daten.append('Name', v('name'));
+      daten.append('Kontakt', v('kontakt'));
+      daten.append('_subject', 'Racing-Anfrage: ' + v('bike'));
+
+      fetch(endpunkt, { method: 'POST', body: daten, headers: { 'Accept': 'application/json' } })
+        .then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          form.querySelectorAll('.af__f, .af__go, .af__note, .af__hp').forEach(function (n) {
+            n.hidden = true;
+          });
+          var ok = form.querySelector('.af__ok');
+          if (ok) { ok.hidden = false; ok.focus && ok.focus(); }
+          ereignis('sm_anfrage_gesendet', { bike: v('bike') });
+        })
+        .catch(function () {
+          knopf.disabled = false; knopf.innerHTML = alt;
+          meldung('Das hat gerade nicht geklappt. Ruf uns kurz an oder schreib direkt an '
+                  + mail + '.', true);
+        });
     });
   }
 

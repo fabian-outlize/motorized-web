@@ -1296,3 +1296,49 @@ select.af__i option { background: #0b0b15; color: #fff; }
 .ctab th, .ctab td { text-align: left; padding: .75rem .9rem; border-bottom: 1px solid var(--ink-line-2); vertical-align: top; }
 .ctab th { color: var(--cyan); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
 .ctab td { color: var(--text-dim); }
+
+/* --------------------------------------------------------------------------
+   10) AKTIONEN
+   Fällt komplett weg, wenn nichts läuft — deshalb keine leere Hülle im HTML.
+   -------------------------------------------------------------------------- */
+.aktionen { position: relative; }
+.aktionen__head { max-width: 44rem; margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem); }
+.aktionen__h { font-size: var(--fs-d2); }
+.aktionen__grid {
+  display: grid; gap: clamp(1rem, 2vw, 1.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+}
+.akt {
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--ink-raised); box-shadow: inset 0 0 0 1px var(--ink-line-2);
+  transition: box-shadow .45s var(--ease), transform .45s var(--ease);
+}
+.akt:hover { transform: translateY(-3px); box-shadow: inset 0 0 0 1px rgba(84,255,230,.3); }
+.akt__media { aspect-ratio: 16/10; overflow: hidden; }
+.akt__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
+.akt:hover .akt__media img { transform: scale(1.04); }
+.akt__body { padding: clamp(1.15rem, 2.2vw, 1.6rem); display: flex; flex-direction: column; gap: .6rem; flex: 1; }
+.akt__t { font-size: var(--fs-d4); }
+.akt__d { font-size: var(--fs-sm); color: var(--text-dim); margin: 0; }
+.akt__bis {
+  font-size: var(--fs-xs); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--cyan); font-weight: 700; margin: 0;
+}
+.akt .tlink { margin-top: auto; align-self: flex-start; }
+
+/* Hinweis bei den Öffnungszeiten (Feiertage, Betriebsurlaub) */
+.info__note {
+  display: flex; gap: .6rem; align-items: flex-start; margin-top: .7rem;
+  padding: .65rem .75rem; font-size: var(--fs-xs); line-height: 1.5;
+  background: rgba(229,26,54,.1); box-shadow: inset 0 0 0 1px rgba(229,26,54,.3);
+  color: rgba(255,255,255,.9); font-variant-numeric: normal;
+}
+.info__note .chev { color: var(--red-lite); width: .8em; height: .8em; flex: none; margin-top: .3em; }
+
+/* Spam-Falle — für Menschen unsichtbar, Screenreader ignorieren sie */
+.af__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.af__ok {
+  padding: 1rem 1.15rem; border-radius: var(--r);
+  background: rgba(84,255,230,.1); box-shadow: inset 0 0 0 1px rgba(84,255,230,.35);
+  color: var(--white); font-size: var(--fs-sm); margin: 0;
+}
