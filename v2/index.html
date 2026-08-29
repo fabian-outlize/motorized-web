@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schwarz Motorized — Entwurf 2</title>
+<meta name="description" content="Zweiter Entwurf der Startseite: Hell-Dunkel-Wechsel, variable Schrift, scrollgetriebene Bewegung.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../assets/icons/favicon.png">
+
+<script>
+document.documentElement.classList.add("js");
+setTimeout(function(){ if(!window.__v2) document.documentElement.classList.remove("js"); }, 3000);
+</script>
+
+<link rel="preload" href="fonts/archivo-latin-400-900.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/martian-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="chev" viewBox="0 0 217 217">
+    <path d="M0 217L74.082 108.5L0 0H44.6104L118.692 108.5L44.6104 217H0ZM98.3076 217L172.39 108.5L98.3076 0H142.918L217 108.5L142.918 217H98.3076Z"/>
+  </symbol>
+</svg>
+
+<div class="grain" aria-hidden="true"></div>
+<a class="skip" href="#main">Zum Inhalt springen</a>
+
+<header class="hdr" id="hdr">
+  <div class="wrap hdr__in">
+    <a class="hdr__logo" href="#top" aria-label="Schwarz Motorized">
+      <img src="../assets/logo/schwarz-motorized-logo-white-rgb.svg" alt="Schwarz Motorized" width="300" height="58">
+    </a>
+    <nav class="hdr__nav" aria-label="Hauptmenü">
+      <a class="hdr__link" href="#werkstatt">Werkstatt</a>
+      <a class="hdr__link" href="#racing">Racing</a>
+      <a class="hdr__link" href="#bikes">Bikes</a>
+      <a class="hdr__link" href="#kontakt">Kontakt</a>
+    </nav>
+    <div class="hdr__cta">
+      <a class="btn" href="#kontakt" data-cursor="Los">
+        <svg class="chev" aria-hidden="true"><use href="#chev"/></svg>Termin
+      </a>
+    </div>
+    <button class="hdr__burger" id="burger" aria-label="Menü" aria-expanded="false"><span></span></button>
+  </div>
+</header>
+
+<div class="mnav" id="mnav">
+  <nav aria-label="Mobiles Menü">
+    <a href="#werkstatt">Werkstatt</a>
+    <a href="#racing">Racing</a>
+    <a href="#bikes">Bikes</a>
+    <a href="#stimmen">Stimmen</a>
+    <a href="#kontakt">Kontakt</a>
+  </nav>
+  <div class="mnav__foot">
+    <a class="btn" href="#kontakt"><svg class="chev" aria-hidden="true"><use href="#chev"/></svg>Termin buchen</a>
+    <a class="tlink" href="tel:+43217380060">+43 2173 80060</a>
+  </div>
+</div>
+
+<div id="stage">
+<main id="main">
+
+<!-- ══════════════════════════════════════════════ 01 HERO ══════════ -->
+<section class="hero" id="top">
+  <div class="hero__media">
+    <img src="../assets/web/hero-showroom.jpg" alt="Aprilia RSV4 im Neonlicht des Showrooms" fetchpriority="high">
+  </div>
+  <div class="hero__scrim" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <p class="mono hero__badge">
+      Mönchhof · Burgenland &nbsp;—&nbsp; <b>Offizieller Aprilia Händler</b>
+    </p>
+
+    <h1 class="hero__h">
+      <span class="up"><span class="l1">Wir bauen</span></span>
+      <span class="up"><span class="l2" style="--d:90ms">Maschinen,</span></span>
+      <span class="up"><span class="l1" style="--d:180ms">die <em>beißen.</em></span></span>
+    </h1>
+
+    <div class="hero__foot">
+      <p class="lead" data-rv style="--d:320ms">
+        Vom ehrlichen Service bis zum kompromisslosen Rennstreckenaufbau.
+        Wir fahren selbst — und schrauben so, wie wir fahren würden.
+      </p>
+      <div class="hero__acts" data-rv style="--d:400ms">
+        <a class="btn" href="#kontakt" data-cursor="Termin">
+          <svg class="chev" aria-hidden="true"><use href="#chev"/></svg>Werkstatttermin
+        </a>
+        <a class="btn btn--ghost" href="#werkstatt">Was wir machen</a>
+      </div>
+    </div>
+
+    <div class="hero__scroll mono" data-rv style="--d:520ms;margin-top:clamp(2rem,4vw,3rem)">
+      <i aria-hidden="true"></i> Scrollen
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ 02 LAUFBAND ══════════════ -->
+<div class="ticker ticker--edge" aria-hidden="true">
+  <div class="ticker__track">
+    <div class="ticker__set">
+      <span class="ticker__w">Aprilia<svg class="chev"><use href="#chev"/></svg></span>
+      <span class="ticker__w ticker__w--out">Rennstrecke<svg class="chev"><use href="#chev"/></svg></span>
+      <span class="ticker__w">ECU Flash<svg class="chev"><use href="#chev"/></svg></span>
+      <span class="ticker__w ticker__w--out">Service<svg class="chev"><use href="#chev"/></svg></span>
+      <span class="ticker__w">Seit 2019<svg class="chev"><use href="#chev"/></svg></span>
+    </div>
+    <div class="ticker__set">
+      <span class="ticker__w">Aprilia<svg class="chev"><use href="#chev"/></svg></span>
+      <span class="ticker__w ticker__w--out">Rennstrecke<svg class="chev"><use href="#chev"/></svg></span>
+      <span class="ticker__w">ECU Flash<svg class="chev"><use href="#chev"/></svg></span>
+      <span class="ticker__w ticker__w--out">Service<svg class="chev"><use href="#chev"/></svg></span>
+      <span class="ticker__w">Seit 2019<svg class="chev"><use href="#chev"/></svg></span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ 03 MANIFEST (hell) ══════════ -->
+<section class="bay bay--paper manifest">
+  <div class="wrap">
+    <p class="mark"><b>01</b> Wer wir sind</p>
+
+    <div class="manifest__grid">
+      <h2 class="manifest__h">
+        <span class="up"><span>Kein</span></span>
+        <span class="up"><span style="--d:80ms"><em>Mopedhändler.</em></span></span>
+      </h2>
+      <div class="manifest__copy" data-rv style="--d:140ms">
+        <p>Wir verkaufen keine Motorräder von der Preisliste. Wir fahren sie.</p>
+        <p>Als offizieller Aprilia Partner verbinden wir Werkstatterfahrung mit
+           Rennsport-Know-how. Was wir dir empfehlen, sind wir vorher selbst gefahren —
+           auf der Straße und unter Startnummer 141 auf der Strecke.</p>
+        <p>Das heißt auch: Wir sagen dir, wenn ein Umbau keinen Sinn ergibt.</p>
+      </div>
+    </div>
+
+    <ul class="figs" data-rv>
+      <li class="fig">
+        <span class="fig__n"><span data-zahl="5">5</span></span>
+        <span class="fig__t">Marken im Haus<br>Aprilia · Moto Morini · VENT · SYM · UM</span>
+      </li>
+      <li class="fig">
+        <span class="fig__n">Nur hier</span>
+        <span class="fig__t">ECU Flash by ROM Racing<br>exklusiv in Österreich</span>
+      </li>
+      <li class="fig">
+        <span class="fig__n">§57a</span>
+        <span class="fig__t">Pickerl, Reifen, Service<br>für alle Marken</span>
+      </li>
+      <li class="fig">
+        <span class="fig__n">#141</span>
+        <span class="fig__t">Unsere eigene Startnummer<br>auf der Rennstrecke</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════ 04 LEISTUNGEN ═══════════════ -->
+<section class="bay" id="werkstatt">
+  <div class="wrap">
+    <p class="mark"><b>02</b> Was wir machen</p>
+
+    <div class="idx__head">
+      <h2 class="idx__h">
+        <span class="up"><span>Vom Ölwechsel</span></span>
+        <span class="up"><span style="--d:80ms">bis zum Racebike.</span></span>
+      </h2>
+      <p class="lead" data-rv style="--d:140ms">
+        Eine Werkstatt, die auch dann weiterweiß, wenn es ernst wird —
+        und ein Aufbau, der zu dir passt statt zum Katalog.
+      </p>
+    </div>
+
+    <div class="idx__list" id="idxList">
+      <div class="peek" id="peek" aria-hidden="true"><img alt="" id="peekImg"></div>
+
+      <a class="row" href="#kontakt" data-img="../assets/web/svc-aprilia.jpg" data-cursor="Ansehen">
+        <div class="row__in">
+          <span class="row__n">/01</span>
+          <h3 class="row__t">Aprilia Händler</h3>
+          <p class="row__d">Alle aktuellen Modelle, Beratung, Finanzierung, Anmeldung — aus einer Hand.</p>
+          <span class="row__go"><svg class="chev"><use href="#chev"/></svg></span>
+        </div>
+        <div class="row__img wipe"><img src="../assets/web/svc-aprilia.jpg" alt="Aprilia RSV4 im Showroom" loading="lazy"></div>
+      </a>
+
+      <a class="row" href="#kontakt" data-img="assets/brake.jpg" data-cursor="Ansehen">
+        <div class="row__in">
+          <span class="row__n">/02</span>
+          <h3 class="row__t">Fahrwerk &amp; Bremsen</h3>
+          <p class="row__d">Abgestimmt auf dein Gewicht, deine Strecke, deinen Bremspunkt. Der größte Hebel überhaupt.</p>
+          <span class="row__go"><svg class="chev"><use href="#chev"/></svg></span>
+        </div>
+        <div class="row__img wipe"><img src="assets/brake.jpg" alt="Gebohrte Bremsscheibe mit Radialbremssattel" loading="lazy"></div>
+      </a>
+
+      <a class="row" href="#kontakt" data-img="../assets/web/svc-ecu.jpg" data-cursor="Ansehen">
+        <div class="row__in">
+          <span class="row__n">/03</span>
+          <h3 class="row__t">ECU Flash</h3>
+          <p class="row__d">Motorsteuerung auf Auspuff, Strecke und Fahrstil. By ROM Racing — exklusiv in Österreich.</p>
+          <span class="row__go"><svg class="chev"><use href="#chev"/></svg></span>
+        </div>
+        <div class="row__img wipe"><img src="../assets/web/svc-ecu.jpg" alt="Laptop mit Kennfeldern am Motorrad" loading="lazy"></div>
+      </a>
+
+      <a class="row" href="#kontakt" data-img="assets/gloves.jpg" data-cursor="Ansehen">
+        <div class="row__in">
+          <span class="row__n">/04</span>
+          <h3 class="row__t">Rennstreckenumbau</h3>
+          <p class="row__d">Verkleidung, Ergonomie, Elektronik. Damit du arbeiten kannst statt zu kämpfen.</p>
+          <span class="row__go"><svg class="chev"><use href="#chev"/></svg></span>
+        </div>
+        <div class="row__img wipe"><img src="assets/gloves.jpg" alt="Rennhandschuhe am Lenker" loading="lazy"></div>
+      </a>
+
+      <a class="row" href="#kontakt" data-img="../assets/web/svc-service.jpg" data-cursor="Ansehen">
+        <div class="row__in">
+          <span class="row__n">/05</span>
+          <h3 class="row__t">Service, alle Marken</h3>
+          <p class="row__d">Wartung, Reparatur, §57a-Pickerl und Reifen. Schnell, unkompliziert, persönlich.</p>
+          <span class="row__go"><svg class="chev"><use href="#chev"/></svg></span>
+        </div>
+        <div class="row__img wipe"><img src="../assets/web/svc-service.jpg" alt="Drehmomentschlüssel am Fahrwerk" loading="lazy"></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ 05 RACING ════════════════ -->
+<section class="split" id="racing">
+  <div class="split__grid">
+    <div class="split__media wipe">
+      <img src="../assets/web/racing-141.jpg" alt="Rennmotorrad mit Startnummer 141 auf der Strecke" loading="lazy">
+    </div>
+    <div class="split__body">
+      <p class="mark"><b>03</b> Racing</p>
+      <h2 class="split__h">
+        <span class="up"><span>Rennstrecke ohne</span></span>
+        <span class="up"><span style="--d:80ms"><em>Rätselraten.</em></span></span>
+      </h2>
+      <p class="lead" data-rv style="--d:140ms">
+        Das Heck stempelt beim Bremsen, die Elektronik regelt zu früh, nach zwei Sessions
+        lässt die Bremse nach. Das sind keine Fahrfehler — das ist Setup.
+      </p>
+      <ul class="split__tags" data-rv style="--d:200ms">
+        <li class="split__tag">RSV4</li>
+        <li class="split__tag">RS 660</li>
+        <li class="split__tag">Tuono V4</li>
+        <li class="split__tag">Stresskilometer</li>
+      </ul>
+      <div class="split__acts" data-rv style="--d:260ms">
+        <a class="btn" href="#kontakt" data-cursor="Reden">
+          <svg class="chev" aria-hidden="true"><use href="#chev"/></svg>Racing-Gespräch
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ 06 BIKES (hell) ══════════════════ -->
+<section class="bay bay--paper" id="bikes">
+  <div class="wrap">
+    <p class="mark"><b>04</b> Im Haus</p>
+
+    <div class="bikes__head">
+      <h2 class="bikes__h">
+        <span class="up"><span>Bereit zum Fahren.</span></span>
+      </h2>
+      <a class="tlink" href="#kontakt" data-rv>Alle Bikes <svg class="chev"><use href="#chev"/></svg></a>
+    </div>
+
+    <div class="bikes__grid">
+      <article class="bike" data-rv>
+        <div class="bike__media wipe"><img src="../assets/web/offer-tuono.jpg" alt="Aprilia Tuono V4 1100 Factory" loading="lazy"><span class="bike__flag">Cool Deal</span></div>
+        <div class="bike__body">
+          <h3 class="bike__t">Tuono V4 1100 Factory</h3>
+          <p class="bike__meta">Naked Superbike · 175 PS V4</p>
+          <p class="bike__price">ab € 21.490,–</p>
+        </div>
+      </article>
+
+      <article class="bike" data-rv style="--d:90ms">
+        <div class="bike__media wipe"><img src="../assets/web/offer-tuareg.jpg" alt="Aprilia Tuareg 660" loading="lazy"><span class="bike__flag">Anmeldeaktion</span></div>
+        <div class="bike__body">
+          <h3 class="bike__t">Tuareg 660</h3>
+          <p class="bike__meta">Adventure · 80 PS Twin</p>
+          <p class="bike__price">ab € 12.490,–</p>
+        </div>
+      </article>
+
+      <article class="bike" data-rv style="--d:180ms">
+        <div class="bike__media wipe"><img src="../assets/web/bike-guzzi-v9.jpg" alt="Moto Guzzi V9 Bobber" loading="lazy"><span class="bike__flag">Gebraucht</span></div>
+        <div class="bike__body">
+          <h3 class="bike__t">Moto Guzzi V9 Bobber</h3>
+          <p class="bike__meta">05/2025 · 1.300 km</p>
+          <p class="bike__price">€ 7.790,–</p>
+        </div>
+      </article>
+    </div>
+
+    <p class="bikes__note">Preise inkl. USt. · Verfügbarkeit auf Anfrage</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════ 07 MIETEN ═══════════════════ -->
+<div class="ticker ticker--fast ticker--edge" aria-hidden="true">
+  <div class="ticker__track">
+    <div class="ticker__set">
+      <span class="ticker__w">Erst fahren<svg class="chev"><use href="#chev"/></svg></span>
+      <span class="ticker__w ticker__w--out">Dann entscheiden<svg class="chev"><use href="#chev"/></svg></span>
+      <span class="ticker__w">Miete wird angerechnet<svg class="chev"><use href="#chev"/></svg></span>
+    </div>
+    <div class="ticker__set">
+      <span class="ticker__w">Erst fahren<svg class="chev"><use href="#chev"/></svg></span>
+      <span class="ticker__w ticker__w--out">Dann entscheiden<svg class="chev"><use href="#chev"/></svg></span>
+      <span class="ticker__w">Miete wird angerechnet<svg class="chev"><use href="#chev"/></svg></span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ 08 STIMMEN ══════════════════ -->
+<section class="bay" id="stimmen">
+  <div class="wrap">
+    <p class="mark"><b>05</b> Was sie sagen</p>
+
+    <div class="says__grid">
+      <article class="say say--flare" data-rv>
+        <p class="say__q">Professioneller Service und sehr nahbar.</p>
+        <p class="say__b">Absolut zuverlässiges Personal. Empfehlenswert.</p>
+        <div class="say__foot">
+          <img class="say__av" src="../assets/web/av-alejandro.jpg" alt="" loading="lazy">
+          <span><span class="say__n">Alejandro</span><br><span class="say__m">Yamaha MT-09</span></span>
+          <span class="say__src">Google</span>
+        </div>
+      </article>
+
+      <article class="say" data-rv style="--d:80ms">
+        <p class="say__q">Man merkt, dass die wissen, wovon sie sprechen.</p>
+        <p class="say__b">Sehr nettes Personal, das einem das Gefühl gibt, willkommen zu sein. Die Beratung war kompetent und ausführlich. Dazu faire Preise.</p>
+        <div class="say__foot">
+          <img class="say__av" src="../assets/web/av-predrag.jpg" alt="" loading="lazy">
+          <span><span class="say__n">Predrag B.</span><br><span class="say__m">Aprilia Tuono V4</span></span>
+          <span class="say__src">Google</span>
+        </div>
+      </article>
+
+      <article class="say" data-rv style="--d:160ms">
+        <p class="say__q">Fachlich kompetent und lösungsorientiert.</p>
+        <p class="say__b">Das Team bringt frischen Wind in den Seewinkel.</p>
+        <div class="say__foot">
+          <img class="say__av" src="../assets/web/av-ursula.jpg" alt="" loading="lazy">
+          <span><span class="say__n">Ursula S.</span><br><span class="say__m">Aprilia Caponord</span></span>
+          <span class="say__src">Facebook</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ 09 TEAM (hell) ══════════════════ -->
+<section class="bay bay--paper">
+  <div class="wrap">
+    <p class="mark"><b>06</b> Die Leute</p>
+    <div class="bikes__head">
+      <h2 class="bikes__h"><span class="up"><span>Wer an deinem Bike schraubt.</span></span></h2>
+    </div>
+    <div class="team__grid">
+      <article class="team__i" data-rv>
+        <div class="team__media wipe"><img src="../assets/web/team-thomas.jpg" alt="Ing. Thomas Schwarz" loading="lazy"></div>
+        <div class="team__cap"><h3 class="team__n">Thomas Schwarz</h3><p class="team__r">Geschäftsführer</p></div>
+      </article>
+      <article class="team__i" data-rv style="--d:80ms">
+        <div class="team__media wipe"><img src="../assets/web/team-christoph.jpg" alt="Christoph Halbauer" loading="lazy"></div>
+        <div class="team__cap"><h3 class="team__n">Christoph Halbauer</h3><p class="team__r">Reparaturannahme</p></div>
+      </article>
+      <article class="team__i" data-rv style="--d:160ms">
+        <div class="team__media wipe"><img src="../assets/web/team-roland.jpg" alt="Roland Strobl" loading="lazy"></div>
+        <div class="team__cap"><h3 class="team__n">Roland Strobl</h3><p class="team__r">Mechaniker</p></div>
+      </article>
+      <article class="team__i" data-rv style="--d:240ms">
+        <div class="team__media wipe"><img src="../assets/web/team-max.jpg" alt="Max Barwik" loading="lazy"></div>
+        <div class="team__cap"><h3 class="team__n">Max Barwik</h3><p class="team__r">Mechaniker</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════ 10 KONTAKT ══════════════════ -->
+<section class="bay contact" id="kontakt">
+  <div class="contact__media"><img src="assets/pitlane.jpg" alt="" aria-hidden="true" loading="lazy"></div>
+  <div class="contact__scrim" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <p class="mark"><b>07</b> Kontakt</p>
+    <div class="contact__grid">
+      <div>
+        <h2 class="contact__h">
+          <span class="up"><span>Komm vorbei.</span></span>
+          <span class="up"><span style="--d:80ms">Oder ruf <em>an.</em></span></span>
+        </h2>
+        <p class="lead" data-rv style="--d:140ms">
+          Werkstatttermine buchst du am schnellsten selbst. Für alles andere —
+          Beratung, Probefahrt, Umbau — melde dich direkt.
+        </p>
+        <div class="contact__acts" data-rv style="--d:200ms">
+          <a class="btn" href="tel:+43217380060" data-cursor="Anrufen">
+            <svg class="chev" aria-hidden="true"><use href="#chev"/></svg>+43 2173 80060
+          </a>
+          <a class="btn btn--ghost" href="mailto:schwarz@motorized.at">E-Mail schreiben</a>
+        </div>
+      </div>
+
+      <ul class="info" data-rv style="--d:160ms">
+        <li class="info__i">
+          <span class="info__k">Adresse</span>
+          <span class="info__v"><a href="https://maps.app.goo.gl/D2jVzh5HcYnCtnNU9" target="_blank" rel="noopener">Betriebsgebiet Nord 4<br>7123 Mönchhof, Burgenland</a><small>In Google Maps öffnen</small></span>
+        </li>
+        <li class="info__i">
+          <span class="info__k">Offen</span>
+          <span class="info__v">Mo – Fr &nbsp;07:30 – 12:00<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:00 – 17:30<small>Sa und So geschlossen</small></span>
+        </li>
+        <li class="info__i">
+          <span class="info__k">E-Mail</span>
+          <span class="info__v"><a href="mailto:schwarz@motorized.at">schwarz@motorized.at</a></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="ft">
+  <div class="wrap ft__in">
+    <p class="ft__big">
+      <span class="up"><span>We are</span></span>
+      <span class="up"><span style="--d:80ms"><em>racers.</em></span></span>
+    </p>
+
+    <div class="ft__cols">
+      <div><p class="ft__k">Adresse</p><p class="ft__v">Betriebsgebiet Nord 4<br>7123 Mönchhof</p></div>
+      <div><p class="ft__k">Kontakt</p><p class="ft__v"><a href="tel:+43217380060">+43 2173 80060</a><br><a href="mailto:schwarz@motorized.at">schwarz@motorized.at</a></p></div>
+      <div><p class="ft__k">Offen</p><p class="ft__v">Mo – Fr 07:30 – 12:00<br>13:00 – 17:30</p></div>
+      <div><p class="ft__k">Marken</p><p class="ft__v">Aprilia · Moto Morini<br>VENT · SYM · UM Motors</p></div>
+    </div>
+
+    <div class="ft__bot">
+      <nav class="ft__links">
+        <a href="../impressum/">Impressum</a>
+        <a href="../agb/">AGB</a>
+        <a href="../datenschutz/">Datenschutz</a>
+      </nav>
+      <span>© 2026 Autohaus Schwarz e.U.</span>
+      <span class="ft__by">Entwurf 2 · outlize®</span>
+    </div>
+  </div>
+</footer>
+</div>
+
+<script src="js/main.js" defer></script>
+</body>
+</html>

@@ -1184,7 +1184,8 @@ def build_robots():
               "Allow: /\n"
               "Disallow: /admin/\n"
               "Disallow: /tools/\n"
-              "Disallow: /content/\n")
+              "Disallow: /content/\n"
+              "Disallow: /v2/\n")
         return
     write("robots.txt",
           "User-agent: *\n"
@@ -1192,6 +1193,7 @@ def build_robots():
           "Disallow: /admin/\n"
           "Disallow: /tools/\n"
           "Disallow: /content/\n"
+          "Disallow: /v2/\n"
           "\n"
           f"Sitemap: {SITE}/sitemap.xml\n")
 

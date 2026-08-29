@@ -6,3 +6,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /tools/
 Disallow: /content/
+Disallow: /v2/
